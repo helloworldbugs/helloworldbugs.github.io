@@ -1,0 +1,747 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/%E6%A5%BD.png">
+  <link rel="icon" href="/img/%E6%A5%BD.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="神楽">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="win注册表start键值说明   键值 说明    0 默认开机bios启动而启动   1 跟随操作系统启动   2 自动启动   3 手动启动   4 禁用   KMS激活安装对应版本的产品密钥 1slmgr &#x2F;ipk &lt;产品密钥&gt;  设置kms服务器 1slmgr &#x2F;skms &lt;kms服务器&gt;  手动激活 1slmgr &#x2F;ato  查看激活信息 1slmgr.vbs">
+<meta property="og:type" content="article">
+<meta property="og:title" content="windows随记">
+<meta property="og:url" content="https://helloworldbugs.gitlab.io/2024/05/10/%E7%B3%BB%E7%BB%9F/windows/windows%E9%9A%8F%E8%AE%B0/index.html">
+<meta property="og:site_name" content="神楽的博客">
+<meta property="og:description" content="win注册表start键值说明   键值 说明    0 默认开机bios启动而启动   1 跟随操作系统启动   2 自动启动   3 手动启动   4 禁用   KMS激活安装对应版本的产品密钥 1slmgr &#x2F;ipk &lt;产品密钥&gt;  设置kms服务器 1slmgr &#x2F;skms &lt;kms服务器&gt;  手动激活 1slmgr &#x2F;ato  查看激活信息 1slmgr.vbs">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/05/10/%E7%B3%BB%E7%BB%9F/windows/windows%E9%9A%8F%E8%AE%B0/fcf72bad0d8ebea5682c834c31937f70-1.png">
+<meta property="article:published_time" content="2024-05-09T16:00:09.000Z">
+<meta property="article:modified_time" content="2025-04-17T03:22:48.372Z">
+<meta property="article:author" content="神楽">
+<meta property="article:tag" content="windows">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://helloworldbugs.gitlab.io/2024/05/10/%E7%B3%BB%E7%BB%9F/windows/windows%E9%9A%8F%E8%AE%B0/fcf72bad0d8ebea5682c834c31937f70-1.png">
+  
+  
+  
+  <title>windows随记 - 神楽的博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"helloworldbugs.gitlab.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":50,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>神楽的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/guidao.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="windows随记"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-05-10 00:00" pubdate>
+          2024年5月10日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          979 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          9 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">windows随记</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2025年4月17日 上午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="win注册表start键值说明"><a href="#win注册表start键值说明" class="headerlink" title="win注册表start键值说明"></a>win注册表start键值说明</h1><table>
+<thead>
+<tr>
+<th align="left">键值</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">0</td>
+<td align="left">默认开机bios启动而启动</td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="left">跟随操作系统启动</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">自动启动</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">手动启动</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left">禁用</td>
+</tr>
+</tbody></table>
+<h1 id="KMS激活"><a href="#KMS激活" class="headerlink" title="KMS激活"></a>KMS激活</h1><p>安装对应版本的<a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows-server/get-started/kms-client-activation-keys?tabs=server2022,windows10ltsc,version1803,windows81">产品密钥</a></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml">slmgr /ipk <span class="hljs-tag">&lt;<span class="hljs-name">产品密钥</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>设置kms服务器</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml">slmgr /skms <span class="hljs-tag">&lt;<span class="hljs-name">kms服务器</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>手动激活</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">slmgr /ato<br></code></pre></td></tr></table></figure>
+
+<p>查看激活信息</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus">slmgr<span class="hljs-selector-class">.vbs</span> -dlv<br></code></pre></td></tr></table></figure>
+
+<p>更多参考：</p>
+<p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows-server/get-started/kms-client-activation-keys?tabs=server2022,windows10ltsc,version1803,windows81">密钥管理服务 (KMS) 客户端激活和产品密钥</a></p>
+<p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows-server/get-started/upgrade-conversion-options">适用于 Windows Server 的升级和转换选项</a></p>
+<h1 id="显示桌面“我的电脑”"><a href="#显示桌面“我的电脑”" class="headerlink" title="显示桌面“我的电脑”"></a>显示桌面“我的电脑”</h1><p>win+r运行：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus">rundll32<span class="hljs-selector-class">.exe</span> shell32<span class="hljs-selector-class">.dll</span>,Control_RunDLL desk<span class="hljs-selector-class">.cpl</span>,,<span class="hljs-number">0</span><br></code></pre></td></tr></table></figure>
+
+<h1 id="关闭Windows-Defender（安全中心）"><a href="#关闭Windows-Defender（安全中心）" class="headerlink" title="关闭Windows Defender（安全中心）"></a>关闭Windows Defender（安全中心）</h1><p>win+r：regedit</p>
+<figure class="highlight moonscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs moonscript">计算机\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SecurityHealthService<br></code></pre></td></tr></table></figure>
+
+<p>修改start值为4（禁用）</p>
+<figure class="highlight moonscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs moonscript">计算机\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\wscsvc<br></code></pre></td></tr></table></figure>
+
+<p>修改start值为4（禁用）</p>
+<h1 id="禁用windows自动更新"><a href="#禁用windows自动更新" class="headerlink" title="禁用windows自动更新"></a>禁用windows自动更新</h1><p>win+r：regedit</p>
+<p>Windows Update（修改stat值为4禁用）</p>
+<figure class="highlight moonscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs moonscript">HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\UsoSvc<br></code></pre></td></tr></table></figure>
+
+<p>Windows 更新医生服务（修改stat值为4禁用）</p>
+<figure class="highlight moonscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs moonscript">HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WaaSMedicSvc<br></code></pre></td></tr></table></figure>
+
+<p>修改FailureActions键，修改010和018左起第5个值为00</p>
+<p><img src="/2024/05/10/%E7%B3%BB%E7%BB%9F/windows/windows%E9%9A%8F%E8%AE%B0/fcf72bad0d8ebea5682c834c31937f70-1.png" srcset="/img/loading.gif" lazyload alt="alt text"></p>
+<h1 id="解决windows系统显示SATA盘为可弹出设备"><a href="#解决windows系统显示SATA盘为可弹出设备" class="headerlink" title="解决windows系统显示SATA盘为可弹出设备"></a>解决windows系统显示SATA盘为可弹出设备</h1><ol>
+<li>windows+R 输入regedit打开注册表，定位到</li>
+</ol>
+<figure class="highlight moonscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs moonscript">HKLM\SYSTEM\CurrentControlSet\Services\storahci\Parameters\Device<br></code></pre></td></tr></table></figure>
+<p>新建”多字符串值”，命名为”TreatAsInternalPort”。</p>
+<ol start="2">
+<li><p>打开设备管理器，查看磁盘驱动的硬盘位置。</p>
+</li>
+<li><p>在 <code>TreatAsInternalPort</code> 的 <code>值</code> 里竖着写上自己的硬盘端口号，写完后要在最后加一个回车。</p>
+</li>
+</ol>
+<h1 id="打开隐藏的电源计划"><a href="#打开隐藏的电源计划" class="headerlink" title="打开隐藏的电源计划"></a>打开隐藏的电源计划</h1><ol>
+<li>命令 <code>powercfg/L</code> 可以看到当前系统存在的电源方案，带星号的正在用的方案</li>
+<li>命令 <code>powercfg/ALIASES</code> 可以看到所有系统内置的电源方案</li>
+<li>命令 <code>powercfg/S SCHEME_MIN</code> 就可以使用高性能方案了</li>
+<li>SCHEME_MAX (省电)、SCHEME_MIN (高性能) 和 SCHEME_BALANCED (平衡)</li>
+</ol>
+<h1 id="改变用户管理员角色属性"><a href="#改变用户管理员角色属性" class="headerlink" title="改变用户管理员角色属性"></a>改变用户管理员角色属性</h1><p>win+r：</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs lsl"><span class="hljs-section">control</span> userpasswords2<br></code></pre></td></tr></table></figure>
+
+<p>用户 -&gt; 属性 -&gt; 组成员</p>
+<h1 id="cmd命令行重启服务"><a href="#cmd命令行重启服务" class="headerlink" title="cmd命令行重启服务"></a>cmd命令行重启服务</h1><p>列出当前的服务名称</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stata"><span class="hljs-keyword">sc</span> <span class="hljs-keyword">query</span> | findstr &lt;服务名称&gt;<br></code></pre></td></tr></table></figure>
+
+<p>停止服务</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arduino">net stop &lt;服务名称&gt;<br></code></pre></td></tr></table></figure>
+
+<p>启动服务</p>
+<figure class="highlight dos"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dos"><span class="hljs-built_in">net</span> <span class="hljs-built_in">start</span> &lt;服务名称&gt;<br></code></pre></td></tr></table></figure>
+
+
+<h1 id="win11右键菜单样式切换回win10样式-cmd命令"><a href="#win11右键菜单样式切换回win10样式-cmd命令" class="headerlink" title="win11右键菜单样式切换回win10样式(cmd命令)"></a>win11右键菜单样式切换回win10样式(cmd命令)</h1><p>win11右键菜单样式切换到win10样式</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile">reg <span class="hljs-keyword">add</span><span class="language-bash"> <span class="hljs-string">&quot;HKCU\Software\Classes\CLSID\&#123;86ca1aa0-34aa-4e8b-a509-50c905bae2a2&#125;\InprocServer32&quot;</span> /f /ve</span><br></code></pre></td></tr></table></figure>
+
+<p>恢复</p>
+<figure class="highlight subunit"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs subunit">reg delete &quot;HKCU\Software\Classes\CLSID\&#123;86ca1aa0<span class="hljs-string">-34</span>aa<span class="hljs-string">-4</span>e8b-a509<span class="hljs-string">-50</span>c905bae2a2&#125;&quot; /f<br></code></pre></td></tr></table></figure>
+
+<h1 id="win11关机被软件阻止的解决办法"><a href="#win11关机被软件阻止的解决办法" class="headerlink" title="win11关机被软件阻止的解决办法"></a>win11关机被软件阻止的解决办法</h1><p>win+r：regedit</p>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs livescript">计算机<span class="hljs-string">\HKEY_CURRENT_USER\Control</span> Panel<span class="hljs-string">\Desktop</span><br></code></pre></td></tr></table></figure>
+
+<p>新建字符串值：AutoEndTasks , 键值为：1</p>
+<h1 id="去除Win10右键菜单使用Windows-Defender扫描"><a href="#去除Win10右键菜单使用Windows-Defender扫描" class="headerlink" title="去除Win10右键菜单使用Windows Defender扫描"></a>去除Win10右键菜单使用Windows Defender扫描</h1><p>cmd管理员权限执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">regsvr32 /u <span class="hljs-string">&quot;%ProgramFiles%\Windows Defender\shellext.dll&quot;</span><br></code></pre></td></tr></table></figure>
+<p>要恢复执行：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">regsvr32</span> <span class="hljs-string">&quot;%ProgramFiles%\Windows Defender\shellext.dll&quot;</span><br></code></pre></td></tr></table></figure>
+
+
+<h1 id="Windows系统封装初始化工具"><a href="#Windows系统封装初始化工具" class="headerlink" title="Windows系统封装初始化工具"></a>Windows系统封装初始化工具</h1><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">sysprep</span><br></code></pre></td></tr></table></figure>
+<p>win+r 键入 sysprep即可找到启动文件</p>
+<h1 id="磁盘修复"><a href="#磁盘修复" class="headerlink" title="磁盘修复"></a>磁盘修复</h1><p>#为要修复的磁盘盘符</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">chkdsk</span> <span class="hljs-comment">#: /f /r /x</span><br></code></pre></td></tr></table></figure>
+<p>更多参考文章：<a target="_blank" rel="noopener" href="https://www.disktool.cn/content-center/check-hard-drive-for-errors-windows-10-2111.html">https://www.disktool.cn/content-center/check-hard-drive-for-errors-windows-10-2111.html</a></p>
+<h1 id="iis配置"><a href="#iis配置" class="headerlink" title="iis配置"></a>iis配置</h1><h2 id="修改文件上传大小限制（最大4G）"><a href="#修改文件上传大小限制（最大4G）" class="headerlink" title="修改文件上传大小限制（最大4G）"></a>修改文件上传大小限制（最大4G）</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">configuration</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">system.webServer</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">security</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">requestFiltering</span>&gt;</span><br>                <span class="hljs-tag">&lt;<span class="hljs-name">requestLimits</span> <span class="hljs-attr">maxAllowedContentLength</span>=<span class="hljs-string">&quot;4294967295&quot;</span> /&gt;</span><br>                <span class="hljs-tag">&lt;<span class="hljs-name">fileExtensions</span>&gt;</span><br>                <span class="hljs-tag">&lt;/<span class="hljs-name">fileExtensions</span>&gt;</span><br>            <span class="hljs-tag">&lt;/<span class="hljs-name">requestFiltering</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">security</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">system.webServer</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">system.web</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">httpRuntime</span> <span class="hljs-attr">maxRequestLength</span>=<span class="hljs-string">&quot;2147483647&quot;</span> /&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">system.web</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">configuration</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<h1 id="cmd命令设置代理"><a href="#cmd命令设置代理" class="headerlink" title="cmd命令设置代理"></a>cmd命令设置代理</h1><p>http协议</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-built_in">set</span> <span class="hljs-attribute">http_proxy</span>=http://127.0.0.1:10808<br><span class="hljs-built_in">set</span> <span class="hljs-attribute">https_proxy</span>=http://127.0.0.1:10808<br></code></pre></td></tr></table></figure>
+<p>socks协议</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-built_in">set</span> <span class="hljs-attribute">http_proxy</span>=socks5://127.0.0.1:10808<br><span class="hljs-built_in">set</span> <span class="hljs-attribute">https_proxy</span>=socks5://127.0.0.1:10808<br></code></pre></td></tr></table></figure>
+<h1 id="关机被阻止解决方法-“此应用程序阻止关机”"><a href="#关机被阻止解决方法-“此应用程序阻止关机”" class="headerlink" title="关机被阻止解决方法-“此应用程序阻止关机”"></a>关机被阻止解决方法-“此应用程序阻止关机”</h1><p>按 Win + R 打开运行窗口，输入 regedit 并按回车，打开注册表编辑器。<br>依次导航到以下路径：<code>HKEY_USERS\.DEFAULT\Control Panel\Desktop</code><br>在右侧窗口中，右键单击，选择“新建” -&gt; “字符串值”，命名为：<code>AutoEndTasks</code>。<br>双击 AutoEndTasks，将其值设置为 1</p>
+<h1 id="批量还原被Windows-Defender隔离的文件"><a href="#批量还原被Windows-Defender隔离的文件" class="headerlink" title="批量还原被Windows Defender隔离的文件"></a>批量还原被Windows Defender隔离的文件</h1><p>以管理员身份打开PowerShell。</p>
+<ul>
+<li>列出被隔离的文件<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql"><span class="hljs-keyword">Get</span>-MpThreatDetection | <span class="hljs-keyword">Where</span>-<span class="hljs-keyword">Object</span> &#123; $_.InitialDetectionTime -gt (<span class="hljs-keyword">Get</span>-<span class="hljs-type">Date</span>).AddDays(<span class="hljs-number">-30</span>) &#125; | <span class="hljs-keyword">Format</span>-<span class="hljs-keyword">Table</span> -Property InitialDetectionTime,Resources<br></code></pre></td></tr></table></figure></li>
+<li>批量还原文件<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs powershell"><span class="hljs-built_in">Get-MpThreatDetection</span> | <span class="hljs-built_in">Where-Object</span> &#123; <span class="hljs-variable">$_</span>.Actions <span class="hljs-operator">-eq</span> <span class="hljs-string">&quot;Quarantine&quot;</span> &#125; | <span class="hljs-built_in">ForEach-Object</span> &#123;<br>    <span class="hljs-variable">$filePath</span> = <span class="hljs-variable">$_</span>.Resources<br>    <span class="hljs-built_in">Move-Item</span> <span class="hljs-literal">-Path</span> <span class="hljs-variable">$filePath</span> <span class="hljs-literal">-Destination</span> (<span class="hljs-built_in">Split-Path</span> <span class="hljs-variable">$filePath</span> <span class="hljs-literal">-Parent</span>)<br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li>验证是否还原成功，如果输出为空，说明没有文件被隔离，还原成功。如果仍有文件被隔离，说明还原未完全成功。<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql"><span class="hljs-keyword">Get</span>-MpThreatDetection | <span class="hljs-keyword">Where</span>-<span class="hljs-keyword">Object</span> &#123; $_.Actions -eq &quot;Quarantine&quot; &#125; | <span class="hljs-keyword">Format</span>-<span class="hljs-keyword">Table</span> -Property InitialDetectionTime,Resources<br></code></pre></td></tr></table></figure></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%B3%BB%E7%BB%9F/" class="category-chain-item">系统</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E7%B3%BB%E7%BB%9F/windows/" class="category-chain-item">windows</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/windows/" class="print-no-link">#windows</a>
+      
+    </div>
+  
+</div>
+
+
+              
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/05/13/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/%E4%B8%80%E6%AC%A15986%E7%AB%AF%E5%8F%A3%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/" title="一次5986端口应急响应">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">一次5986端口应急响应</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/05/07/%E7%BC%96%E7%A8%8B/%E5%B8%B8%E7%94%A8git%E5%91%BD%E4%BB%A4%E6%95%B4%E7%90%86/" title="常用git命令整理">
+                        <span class="hidden-mobile">常用git命令整理</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

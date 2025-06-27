@@ -1,0 +1,734 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/%E6%A5%BD.png">
+  <link rel="icon" href="/img/%E6%A5%BD.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="神楽">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="安装 ps:  docker.io 是 Debian 团队维护的 docker-ce 是 docker 官方维护的社区版（Community Edition） docker-ee 是 docker 官方维护的商业版（Enterprise Edition）   docker安装官方脚本1curl -fsSL https:&#x2F;&#x2F;get.docker.com | bash -s docker --mirr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker">
+<meta property="og:url" content="https://helloworldbugs.gitlab.io/2024/05/14/%E7%B3%BB%E7%BB%9F/linux/Docker/index.html">
+<meta property="og:site_name" content="神楽的博客">
+<meta property="og:description" content="安装 ps:  docker.io 是 Debian 团队维护的 docker-ce 是 docker 官方维护的社区版（Community Edition） docker-ee 是 docker 官方维护的商业版（Enterprise Edition）   docker安装官方脚本1curl -fsSL https:&#x2F;&#x2F;get.docker.com | bash -s docker --mirr">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-05-13T16:00:50.000Z">
+<meta property="article:modified_time" content="2025-04-18T05:28:52.861Z">
+<meta property="article:author" content="神楽">
+<meta property="article:tag" content="docker">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Docker - 神楽的博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"helloworldbugs.gitlab.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":50,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>神楽的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/guidao.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Docker"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-05-14 00:00" pubdate>
+          2024年5月14日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          993 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          9 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Docker</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2025年4月18日 下午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><blockquote>
+<p>ps:</p>
+<ul>
+<li>docker.io 是 Debian 团队维护的</li>
+<li>docker-ce 是 docker 官方维护的社区版（Community Edition）</li>
+<li>docker-ee 是 docker 官方维护的商业版（Enterprise Edition）</li>
+</ul>
+</blockquote>
+<h3 id="docker安装"><a href="#docker安装" class="headerlink" title="docker安装"></a>docker安装</h3><h4 id="官方脚本"><a href="#官方脚本" class="headerlink" title="官方脚本"></a>官方脚本</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">curl -fsSL https://get.docker.com | bash -s docker --mirror Aliyun<br></code></pre></td></tr></table></figure>
+
+<h4 id="debian-ubuntu"><a href="#debian-ubuntu" class="headerlink" title="debian&#x2F;ubuntu"></a>debian&#x2F;ubuntu</h4><p>建议直接安装apt库的docker-io版</p>
+<figure class="highlight sas"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sas">apt <span class="hljs-keyword">update</span> <span class="hljs-variable">&amp;&amp;</span> apt install -y docker.io<br></code></pre></td></tr></table></figure>
+<p>查看版本</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">docker version<br></code></pre></td></tr></table></figure>
+
+<h3 id="docker-compose安装"><a href="#docker-compose安装" class="headerlink" title="docker-compose安装"></a>docker-compose安装</h3><p>从github上下载文件（linux通用）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">curl -L &quot;https://github.com/docker/compose/releases/download/latest/docker-compose-$(uname -s)-$(uname -m)&quot; -o /usr/local/bin/docker-compose &amp;&amp; chmod +x /usr/local/bin/docker-compose<br></code></pre></td></tr></table></figure>
+
+<p>查看版本</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs applescript">docker-compose <span class="hljs-built_in">version</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="debian-ubuntu安装docker-ce"><a href="#debian-ubuntu安装docker-ce" class="headerlink" title="debian&#x2F;ubuntu安装docker-ce"></a>debian&#x2F;ubuntu安装docker-ce</h3><ol>
+<li>更新软件包列表：<br>在终端中执行以下命令以确保软件包列表是最新的：<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">apt update</span><br></code></pre></td></tr></table></figure></li>
+<li>安装依赖包：<br>安装一些必要的软件包，以便使用HTTPS传输：<figure class="highlight elm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs elm"><span class="hljs-title">apt</span> install -y apt-trans<span class="hljs-keyword">port</span>-https ca-certificates curl gnupg2 software-properties-common dirmngr<br></code></pre></td></tr></table></figure></li>
+<li>添加Docker官方的GPG密钥：<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">curl -fsSL https:<span class="hljs-regexp">//</span>download.docker.com<span class="hljs-regexp">/linux/</span>debian/gpg | apt-key add -<br></code></pre></td></tr></table></figure></li>
+<li>添加Docker软件包仓库：<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-keyword">add</span><span class="language-bash">-apt-repository <span class="hljs-string">&quot;deb [arch=amd64] https://download.docker.com/linux/debian <span class="hljs-subst">$(lsb_release -cs)</span> stable&quot;</span></span><br></code></pre></td></tr></table></figure></li>
+<li>更新软件包列表：<br>再次运行更新以获取Docker软件包：<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">apt update</span><br></code></pre></td></tr></table></figure></li>
+<li>安装Docker Engine：<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmake">apt <span class="hljs-keyword">install</span> docker-ce -y<br></code></pre></td></tr></table></figure></li>
+<li>验证Docker版本：<br>运行以下命令来验证Docker是否正确安装：<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ada">docker <span class="hljs-comment">--version</span><br></code></pre></td></tr></table></figure></li>
+<li>将Docker设置为开机启动：<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">systemctl <span class="hljs-built_in">enable</span> docker<br></code></pre></td></tr></table></figure></li>
+<li>将用户添加到docker组（可选）：<br>如果想允许非root用户运行Docker命令，可以将他们添加到docker用户组中：<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">usermod -aG docker your_username</span><br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>请将 “your_username” 替换为希望添加到docker组的用户名。</p>
+</blockquote>
+</li>
+</ol>
+<h3 id="RedHat-Cent安装docker-ce"><a href="#RedHat-Cent安装docker-ce" class="headerlink" title="RedHat&#x2F;Cent安装docker-ce"></a>RedHat&#x2F;Cent安装docker-ce</h3><p>卸载旧版本（如果装过）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">yum remove docker  docker-common docker-selinux docker-engine<br></code></pre></td></tr></table></figure>
+
+<p>安装依赖</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">yum install -y yum-utils device-mapper-persistent-data lvm2<br></code></pre></td></tr></table></figure>
+
+<p>查看可用docker版本有哪些</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">yum list docker-ce --showduplicates | sort -r<br></code></pre></td></tr></table></figure>
+
+<p>选择一个版本并安装：<code>yum install docker-ce-版本号</code></p>
+<blockquote>
+<p>注意：24版本和26版本的镜像不通用</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">yum -y install docker-ce-24.0.0<br></code></pre></td></tr></table></figure>
+
+<p>查看版本号</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">docker version<br></code></pre></td></tr></table></figure>
+
+<h2 id="改查"><a href="#改查" class="headerlink" title="改查"></a>改查</h2><h3 id="修改容器配置参数"><a href="#修改容器配置参数" class="headerlink" title="修改容器配置参数"></a>修改容器配置参数</h3><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-regexp">/var/</span>lib<span class="hljs-regexp">/docker/</span>containers/&lt;容器ID&gt;<br></code></pre></td></tr></table></figure>
+
+<h3 id="修改docker默认存储目录"><a href="#修改docker默认存储目录" class="headerlink" title="修改docker默认存储目录"></a>修改docker默认存储目录</h3><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">vim <span class="hljs-regexp">/etc/</span>docker/daemon.json<br></code></pre></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;data-root&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;/data/docker&quot;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight nsis"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs nsis"><span class="hljs-params">system</span>ctl daemon-reload &amp;&amp; <span class="hljs-params">system</span>ctl restart docker<br></code></pre></td></tr></table></figure>
+
+<p>一句话命令（测试）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">mkdir</span> -p /etc/docker &amp;&amp; <span class="hljs-built_in">echo</span> <span class="hljs-string">&#x27;&#123;&quot;data-root&quot;:&quot;/data/docker&quot;&#125;&#x27;</span> | <span class="hljs-built_in">tee</span> /etc/docker/daemon.json &gt;/dev/null &amp;&amp; systemctl restart docker<br></code></pre></td></tr></table></figure>
+
+<h3 id="查看容器启动命令"><a href="#查看容器启动命令" class="headerlink" title="查看容器启动命令"></a>查看容器启动命令</h3><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stata">docker <span class="hljs-keyword">run</span> --<span class="hljs-keyword">rm</span> -v /<span class="hljs-keyword">var</span>/<span class="hljs-keyword">run</span>/docker.sock:/<span class="hljs-keyword">var</span>/<span class="hljs-keyword">run</span>/docker.sock cucker/get_command_4_run_container &lt;容器ID&gt;<br></code></pre></td></tr></table></figure>
+<h2 id="其他命令"><a href="#其他命令" class="headerlink" title="其他命令"></a>其他命令</h2><h3 id="docker-compose重新构建容器"><a href="#docker-compose重新构建容器" class="headerlink" title="docker-compose重新构建容器"></a>docker-compose重新构建容器</h3><figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ada">docker-compose up <span class="hljs-comment">--build -d</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="拉取镜像"><a href="#拉取镜像" class="headerlink" title="拉取镜像"></a>拉取镜像</h3><figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs 1c">docker pull &lt;images_name&gt;:latest    <span class="hljs-comment">//latest为最新镜像的意思</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="设置容器开机自启"><a href="#设置容器开机自启" class="headerlink" title="设置容器开机自启"></a>设置容器开机自启</h3><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">--restart</span>=always //容器初次启动添加的参数<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli">docker update <span class="hljs-params">--restart=always</span> &lt;docker_ID&gt; <span class="hljs-string">//</span>已启动的容器设置<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stata">docker <span class="hljs-keyword">update</span> --restart=<span class="hljs-keyword">no</span> &lt;docker_ID&gt; <span class="hljs-comment">//取消开机自启动</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight dust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dust"><span class="language-xml">docker ps -aq | xargs -I </span><span class="hljs-template-variable">&#123;&#125;</span><span class="language-xml"> docker update --restart=always </span><span class="hljs-template-variable">&#123;&#125;</span><span class="language-xml">   //批量给所有容器添加自启动标签</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="将文件从本机上传到docker容器"><a href="#将文件从本机上传到docker容器" class="headerlink" title="将文件从本机上传到docker容器"></a>将文件从本机上传到docker容器</h3><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vim">docker <span class="hljs-keyword">cp</span> <span class="hljs-symbol">&lt;local_path&gt;</span> <span class="hljs-symbol">&lt;docker_ID&gt;</span>:<span class="hljs-symbol">&lt;docker_path&gt;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="从docker容器中下载文件"><a href="#从docker容器中下载文件" class="headerlink" title="从docker容器中下载文件"></a>从docker容器中下载文件</h3><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vim">docker <span class="hljs-keyword">cp</span> <span class="hljs-symbol">&lt;docker_ID&gt;</span>:<span class="hljs-symbol">&lt;local_path&gt;</span> <span class="hljs-symbol">&lt;local_path&gt;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="将容器保存为镜像"><a href="#将容器保存为镜像" class="headerlink" title="将容器保存为镜像"></a>将容器保存为镜像</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml">docker commit <span class="hljs-tag">&lt;<span class="hljs-name">docker_ID</span>&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-name">要保存的镜像名称</span>&gt;</span>:v1.1<br></code></pre></td></tr></table></figure>
+
+<h2 id="批量操作"><a href="#批量操作" class="headerlink" title="批量操作"></a>批量操作</h2><p>给所有容器添加自启动标签</p>
+<figure class="highlight dust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dust"><span class="language-xml">docker ps -aq | xargs -I </span><span class="hljs-template-variable">&#123;&#125;</span><span class="language-xml"> docker update --restart=always </span><span class="hljs-template-variable">&#123;&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>停止&#x2F;删除所有容器</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs powershell">docker stop <span class="hljs-variable">$</span>(docker <span class="hljs-built_in">ps</span> <span class="hljs-literal">-a</span> <span class="hljs-literal">-q</span>)<br>docker <span class="hljs-built_in">rm</span> <span class="hljs-variable">$</span>(docker <span class="hljs-built_in">ps</span> <span class="hljs-literal">-a</span> <span class="hljs-literal">-q</span>)<br></code></pre></td></tr></table></figure>
+<p>停止&#x2F;删除所有名字包含<code>linglong</code>的容器</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs powershell">docker stop <span class="hljs-variable">$</span>(docker <span class="hljs-built_in">ps</span> <span class="hljs-literal">-a</span> | grep <span class="hljs-string">&#x27;linglong&#x27;</span> | awk <span class="hljs-string">&#x27;&#123;print $1&#125;&#x27;</span>)<br>docker <span class="hljs-built_in">rm</span> <span class="hljs-variable">$</span>(docker <span class="hljs-built_in">ps</span> <span class="hljs-literal">-a</span> | grep <span class="hljs-string">&#x27;linglong&#x27;</span> | awk <span class="hljs-string">&#x27;&#123;print $1&#125;&#x27;</span>)<br></code></pre></td></tr></table></figure>
+
+<p>删除所有未打<code>dangling</code>标签的镜像</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">docker rmi $(docker images -q -f <span class="hljs-attribute">dangling</span>=<span class="hljs-literal">true</span>)<br></code></pre></td></tr></table></figure>
+
+<p>删除所有名字包含<code>linglong</code>的镜像</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">docker</span> rmi $(docker images | grep <span class="hljs-string">&quot;linglong&quot;</span> | awk <span class="hljs-string">&#x27;&#123;print <span class="hljs-variable">$3</span>&#125;&#x27;</span>)<br></code></pre></td></tr></table></figure>
+
+<p>删除所有镜像</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs powershell">docker rmi <span class="hljs-operator">-f</span> <span class="hljs-variable">$</span>(docker images <span class="hljs-literal">-q</span>)<br></code></pre></td></tr></table></figure>
+
+
+<h2 id="配置docker代理"><a href="#配置docker代理" class="headerlink" title="配置docker代理"></a>配置docker代理</h2><ol>
+<li><p>创建 dockerd 相关的 systemd 目录，这个目录下的配置将覆盖 dockerd 的默认配置</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">mkdir</span> -p /etc/systemd/system/docker.service.d<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>新建配置文件 <code>http-proxy.conf</code>，这个文件中将包含环境变量</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">vim /etc/systemd/system/docker.service.d/http-proxy.conf<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>写入代理配置 </p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">[Service]<br>Environment=<span class="hljs-string">&quot;HTTP_PROXY=http://10.0.0.100:10808&quot;</span><br>Environment=<span class="hljs-string">&quot;HTTPS_PROXY=http://10.0.0.100:10808&quot;</span><br></code></pre></td></tr></table></figure>
+</li>
+<li><p>重新加载配置文件，重启 dockerd</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">systemctl daemon-reload &amp;&amp; systemctl restart docker<br></code></pre></td></tr></table></figure></li>
+</ol>
+<p>一句话命令（测试）</p>
+<figure class="highlight nsis"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs nsis">mkdir -p /etc/<span class="hljs-params">system</span>d/<span class="hljs-params">system</span>/docker.service.d &amp;&amp; echo -e <span class="hljs-string">&#x27;[Service]\nEnvironment=&quot;HTTP_PROXY=http://10.0.0.100:10808&quot;\nEnvironment=&quot;HTTPS_PROXY=http://10.0.0.100:10808&quot;&#x27;</span> &gt; /etc/<span class="hljs-params">system</span>d/<span class="hljs-params">system</span>/docker.service.d/http-proxy.conf &amp;&amp; <span class="hljs-params">system</span>ctl daemon-reload &amp;&amp; <span class="hljs-params">system</span>ctl restart docker<br></code></pre></td></tr></table></figure>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%B3%BB%E7%BB%9F/" class="category-chain-item">系统</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E7%B3%BB%E7%BB%9F/linux/" class="category-chain-item">linux</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/docker/" class="print-no-link">#docker</a>
+      
+    </div>
+  
+</div>
+
+
+              
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/05/14/%E5%85%B6%E5%AE%83/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%AE%9E%E9%AA%8C%E6%80%A7%E5%8A%9F%E8%83%BD%E8%B0%83%E8%AF%95/" title="浏览器实验性功能调试">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">浏览器实验性功能调试</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/05/13/WEB/windows%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEFileBrowser/" title="windows安装配置FileBrowser">
+                        <span class="hidden-mobile">windows安装配置FileBrowser</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

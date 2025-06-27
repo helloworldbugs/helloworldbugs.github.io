@@ -1,0 +1,735 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/%E6%A5%BD.png">
+  <link rel="icon" href="/img/%E6%A5%BD.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="神楽">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="用户操作创建用户1create user &#x27;&lt;用户名&gt;&#x27;@&#x27;&lt;host&gt;&#x27; identified by &#x27;&lt;密码&gt;&#x27;;  说明:  host – 指定该用户在哪个主机上可以登陆,如果是本地用户可用localhost, 如果想让该用户可以从任意远程主机登陆,可以使用通配符% 如果想只让某个IP段的主机连接">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SQL学习">
+<meta property="og:url" content="https://helloworldbugs.gitlab.io/2024/05/14/%E7%BC%96%E7%A8%8B/SQL%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="神楽的博客">
+<meta property="og:description" content="用户操作创建用户1create user &#x27;&lt;用户名&gt;&#x27;@&#x27;&lt;host&gt;&#x27; identified by &#x27;&lt;密码&gt;&#x27;;  说明:  host – 指定该用户在哪个主机上可以登陆,如果是本地用户可用localhost, 如果想让该用户可以从任意远程主机登陆,可以使用通配符% 如果想只让某个IP段的主机连接">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-05-14T13:38:51.000Z">
+<meta property="article:modified_time" content="2025-04-17T04:13:38.354Z">
+<meta property="article:author" content="神楽">
+<meta property="article:tag" content="sql">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>SQL学习 - 神楽的博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"helloworldbugs.gitlab.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":50,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>神楽的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/guidao.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="SQL学习"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-05-14 21:38" pubdate>
+          2024年5月14日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          918 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          8 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">SQL学习</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2025年4月17日 中午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="用户操作"><a href="#用户操作" class="headerlink" title="用户操作"></a>用户操作</h1><h2 id="创建用户"><a href="#创建用户" class="headerlink" title="创建用户"></a>创建用户</h2><figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs n1ql"><span class="hljs-keyword">create</span> <span class="hljs-keyword">user</span> <span class="hljs-string">&#x27;&lt;用户名&gt;&#x27;</span>@<span class="hljs-string">&#x27;&lt;host&gt;&#x27;</span> identified <span class="hljs-keyword">by</span> <span class="hljs-string">&#x27;&lt;密码&gt;&#x27;</span>;<br></code></pre></td></tr></table></figure>
+
+<p>说明:</p>
+<ul>
+<li>host – 指定该用户在哪个主机上可以登陆,如果是本地用户可用localhost, 如果想让该用户可以从任意远程主机登陆,可以使用通配符%</li>
+<li>如果想只让某个IP段的主机连接，可以修改为：<code>create user &#39;admin&#39;@&#39;192.168.100.%&#39; identified by &#39;password&#39;;</code></li>
+</ul>
+<h2 id="删除用户"><a href="#删除用户" class="headerlink" title="删除用户"></a>删除用户</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">drop</span> <span class="hljs-keyword">user</span> <span class="hljs-operator">&lt;</span>用户名<span class="hljs-operator">&gt;</span>; <span class="hljs-operator">/</span><span class="hljs-operator">/</span>默认情况下删除<span class="hljs-string">&#x27;username&#x27;</span>@<span class="hljs-string">&#x27;%&#x27;</span><br><span class="hljs-keyword">drop</span> <span class="hljs-keyword">user</span> <span class="hljs-string">&#x27;&lt;用户名&gt;&#x27;</span>@<span class="hljs-string">&#x27;&lt;host&gt;&#x27;</span>; <span class="hljs-operator">/</span><span class="hljs-operator">/</span>删除指定host的用户<br></code></pre></td></tr></table></figure>
+
+<h2 id="修改用户密码"><a href="#修改用户密码" class="headerlink" title="修改用户密码"></a>修改用户密码</h2><figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">mysqladmin -u <span class="hljs-keyword">admin</span> -h localhost -p <span class="hljs-keyword">password</span> &quot;password&quot;<br>mysqladmin -u &lt;<span class="hljs-keyword">user</span>&gt; -p &lt;<span class="hljs-keyword">password</span>&gt;<br></code></pre></td></tr></table></figure>
+<h1 id="授权"><a href="#授权" class="headerlink" title="授权"></a>授权</h1><h2 id="添加授权"><a href="#添加授权" class="headerlink" title="添加授权"></a>添加授权</h2><figure class="highlight pf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pf">grant <span class="hljs-literal">all</span> <span class="hljs-keyword">on</span> <span class="hljs-variable">&lt;库名&gt;</span>.<span class="hljs-variable">&lt;表名&gt;</span> <span class="hljs-keyword">to</span> &#x27;<span class="hljs-variable">&lt;用户名&gt;</span>&#x27;@&#x27;<span class="hljs-variable">&lt;host&gt;</span>&#x27;;<br></code></pre></td></tr></table></figure>
+
+<h2 id="撤销权限"><a href="#撤销权限" class="headerlink" title="撤销权限"></a>撤销权限</h2><figure class="highlight pf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pf">revoke <span class="hljs-variable">&lt;权限&gt;</span> <span class="hljs-keyword">on</span> <span class="hljs-variable">&lt;库名&gt;</span>.<span class="hljs-variable">&lt;表名&gt;</span> <span class="hljs-keyword">from</span> &#x27;<span class="hljs-variable">&lt;用户名&gt;</span>&#x27;@&#x27;<span class="hljs-variable">&lt;host&gt;</span>&#x27;;<br></code></pre></td></tr></table></figure>
+
+<h2 id="查询某用户的授权情况"><a href="#查询某用户的授权情况" class="headerlink" title="查询某用户的授权情况"></a>查询某用户的授权情况</h2><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dart"><span class="hljs-keyword">show</span> grants <span class="hljs-keyword">for</span> <span class="hljs-string">&#x27;&lt;用户名&gt;&#x27;</span>@<span class="hljs-string">&#x27;&lt;host&gt;&#x27;</span>;<br></code></pre></td></tr></table></figure>
+
+<p>说明: </p>
+<ul>
+<li>权限 – grant all为授予用户所有操作权限。可单独设置，如select , insert , update 等。</li>
+<li>授权 – 如果要授予该用户对所有数据库和表的相应操作权限则可用 * 表示, 如 <em>.</em></li>
+</ul>
+<h2 id="刷新授权表"><a href="#刷新授权表" class="headerlink" title="刷新授权表"></a>刷新授权表</h2><figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs abnf">flush privileges<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
+
+
+<h1 id="创建库表"><a href="#创建库表" class="headerlink" title="创建库表"></a>创建库表</h1><h2 id="创建数据库"><a href="#创建数据库" class="headerlink" title="创建数据库"></a>创建数据库</h2><figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs n1ql"><span class="hljs-keyword">create</span> <span class="hljs-keyword">database</span> &lt;库名&gt;；<br></code></pre></td></tr></table></figure>
+<h2 id="创建数据表"><a href="#创建数据表" class="headerlink" title="创建数据表"></a>创建数据表</h2><figure class="highlight pf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pf">create <span class="hljs-built_in">table</span> <span class="hljs-variable">&lt;库名&gt;</span>.<span class="hljs-variable">&lt;表名&gt;</span> (<span class="hljs-variable">&lt;字段1 数据类型&gt;</span>,<span class="hljs-variable">&lt;字段2 数据类型&gt;</span>,......)；<br></code></pre></td></tr></table></figure>
+
+<p><strong>示例：</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">create</span> <span class="hljs-keyword">table</span> users (<br>id <span class="hljs-type">int</span> auto_increment <span class="hljs-keyword">primary</span> key,<br>username <span class="hljs-type">varchar</span>(<span class="hljs-number">50</span>) <span class="hljs-keyword">not</span> <span class="hljs-keyword">null</span>,<br>phone <span class="hljs-type">varchar</span>(<span class="hljs-number">11</span>) <span class="hljs-keyword">not</span> <span class="hljs-keyword">null</span>,<br>email <span class="hljs-type">varchar</span>(<span class="hljs-number">100</span>) <span class="hljs-keyword">not</span> <span class="hljs-keyword">null</span>,<br>birthdate <span class="hljs-type">date</span>,<br>active <span class="hljs-type">boolean</span> <span class="hljs-keyword">default</span> <span class="hljs-literal">true</span><br>);<br></code></pre></td></tr></table></figure>
+
+<p><strong>实例解析：</strong></p>
+<ul>
+<li>id: 用户 id，整数类型，自增长，作为主键。</li>
+<li>username: 用户名，变长字符串，不允许为空。</li>
+<li>phone: 用户手机号，数字整数，最大11位。</li>
+<li>email: 用户邮箱，变长字符串，不允许为空。</li>
+<li>birthdate: 用户的生日，日期类型。</li>
+<li>active: 用户是否已经激活，布尔类型，默认值为 true。</li>
+</ul>
+<h2 id="常见数据类型"><a href="#常见数据类型" class="headerlink" title="常见数据类型"></a>常见数据类型</h2><table>
+<tr>
+<td>数据类型</td>
+<td>描述</td>
+</tr>
+<tr>
+<td>id</td>
+<td>INT AUTO_INCREMENT PRIMARY KEY，整数类型，自增长，作为主键</td>
+</tr>
+<tr>
+<td>integer(size) </td>
+<td rowspan="4">仅容纳整数。在括号内规定数字的最大位数。</td>
+</tr>
+<tr>
+<td>int(size) </td>
+</tr>
+<tr>
+<td>smallint(size) </td>
+</tr>
+<tr>
+<td>tinyint(size) </td>
+</tr>
+<tr>
+<td>decimal(size,d) </td>
+<td rowspan="2">容纳带有小数的数字。size 规定数字的最大位数。”d” 规定小数点右侧的最大位数。</td>
+</tr>
+<tr>
+<td>numeric(size,d) </td>
+</tr>
+<tr>
+<td>varchar(size) </td>
+<td>容纳可变长度的字符串（可容纳字母、数字以及特殊的字符）。</td>
+</tr>
+<tr>
+<td>date(yyyymmdd) </td>
+<td>容纳日期。</td>
+</tr>
+<tr>
+<td>is_active</td>
+<td>布尔类型，默认值为 true</td>
+</tr>
+</table>
+
+
+<h1 id="增删查改"><a href="#增删查改" class="headerlink" title="增删查改"></a>增删查改</h1><h2 id="查"><a href="#查" class="headerlink" title="查"></a>查</h2><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dart"><span class="hljs-keyword">show</span> databases; <span class="hljs-comment">//查询当前空间下所有库</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dart"><span class="hljs-keyword">show</span> tabses; <span class="hljs-comment">//查询当前库下所有表</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs axapta"><span class="hljs-keyword">desc</span> &lt;表名&gt;; <span class="hljs-comment">//查询表的字段结构</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight pf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pf">select <span class="hljs-variable">&lt;值&gt;</span> <span class="hljs-keyword">from</span> <span class="hljs-variable">&lt;库&gt;</span>.<span class="hljs-variable">&lt;表&gt;</span>; //查询某列值，可以写多个值，以逗号分隔；也可以用通配符“*”查询所有值。<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight pf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pf">select <span class="hljs-variable">&lt;值&gt;</span> <span class="hljs-keyword">from</span> <span class="hljs-variable">&lt;库&gt;</span>.<span class="hljs-variable">&lt;表&gt;</span> where <span class="hljs-variable">&lt;值&gt;</span>=<span class="hljs-variable">&lt;值&gt;</span>; //查询某行值，where后跟上定位条件，和select查询的某列值形成and的关系。<br></code></pre></td></tr></table></figure>
+
+<h2 id="增"><a href="#增" class="headerlink" title="增"></a>增</h2><figure class="highlight bnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bnf">insert into <span class="hljs-attribute">&lt;库&gt;</span>.<span class="hljs-attribute">&lt;表&gt;</span> (<span class="hljs-attribute">&lt;列1&gt;</span>,<span class="hljs-attribute">&lt;列2&gt;</span>) values (<span class="hljs-attribute">&lt;&#x27;新值1&#x27;&gt;</span>,<span class="hljs-attribute">&lt;&#x27;新值2&#x27;&gt;</span>，......);<br></code></pre></td></tr></table></figure>
+
+<h2 id="改"><a href="#改" class="headerlink" title="改"></a>改</h2><figure class="highlight pf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pf">update <span class="hljs-variable">&lt;库&gt;</span>.<span class="hljs-variable">&lt;表&gt;</span> <span class="hljs-built_in">set</span> <span class="hljs-variable">&lt;列&gt;</span>=<span class="hljs-variable">&lt;&#x27;新值&#x27;&gt;</span> where <span class="hljs-variable">&lt;列&gt;</span>=<span class="hljs-variable">&lt;&#x27;值&#x27;&gt;</span>;<br></code></pre></td></tr></table></figure>
+
+<h2 id="删"><a href="#删" class="headerlink" title="删"></a>删</h2><figure class="highlight pf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pf">delete <span class="hljs-keyword">from</span> <span class="hljs-variable">&lt;库&gt;</span>.<span class="hljs-variable">&lt;表&gt;</span> where <span class="hljs-variable">&lt;列&gt;</span>=<span class="hljs-variable">&lt;&#x27;值&#x27;&gt;</span>； //删除某行<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gradle"><span class="hljs-keyword">delete</span> <span class="hljs-keyword">from</span> &lt;库&gt;.&lt;表&gt;; 或 <span class="hljs-keyword">delete</span> * <span class="hljs-keyword">from</span> &lt;表&gt;； <span class="hljs-comment">//删除所有行</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight pf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pf"><span class="hljs-keyword">drop</span> <span class="hljs-built_in">table</span> <span class="hljs-variable">&lt;库&gt;</span>.<span class="hljs-variable">&lt;表&gt;</span>； //删除表<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight gauss"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gauss"><span class="hljs-built_in">drop</span> database &lt;库&gt;； <span class="hljs-comment">//删除库</span><br></code></pre></td></tr></table></figure>
+
+
+<h1 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h1><h2 id="解决3306无法远程连接问题"><a href="#解决3306无法远程连接问题" class="headerlink" title="解决3306无法远程连接问题"></a>解决3306无法远程连接问题</h2><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vim"><span class="hljs-keyword">vim</span> /etc/mysql/mysql.<span class="hljs-keyword">conf</span>.d/mysqld.<span class="hljs-keyword">cnf</span><br></code></pre></td></tr></table></figure>
+
+<p>将“bind-address &#x3D; 127.0.0.1”这行注释</p>
+<h2 id="删除用户名为空的用户"><a href="#删除用户名为空的用户" class="headerlink" title="删除用户名为空的用户"></a>删除用户名为空的用户</h2><p>以root账户登录MySQL，需输入root密码</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs css">mysql -u root -<span class="hljs-selector-tag">p</span><br></code></pre></td></tr></table></figure>
+
+<p>选择mysql库</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs abnf">use mysql<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
+
+<p>删除账号为空账户</p>
+<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs n1ql"><span class="hljs-keyword">delete</span> <span class="hljs-keyword">from</span> <span class="hljs-keyword">user</span> <span class="hljs-keyword">where</span> <span class="hljs-keyword">User</span>=<span class="hljs-string">&#x27;&#x27;</span>;<br></code></pre></td></tr></table></figure>
+
+<p>刷新权限</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs abnf">flush privileges<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
+
+<p>退出</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-keyword">exit</span><br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%BC%96%E7%A8%8B/" class="category-chain-item">编程</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/sql/" class="print-no-link">#sql</a>
+      
+    </div>
+  
+</div>
+
+
+              
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/05/14/%E7%BC%96%E7%A8%8B/Python%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/" title="Python学习记录">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Python学习记录</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/05/14/WEB/%E8%87%AA%E7%AD%BE%E5%90%8Dssl%E8%AF%81%E4%B9%A6%E5%B9%B6%E9%85%8D%E7%BD%AEhttps/" title="自签名ssl证书并配置https">
+                        <span class="hidden-mobile">自签名ssl证书并配置https</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

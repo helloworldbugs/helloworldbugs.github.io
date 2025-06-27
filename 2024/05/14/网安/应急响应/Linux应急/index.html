@@ -1,0 +1,660 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/%E6%A5%BD.png">
+  <link rel="icon" href="/img/%E6%A5%BD.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="神楽">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="异常进程、端口排查12345678910111213查找占用cpu最多的进程，相关命令：运行top命令后，键入大写字母P按cpu排序查找占用内存最多的进程，相关命令：运行top命令后，键入大写字母M按内存排序查看显卡占用情况：nvidia-smi查看静态进程：ps -ef查看进程的可执行程序：ls -l &#x2F;proc&#x2F;PID&#x2F;exe查看进程打开的文件：lsof -p PID查看进程的启动时间点：ps">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux应急">
+<meta property="og:url" content="https://helloworldbugs.gitlab.io/2024/05/14/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/Linux%E5%BA%94%E6%80%A5/index.html">
+<meta property="og:site_name" content="神楽的博客">
+<meta property="og:description" content="异常进程、端口排查12345678910111213查找占用cpu最多的进程，相关命令：运行top命令后，键入大写字母P按cpu排序查找占用内存最多的进程，相关命令：运行top命令后，键入大写字母M按内存排序查看显卡占用情况：nvidia-smi查看静态进程：ps -ef查看进程的可执行程序：ls -l &#x2F;proc&#x2F;PID&#x2F;exe查看进程打开的文件：lsof -p PID查看进程的启动时间点：ps">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-05-14T14:24:50.000Z">
+<meta property="article:modified_time" content="2025-06-06T03:44:33.654Z">
+<meta property="article:author" content="神楽">
+<meta property="article:tag" content="应急响应">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Linux应急 - 神楽的博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"helloworldbugs.gitlab.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":50,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>神楽的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/guidao.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Linux应急"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-05-14 22:24" pubdate>
+          2024年5月14日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          17 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Linux应急</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2025年6月6日 中午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="异常进程、端口排查"><a href="#异常进程、端口排查" class="headerlink" title="异常进程、端口排查"></a>异常进程、端口排查</h1><figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs tcl">查找占用cpu最多的进程，相关命令：运行top命令后，键入大写字母P按cpu排序<br>查找占用内存最多的进程，相关命令：运行top命令后，键入大写字母M按内存排序<br>查看显卡占用情况：nvidia-smi<br>查看静态进程：ps -ef<br>查看进程的可执行程序：ls -l /<span class="hljs-keyword">proc</span>/PID/exe<br>查看进程打开的文件：lsof -p<span class="hljs-title"> PID</span><br>查看进程的启动时间点：ps -p<span class="hljs-title"> PID</span> -o<span class="hljs-title"> lstart</span><br>查看进程启动时间以及关联的子进程：systemctl<span class="hljs-title"> status</span> PID<br>查看端口对应的进程：lsof -i:PORT<br>查看进程sshd打开的文件：lsof -c<span class="hljs-title"> sshd</span><br>跟踪异常进程运行情况：strace -tt -T -e<span class="hljs-title"> trace=all</span> -p<span class="hljs-title"> PID</span><br>检查进程挂载：cat /<span class="hljs-keyword">proc</span>/mounts 或<span class="hljs-title"> cat</span> /<span class="hljs-keyword">proc</span>/$$/mountinfo<br>查看进程的线程：top -Hp &lt;进程pid&gt;<br></code></pre></td></tr></table></figure>
+
+<p>更多可参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/yingchao_yuan/article/details/109199868">https://blog.csdn.net/yingchao_yuan/article/details/109199868</a></p>
+<h1 id="命令排查"><a href="#命令排查" class="headerlink" title="命令排查"></a>命令排查</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">查看当前用户历史命令：<span class="hljs-built_in">history</span><br>查看root用户历史命令：<span class="hljs-built_in">cat</span> /root/.bash_history<br>查看某用户历史命令：<span class="hljs-built_in">cat</span> /home/&lt;用户&gt;/.bash_history<br>使<span class="hljs-built_in">history</span>命令显示时间戳：<span class="hljs-built_in">export</span> HISTTIMEFORMAT=<span class="hljs-string">&#x27;%F %T &#x27;</span><br></code></pre></td></tr></table></figure>
+
+
+<h1 id="网络排查"><a href="#网络排查" class="headerlink" title="网络排查"></a>网络排查</h1><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs">查看外连地址及相关进程：netstat -antlp<br></code></pre></td></tr></table></figure>
+
+<h1 id="定时任务排查"><a href="#定时任务排查" class="headerlink" title="定时任务排查"></a>定时任务排查</h1><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs stata">crontab -<span class="hljs-keyword">l</span> （/<span class="hljs-keyword">var</span>/spool/cron/ 目录下的都要检查）<br>查看用户定时任务：crontab -<span class="hljs-keyword">l</span> -<span class="hljs-keyword">u</span> 用户名<br>查看隐藏的定时任务：<span class="hljs-keyword">cat</span> -A /<span class="hljs-keyword">var</span>/spool/cron/root<br>查看定时任务日志：<span class="hljs-keyword">more</span> /<span class="hljs-keyword">var</span>/<span class="hljs-keyword">log</span>/cron <span class="hljs-keyword">log</span><br>查看定时任务执行记录：tail -f /<span class="hljs-keyword">var</span>/<span class="hljs-keyword">log</span>/cron<br></code></pre></td></tr></table></figure>
+
+<h1 id="异常文件排查"><a href="#异常文件排查" class="headerlink" title="异常文件排查"></a>异常文件排查</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs bash">注意使用<span class="hljs-built_in">ls</span> -al以及判断库文件劫持、别名<br>注意文件：执行文件、json文件<br>目录着重看绿色的可执行文件：/etc、/tmp、/、/usr、/root、/boot、/bin、/usr/bin、/sbin<br>保存历史命令：<span class="hljs-built_in">cat</span> .bash_history &gt;&gt; history.txt<br>查看etc目录最近7天内被修改的文件：find /etc -mtime 7 -<span class="hljs-built_in">print</span><br>查看/www目录指定时间范围内新增的文件：find /www -<span class="hljs-built_in">type</span> f -newermt <span class="hljs-string">&#x27;2023-06-25 00:00&#x27;</span> -a -not -newermt <span class="hljs-string">&#x27;2023-06-26 23:59&#x27;</span><br>查看/etc目录修改时间小于7天的配置文件：find /etc -iname <span class="hljs-string">&quot;*conf*&quot;</span> -mtime -7 -<span class="hljs-built_in">print</span><br>查找cron文件中是否存在恶意脚本：<br>/var/spool/cron/*、/etc/crontab、/etc/cron.d/*、/etc/cron.daily/*、/etc/cron.hourly/* 、/etc/cron.monthly/*、/etc/cron.weekly/、/etc/anacrontab、/var/spool/anacron/*<br>查看私钥文件：<span class="hljs-built_in">cat</span> /root/.ssh/authorized_keys<br>查看文件创建修改时间：<span class="hljs-built_in">stat</span> 文件<br>查找文件：find / -name <span class="hljs-string">&quot;localhost_access_log*&quot;</span><br>查看文件隐藏属性：lsattr 文件<br>修改文件隐藏属性：chattr -/+ 属性 文件<br>输出文件md5：<span class="hljs-built_in">md5sum</span> 文件<br>检查hosts文件：<span class="hljs-built_in">cat</span> /etc/hosts<br>os文件分析：strings os文件<br>查找包含关键字符的普通文件（排除目录、设备文件等特殊文件类型）：find / -<span class="hljs-built_in">type</span> f -<span class="hljs-built_in">exec</span> grep -l <span class="hljs-string">&quot;10.16.5.134&quot;</span> &#123;&#125; + 2&gt;/dev/null<br></code></pre></td></tr></table></figure>
+
+<h1 id="账号安全排查"><a href="#账号安全排查" class="headerlink" title="账号安全排查"></a>账号安全排查</h1><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs stata">注意：ubuntu高版本将secure日志目录改成了auth<br>查找特权用户：awk -F <span class="hljs-string">&quot;:&quot;</span> &#x27;<span class="hljs-variable">$3</span>==0&#123;<span class="hljs-keyword">print</span> <span class="hljs-variable">$1&#125;</span>&#x27; /etc/passwd<br>查找可以远程登录的账号信息：awk &#x27;/\<span class="hljs-variable">$1</span>|\<span class="hljs-variable">$6</span>/&#123;<span class="hljs-keyword">print</span> <span class="hljs-variable">$1&#125;</span>&#x27; /etc/shadow<br>查找sudo权限账户：<span class="hljs-keyword">cat</span> /etc/sudoers | grep -v <span class="hljs-string">&quot;^#\|^$&quot;</span> | grep <span class="hljs-string">&quot;ALL=(ALL)&quot;</span> a<br>查找空口令账户：awk -F: &#x27;(<span class="hljs-variable">$2</span>==<span class="hljs-string">&quot;!!&quot;</span>) &#123;<span class="hljs-keyword">print</span> <span class="hljs-variable">$1&#125;</span>&#x27; /etc/shadow<br>查看登录成功日志：<span class="hljs-keyword">more</span> /<span class="hljs-keyword">var</span>/<span class="hljs-keyword">log</span>/secure* | grep <span class="hljs-string">&quot;Accepted password&quot;</span><br>查看登录失败日志：<span class="hljs-keyword">more</span> /<span class="hljs-keyword">var</span>/<span class="hljs-keyword">log</span>/secure* | grep <span class="hljs-string">&quot;Failed password&quot;</span><br>查看本机登录情况：<span class="hljs-keyword">more</span> /<span class="hljs-keyword">var</span>/<span class="hljs-keyword">log</span>/secure* | grep -<span class="hljs-keyword">E</span> <span class="hljs-string">&quot;sshd:session.*session opened&quot;</span><br>查看新增用户：<span class="hljs-keyword">more</span> /<span class="hljs-keyword">var</span>/<span class="hljs-keyword">log</span>/secure* | grep <span class="hljs-string">&quot;new user&quot;</span><br>查看所有用户最后一次登录的时间：lastlog<br>记录当前正在登录系统的用户信息,uptime记录系统启动时间(/<span class="hljs-keyword">var</span>/<span class="hljs-keyword">run</span>/utmp)：w<br>查看所有用户的登录注销信息及系统的启动、重启及关机事件(/<span class="hljs-keyword">var</span>/<span class="hljs-keyword">log</span>/wtmp)：last<br>记录失败的登录尝试信息(/<span class="hljs-keyword">var</span>/<span class="hljs-keyword">log</span>/btmp):lastb<br>所有用户登录日志：last | grep pts | grep -vw :0<br>查看登录成功的日期、用户名及ip：grep <span class="hljs-string">&quot;Accepted &quot;</span> /<span class="hljs-keyword">var</span>/<span class="hljs-keyword">log</span>/secure* | awk &#x27;&#123;<span class="hljs-keyword">print</span> <span class="hljs-variable">$1</span>,<span class="hljs-variable">$2</span>,<span class="hljs-variable">$3</span>,<span class="hljs-variable">$9</span>,<span class="hljs-variable">$11&#125;</span>&#x27;<br>查看试图爆破主机的ip：grep refused /<span class="hljs-keyword">var</span>/<span class="hljs-keyword">log</span>/secure* | awk &#123;&#x27;<span class="hljs-keyword">print</span> <span class="hljs-variable">$9</span>&#x27;&#125; | <span class="hljs-keyword">sort</span> | uniq -c |<span class="hljs-keyword">sort</span> -nr | <span class="hljs-keyword">more</span> grep <span class="hljs-string">&quot;Failed password&quot;</span> /<span class="hljs-keyword">var</span>/<span class="hljs-keyword">log</span>/secure* | grep -<span class="hljs-keyword">E</span> -o <span class="hljs-string">&quot;(([0-9]&#123;1,3&#125;)\.([0-9]&#123;1,3&#125;)\.([0-9]&#123;1,3&#125;)\.([0-9]&#123;1,3&#125;))&quot;</span> | uniq -c<br>查看有哪些ip在爆破主机的root账号：grep <span class="hljs-string">&quot;Failed password for root&quot;</span> /<span class="hljs-keyword">var</span>/<span class="hljs-keyword">log</span>/secure | awk &#x27;&#123;<span class="hljs-keyword">print</span> <span class="hljs-variable">$11&#125;</span>&#x27; | <span class="hljs-keyword">sort</span><br>查看爆破用户名字典：grep <span class="hljs-string">&quot;Failed password&quot;</span> /<span class="hljs-keyword">var</span>/<span class="hljs-keyword">log</span>/secure | awk &#123;&#x27;<span class="hljs-keyword">print</span> <span class="hljs-variable">$9</span>&#x27;&#125; | <span class="hljs-keyword">sort</span> | uniq -c | <span class="hljs-keyword">sort</span> -nr<br></code></pre></td></tr></table></figure>
+<h1 id="日志排查"><a href="#日志排查" class="headerlink" title="日志排查"></a>日志排查</h1><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs stata">日志默认存放位置：/<span class="hljs-keyword">var</span>/<span class="hljs-keyword">log</span>/<br>安全日志：/<span class="hljs-keyword">var</span>/<span class="hljs-keyword">log</span>/secure<br>定时任务日志：/<span class="hljs-keyword">var</span>/<span class="hljs-keyword">log</span>/cron<br>软件安装卸载日志： /<span class="hljs-keyword">var</span>/<span class="hljs-keyword">log</span>/yum.<span class="hljs-keyword">log</span><br>邮件相关：/<span class="hljs-keyword">var</span>/<span class="hljs-keyword">log</span>/maillog<br>日志配置情况：<span class="hljs-keyword">more</span> /etc/rsyslog.<span class="hljs-keyword">conf</span><br>传输文件：<span class="hljs-keyword">more</span> /<span class="hljs-keyword">var</span>/<span class="hljs-keyword">log</span>/message* | grep <span class="hljs-string">&quot;ZMODEM:.*BPS&quot;</span><br>定时任务日志：<span class="hljs-keyword">more</span> /<span class="hljs-keyword">var</span>/<span class="hljs-keyword">log</span>/cron*<br>定时执行脚本：<span class="hljs-keyword">more</span> /<span class="hljs-keyword">var</span>/<span class="hljs-keyword">log</span>/cron* | grep -<span class="hljs-keyword">E</span> <span class="hljs-string">&quot;\.py$|\.sh$|\.pl$&quot;</span><br>下载软件情况：<span class="hljs-keyword">more</span> /<span class="hljs-keyword">var</span>/<span class="hljs-keyword">log</span>/yum* | grep Installed<br>卸载软件情况：<span class="hljs-keyword">more</span> /<span class="hljs-keyword">var</span>/<span class="hljs-keyword">log</span>/yum* | grep Erased<br>可疑工具：<span class="hljs-keyword">more</span> /<span class="hljs-keyword">var</span>/<span class="hljs-keyword">log</span>/yum* | awk -F: &#x27;&#123;<span class="hljs-keyword">print</span> <span class="hljs-variable">$NF&#125;</span>&#x27; | awk -F &#x27;[-]&#x27; &#x27;&#123;<span class="hljs-keyword">print</span> <span class="hljs-variable">$1&#125;</span>&#x27; | <span class="hljs-keyword">sort</span> | uniq | grep -<span class="hljs-keyword">E</span> <span class="hljs-string">&quot;(^nc|sqlmap|nmap|beef|nikto|john|ettercap|backdoor|msfcosole)&quot;</span><br>Nginx日志文件：access.<span class="hljs-keyword">log</span><br>joumalctl日志<br>journal默认配置文件路径：/etc/systemd/journald.<span class="hljs-keyword">conf</span><br>日志从旧到新显示：journalctl<br>日志从新到旧显示：journalctl -r<br>查看进程：journalctl _PID=<span class="hljs-variable">$pid</span><br>journalctl的语法使用跟默认日志的使用一致，如journalctl | grep <span class="hljs-string">&quot;Accepted password&quot;</span><br></code></pre></td></tr></table></figure>
+
+<h1 id="命令排查-1"><a href="#命令排查-1" class="headerlink" title="命令排查"></a>命令排查</h1><figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli">查看历史命令执行记录：<span class="hljs-keyword">history</span>（ 普通账户的历史命令，<span class="hljs-string">/home</span>各账号目录下的<span class="hljs-string">.bash_history</span>）<br>按时间排序，确认最近是否有命令被替换，可以结合rpm -Va命令：<span class="hljs-keyword">ls</span> -all <span class="hljs-string">/usr/bin</span> <span class="hljs-string">/usr/sbin</span> <span class="hljs-string">/bin</span> <span class="hljs-string">/usr/local/bin</span> | rpm -Va&gt;rpm.log<br>查看被别名的命令：<span class="hljs-keyword">alias</span><br>取消被别名的命令：<span class="hljs-keyword">unalias</span> 命令<br></code></pre></td></tr></table></figure>
+
+<h1 id="启动项排查"><a href="#启动项排查" class="headerlink" title="启动项排查"></a>启动项排查</h1><figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli">查看是否有异常开机启动项：cat <span class="hljs-string">/etc/rc.local</span> | chkconfig <span class="hljs-params">--list</span><br>查看启动配置文件：vi <span class="hljs-string">/lib/systemd/system/rc-local.service</span><br>看启动文件：<span class="hljs-string">/etc/rc.local</span>、<span class="hljs-string">/etc/rc</span>[0-6]<span class="hljs-string">.d</span><br>看启动文件目录：<span class="hljs-string">/etc/rc.d</span>、 <span class="hljs-string">/etc/rc.d/init.d</span><br>看异常脚本： <span class="hljs-string">/etc/profile.d/</span> 、<span class="hljs-string">/etc/hourly</span>、<span class="hljs-string">/etc/daily</span>、<span class="hljs-string">/etc/weekly</span>、<span class="hljs-string">/etc/monthly</span><br></code></pre></td></tr></table></figure>
+
+<h1 id="库文件劫持排查"><a href="#库文件劫持排查" class="headerlink" title="库文件劫持排查"></a>库文件劫持排查</h1><figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs avrasm">目前主流的劫持技术主要有三种：<br><span class="hljs-number">1.</span> 更改LD_PRELOAD环境变量，加载恶意库文件<br><span class="hljs-number">2.</span> /etc/<span class="hljs-keyword">ld</span>.so.preload加载恶意的库文件(主流的劫持技术)<br><span class="hljs-number">3.</span> 更改默认的库文件/etc/<span class="hljs-keyword">ld</span>.so.preload为其他库文件<br></code></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">其中第二条是目前遇到的最多的，其主要是通过更改/etc/ld.so.preload来预加载其他恶意的库文件来实现对系统命令，如netstat、<span class="hljs-built_in">cat</span>、top等进行劫持，从而到达隐藏进程、连接、性能等目的，这种也是rootkit典型的技术。<br></code></pre></td></tr></table></figure>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs vim">检查方法：<br>查看环境变量：<span class="hljs-keyword">echo</span> $LD_PRELOAD<br>查看命令加载的库文件：ldd /bin/<span class="hljs-keyword">ls</span><br>跟踪命令加载库的情况：strace -<span class="hljs-keyword">f</span> -<span class="hljs-keyword">e</span> trace=<span class="hljs-keyword">file</span> /bin/<span class="hljs-keyword">cat</span><br>查看ld.<span class="hljs-keyword">so</span>.preload加载库文件：<span class="hljs-keyword">cat</span> /etc/ld.<span class="hljs-keyword">so</span>.preload<br></code></pre></td></tr></table></figure>
+
+<h1 id="处置"><a href="#处置" class="headerlink" title="处置"></a>处置</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">清理定时任务：<br>使用chattr -i /var/spool/cron/取消文件不可修改属性，再<span class="hljs-built_in">rm</span>命令删除定时文件，可以结合crontab命令使用（清除定时任务时和客户确认是否存在正常任务，不要误删了）<br>杀掉进程:killall /kill -9 PID (可用于进程ID一直在变的场景）<br>删除所有任务：crontab -r<br>删除单个任务：crontab -e（编辑）<br>删除恶意文件：<span class="hljs-built_in">rm</span> -rf 文件<br></code></pre></td></tr></table></figure>
+
+<h1 id="工具查杀病毒和rootkit"><a href="#工具查杀病毒和rootkit" class="headerlink" title="工具查杀病毒和rootkit"></a>工具查杀病毒和rootkit</h1><p>chkrootkit (下载地址-<a target="_blank" rel="noopener" href="http://www.chkrootkit.org/">http://www.chkrootkit.org</a>)</p>
+<p>rkhunter (下载地址-<a target="_blank" rel="noopener" href="http://rkhunter.sourceforge.net/">http://rkhunter.sourceforge.net</a>)</p>
+<p>clamav(下载地址-<a target="_blank" rel="noopener" href="http://www.clamav.net/download.html">http://www.clamav.net/download.html</a>)</p>
+<p>webshell：河马、长亭、D盾</p>
+<p>busybox（下载地址-<a target="_blank" rel="noopener" href="https://busybox.net/">https://busybox.net/</a>）</p>
+<p>隐藏进程检测工具：unhide（<a target="_blank" rel="noopener" href="https://www.unhide-forensics.info/">https://www.unhide-forensics.info/</a>）</p>
+<ol>
+<li><p>需先安装epel源：<code>yum -y install epel-release</code></p>
+</li>
+<li><p>安装：<code>yum -y install unhide</code></p>
+</li>
+<li><p>使用： <code>unhide proc</code></p>
+</li>
+</ol>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><p>库劫持参考文章：<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_39581716/article/details/110810798">https://blog.csdn.net/weixin_39581716/article/details/110810798</a></p>
+<p>挖矿应急参考文章：<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/NkleRQknAbvwvkYtNCo-Ww">https://mp.weixin.qq.com/s/NkleRQknAbvwvkYtNCo-Ww</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%BD%91%E5%AE%89/" class="category-chain-item">网安</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/" class="category-chain-item">应急响应</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/" class="print-no-link">#应急响应</a>
+      
+    </div>
+  
+</div>
+
+
+              
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/05/14/%E7%BD%91%E5%AE%89/%E9%BB%91%E5%AE%A2%E5%B7%A5%E5%85%B7/sqlmap/" title="sqlmap">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">sqlmap</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/05/14/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/Windows%E5%BA%94%E6%80%A5/" title="Windows应急">
+                        <span class="hidden-mobile">Windows应急</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,740 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/%E6%A5%BD.png">
+  <link rel="icon" href="/img/%E6%A5%BD.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="神楽">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="本文介绍的思路主要围绕针对于 POST 参数的 multipart&#x2F;form-data 进行讨论。 multipart&#x2F;form-data 是为了解决上传文件场景下文件内容较大且内置字符不可控的问题。在最初的 http 协议中，并没有上传文件方面的功能。RFC1867 为 HTTP 协议添加了这个能力。常见的浏览器都已经支持。按照此规范将用户指定的文件发送到服务器，可以按照此规范解析出用户发送来的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【超详细】Post文件上传BypassWAF汇总">
+<meta property="og:url" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/index.html">
+<meta property="og:site_name" content="神楽的博客">
+<meta property="og:description" content="本文介绍的思路主要围绕针对于 POST 参数的 multipart&#x2F;form-data 进行讨论。 multipart&#x2F;form-data 是为了解决上传文件场景下文件内容较大且内置字符不可控的问题。在最初的 http 协议中，并没有上传文件方面的功能。RFC1867 为 HTTP 协议添加了这个能力。常见的浏览器都已经支持。按照此规范将用户指定的文件发送到服务器，可以按照此规范解析出用户发送来的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/001-0.webp">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/002-0.webp">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/003-0.webp">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/004-0.webp">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/005-0.webp">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/006-0.webp">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/007-0.webp">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/008-0.webp">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/009-0.webp">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/010-0.webp">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/011-0.webp">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/012-0.webp">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/013-0.webp">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/014-0.webp">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/015-0.webp">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/016-0.webp">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/017-0.webp">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/018-0.webp">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/019-0.webp">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/020-0.webp">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/021-0.webp">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/022-0.webp">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/023-0.webp">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/024-0.webp">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/025-0.webp">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/026-0.webp">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/027-0.webp">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/028-0.webp">
+<meta property="article:published_time" content="2024-08-20T07:48:25.000Z">
+<meta property="article:modified_time" content="2024-08-20T07:50:39.071Z">
+<meta property="article:author" content="神楽">
+<meta property="article:tag" content="bypass">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/001-0.webp">
+  
+  
+  
+  <title>【超详细】Post文件上传BypassWAF汇总 - 神楽的博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"helloworldbugs.gitlab.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":50,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>神楽的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/guidao.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="【超详细】Post文件上传BypassWAF汇总"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-08-20 15:48" pubdate>
+          2024年8月20日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          23 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">【超详细】Post文件上传BypassWAF汇总</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2024年8月20日 下午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <p>本文介绍的思路主要围绕针对于 POST 参数的 <code>multipart/form-data</code> 进行讨论。</p>
+<p><code>multipart/form-data</code> 是为了解决上传文件场景下文件内容较大且内置字符不可控的问题。在最初的 http 协议中，并没有上传文件方面的功能。RFC1867 为 HTTP 协议添加了这个能力。常见的浏览器都已经支持。按照此规范将用户指定的文件发送到服务器，可以按照此规范解析出用户发送来的文件。</p>
+<p>HTTP 传输的内容通过 boundary 进行了分割，以 <code>--boundary</code> 开始，并以 <code>--boundary--</code> 结尾。</p>
+<p>multipart&#x2F;form-data 格式也是可以传递 POST 参数的。对于 Nginx + PHP 的架构，Nginx 实际上是不负责解析 multipart&#x2F;form-data 的 body 部分的，而是交由 PHP 来解析，因此 WAF 所获取的内容就很有可能与后端的 PHP 发生不一致。</p>
+<p>通过一个简单的脚本来验证上面的说法。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">&lt;?php<br>echo file_get_contents(&quot;php://input&quot;); <br>echo &#x27;$_POST Content\n&#x27;;<br>echo &#x27;&#x27;;<br>var_dump($_POST); <br>echo &#x27;$_FILES Content\n&#x27;;<br>echo &#x27;&#x27;;<br>var_dump($_FILES);<br>?&gt;<br></code></pre></td></tr></table></figure>
+
+<p>正常情况下使用 multipart&#x2F;form-data POST 传输一个参数 <code>f</code>，其值为 <code>1</code>：</p>
+<p><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/001-0.webp" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>上面说到，multipart&#x2F;form-data 用来解决传输文件的问题，那什么情况是上传文件？什么情况是 POST 参数呢？关键点在于有没有一个完整的 <code>filename=</code>，这 9 个字符缺一不可。加上了 <code>filename=</code> 以后的回显：</p>
+<p><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/002-0.webp" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>由于一些 WAF 产品对用户上传文件的内容不做匹配，直接放行。因此，关键问题在于，WAF 能否准确有效识别出哪些内容是传给 POST 数组的，哪些传给 FILES 数组？如果不能，那就可以想办法让 WAF 以为我们是在上传文件，而实际上却是在 POST 一个参数，这个参数可以是命令注入、SQL 注入、SSRF 等任意的一种攻击，这样就实现了通用型的Waf Bypass。</p>
+<h2 id="Bypass-思路-初级"><a href="#Bypass-思路-初级" class="headerlink" title="Bypass 思路 - 初级"></a><strong>Bypass 思路 - 初级</strong></h2><h3 id="0x00-截断"><a href="#0x00-截断" class="headerlink" title="0x00 截断"></a><strong>0x00 截断</strong></h3><p>在 filename 之前加入了 0x00 (%00 url decode)，有些 WAF 在检测前会对 HTTP 协议中的 0x00 进行过滤， 这样就导致了 WAF 认为是含有 filename 的普通上传，而后端 PHP 则认为是 POST 参数。</p>
+<p><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/003-0.webp" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<h3 id="文件描述双写混淆"><a href="#文件描述双写混淆" class="headerlink" title="文件描述双写混淆"></a><strong>文件描述双写混淆</strong></h3><p>双写 <code>Content-Disposition</code>，一些 WAF 会取第二行，而实际 PHP 会获取第一行。</p>
+<p><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/004-0.webp" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>另外针对 <code>Content-Disposition</code> 的双写混淆还有可以包括 <code>Content-Type</code>:</p>
+<p><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/005-0.webp" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>但是这种方式会将 <code>f</code> 变量中加入一些垃圾数据，在进行注入时需要进行闭合处理。</p>
+<h3 id="multipart-混淆"><a href="#multipart-混淆" class="headerlink" title="multipart 混淆"></a><strong>multipart 混淆</strong></h3><p>通过构建一个新的 multipart 部分，是两个部分传递的参数名相同，达到混淆的目的。</p>
+<p><strong>带有垃圾数据的情况</strong></p>
+<p><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/006-0.webp" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><strong>不带垃圾数据的情况</strong></p>
+<p><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/007-0.webp" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<h3 id="Boundary-混淆"><a href="#Boundary-混淆" class="headerlink" title="Boundary 混淆"></a><strong>Boundary 混淆</strong></h3><h4 id="构造双重-boundary"><a href="#构造双重-boundary" class="headerlink" title="构造双重 boundary"></a><strong>构造双重 boundary</strong></h4><p><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/008-0.webp" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>在 PHP 中，只识别到 <code>boundary=a</code>，即真正的 <code>boundary</code> 为 a。若 WAF 中识别到的 <code>boundary</code> 为 <code>b</code>，就会将第 13 行到第 18 行做为文件 <code>pic.png</code> 的内容进行传输，达到混淆的目的。</p>
+<h4 id="构造双重-Content-Type"><a href="#构造双重-Content-Type" class="headerlink" title="构造双重 Content-Type"></a><strong>构造双重 Content-Type</strong></h4><p>这种混淆方式与上一种情况类似，只是将 <code>Content-Type</code> 进行混淆，指定不同的 boundary。</p>
+<p><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/009-0.webp" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<h4 id="空白-boundary"><a href="#空白-boundary" class="headerlink" title="空白 boundary"></a><strong>空白 boundary</strong></h4><p><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/010-0.webp" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>在 PHP 中，只识别到 <code>boundary=空</code> 。若 WAF 中错将 <code>;</code> 识别到为 <code>boundary</code>，就会将第 13 行到第 18 行做为文件 <code>pic.png</code> 的内容进行传输，达到混淆的目的。</p>
+<h4 id="空格-boundary"><a href="#空格-boundary" class="headerlink" title="空格 boundary"></a><strong>空格 boundary</strong></h4><p>同样的 boundary 也可以是空格</p>
+<p><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/011-0.webp" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<h4 id="boundary-中的逗号"><a href="#boundary-中的逗号" class="headerlink" title="boundary 中的逗号"></a><strong>boundary 中的逗号</strong></h4><p><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/012-0.webp" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>事实上，在 PHP 中会将 Boundary 中的逗号作为分隔符，即 boundary 遇到逗号就结束。</p>
+<p>只标识一个逗号也可以：</p>
+<p><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/013-0.webp" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<h2 id="Bypass-思路-进阶"><a href="#Bypass-思路-进阶" class="headerlink" title="Bypass 思路 - 进阶"></a><strong>Bypass 思路 - 进阶</strong></h2><h3 id="0x00-截断进阶"><a href="#0x00-截断进阶" class="headerlink" title="0x00 截断进阶"></a><strong>0x00 截断进阶</strong></h3><p><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/014-0.webp" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/015-0.webp" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/016-0.webp" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>这三个位置都可以。将其替换为 0x00 和 0x20 与之同理。</p>
+<p>此外，将 0x00 放到参数名中也可以绕过：</p>
+<p><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/017-0.webp" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<h3 id="Boundary-混淆进阶"><a href="#Boundary-混淆进阶" class="headerlink" title="Boundary 混淆进阶"></a><strong>Boundary 混淆进阶</strong></h3><p>boundary 的名称是可以前后加入任意内容的，WAF 如果严格按 boundary 去取，就会出现混淆。</p>
+<p><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/018-0.webp" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>在双写 Content-Type 的混淆中，将第一个 Content-Type 和冒号部分填入了空格，实现绕过。</p>
+<p><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/019-0.webp" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>Boundary 的取值混淆：<br><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/020-0.webp" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<h3 id="单双引号混合"><a href="#单双引号混合" class="headerlink" title="单双引号混合"></a><strong>单双引号混合</strong></h3><p>Content-Disposition 中的字段使用单引号、双引号进行混淆<br><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/021-0.webp" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<h3 id="urlencoded-与-multipart-混淆"><a href="#urlencoded-与-multipart-混淆" class="headerlink" title="urlencoded 与 multipart 混淆"></a><strong>urlencoded 与 multipart 混淆</strong></h3><p>在 Content-Type 头中，分别指定为：<code>urlencoded</code> 与 <code>multipart</code>。实际上 PHP 识别到的为 <code>urlencoded</code>，若 WAF 识别到的为 multipart，就可以绕过检测。通过 &amp; 来作为参数分隔符，截取参数 <code>sqlInjectionParam</code> 的前后部分，完整保留该参数。</p>
+<p>由于 <code>multipart/form-data</code> 下的内容不进行 <code>urldecoded</code>， 一些 WAF 也正是这样设计的，这样做本没有问题，但是如果是 <code>urlencoded</code> 格式的内容，不进行 url 解码就会引入 <code>%0a</code> 这样字符，而这样的字符不解码是可以直接绕过防护规则的，从而导致了绕过。</p>
+<p><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/022-0.webp" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<h2 id="Bypass-思路-高级"><a href="#Bypass-思路-高级" class="headerlink" title="Bypass 思路 - 高级"></a><strong>Bypass 思路 - 高级</strong></h2><p>此章节通过结合 PHP 源码来讨论 WAF Bypass 的可能性。</p>
+<h3 id="skip-upload-1"><a href="#skip-upload-1" class="headerlink" title="skip_upload - 1"></a><strong>skip_upload - 1</strong></h3><p>在 PHP 源码中，处理 multipart 时存在这样一段代码：</p>
+<p><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/023-0.webp" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>其中的 param 就是 <code>name=&quot;f&quot;</code>，当程序进入 <code>c &lt; 0</code> 这个分支时，就会跳过当前 part 的上传流程。由于初始化时 <code>c = 0</code>，遇到 <code>[</code> 时，<code>c += 1</code>，遇到 <code>]</code> 时，<code>c -= 1</code>。因此，可以构造 <code>name=&quot;f]&quot;</code>，即可让 <code>c = -1</code>。</p>
+<p><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/024-0.webp" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<h3 id="skip-upload-2"><a href="#skip-upload-2" class="headerlink" title="skip_upload - 2"></a><strong>skip_upload - 2</strong></h3><p>在 PHP 源码中，有这样一段代码：</p>
+<p><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/025-0.webp" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>当文件上传数量超出最大值后，会跳过当前 part 文件的处理。在 php 5.2.12 和以上的版本，有一个隐藏的文件上传限制是在 <code>php.ini</code> 里没有的，就是这个 <code>max_file_uploads</code> 的设定，该默认值是 20, 在 php 5.2.17 的版本中该值已不再隐藏。文 件上传限制最大默认设为 20，所以一次上传最大就是 20 个文档，所以超出 20 个就会报错。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">POST /waf.php HTTP/1.1<br>Accept: */*<br>Host: localhost:8081<br>Accept-Encoding: gzip, deflate<br>Connection: close<br>Content-Type: multipart/form-data; boundary=a<br>Content-Length: 2030<br><br>--a<br>Content-Disposition: form-data; name=&quot;1&quot;; filename=&quot;pic.png&quot;<br>Content-Type: image/png<br><br>1<br>--a<br>Content-Disposition: form-data; name=&quot;2&quot;; filename=&quot;pic.png&quot;<br>Content-Type: image/png<br><br>2<br>--a<br>Content-Disposition: form-data; name=&quot;3&quot;; filename=&quot;pic.png&quot;<br>Content-Type: image/png<br><br>3<br>--a<br>Content-Disposition: form-data; name=&quot;4&quot;; filename=&quot;pic.png&quot;<br>Content-Type: image/png<br><br>3<br>--a<br>Content-Disposition: form-data; name=&quot;5&quot;; filename=&quot;pic.png&quot;<br>Content-Type: image/png<br><br>3<br>--a<br>Content-Disposition: form-data; name=&quot;6&quot;; filename=&quot;pic.png&quot;<br>Content-Type: image/png<br><br>3<br>--a<br>Content-Disposition: form-data; name=&quot;7&quot;; filename=&quot;pic.png&quot;<br>Content-Type: image/png<br><br>3<br>--a<br>Content-Disposition: form-data; name=&quot;8&quot;; filename=&quot;pic.png&quot;<br>Content-Type: image/png<br><br>3<br>--a<br>Content-Disposition: form-data; name=&quot;9&quot;; filename=&quot;pic.png&quot;<br>Content-Type: image/png<br><br>3<br>--a<br>Content-Disposition: form-data; name=&quot;10&quot;; filename=&quot;pic.png&quot;<br>Content-Type: image/png<br><br>3<br>--a<br>Content-Disposition: form-data; name=&quot;11&quot;; filename=&quot;pic.png&quot;<br>Content-Type: image/png<br><br>3<br>--a<br>Content-Disposition: form-data; name=&quot;12&quot;; filename=&quot;pic.png&quot;<br>Content-Type: image/png<br><br>3<br>--a<br>Content-Disposition: form-data; name=&quot;13&quot;; filename=&quot;pic.png&quot;<br>Content-Type: image/png<br><br>3<br>--a<br>Content-Disposition: form-data; name=&quot;14&quot;; filename=&quot;pic.png&quot;<br>Content-Type: image/png<br><br>3<br>--a<br>Content-Disposition: form-data; name=&quot;15&quot;; filename=&quot;pic.png&quot;<br>Content-Type: image/png<br><br>3<br>--a<br>Content-Disposition: form-data; name=&quot;16&quot;; filename=&quot;pic.png&quot;<br>Content-Type: image/png<br><br>3<br>--a<br>Content-Disposition: form-data; name=&quot;17&quot;; filename=&quot;pic.png&quot;<br>Content-Type: image/png<br><br>3<br>--a<br>Content-Disposition: form-data; name=&quot;18&quot;; filename=&quot;pic.png&quot;<br>Content-Type: image/png<br><br>3<br>--a<br>Content-Disposition: form-data; name=&quot;19&quot;; filename=&quot;pic.png&quot;<br>Content-Type: image/png<br><br>3<br>--a<br>Content-Disposition: form-data; name=&quot;id&quot;; filename=&quot;pic.png&quot;<br>Content-Type: image/png<br><br>3<br>--a<br>Content-Disposition: form-data; name=&quot;id&quot;;<br><br>sql injection!!!!<br>--a--<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/026-0.webp" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<h2 id="关于文件扩展名的绕过"><a href="#关于文件扩展名的绕过" class="headerlink" title="关于文件扩展名的绕过"></a><strong>关于文件扩展名的绕过</strong></h2><p>前文主要是提出一些关于源站与 WAF 在解析 multipart 之间存在的差异导致的绕过。在实际渗透测试中，如何绕过文件扩展名是很重要一个点，所以本节内容主要介绍，在 WAF 解析到 filename 参数的情况下，从协议和后端解析的层面如何绕过文件扩展名。</p>
+<p>整体上的思路为：<code>filename=&quot;file_name.php&quot;</code>，对于 WAF 层面来说，发现扩展名为 php，接着进行拦截，绕过的目标为，使 WAF 解析出的 filename 不出现 php 关键字，并且后端程序在验证扩展名的时候会认为这是一个 php 文件。</p>
+<p>从各种程序解析的代码来看，为了让 waf 解析出现问题，干扰的字符除了上文说的引号，空格，转义符，还有 <code>:;</code>，这里还是要分为两种形式的测试。</p>
+<p><strong>无引号包裹的形式</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">Content-Disposition: form-data; name=key3; filename=file_name:.php <br><br>Content-Disposition: form-data; name=key3; filename=file_name&#x27;.php <br><br>Content-Disposition: form-data; name=key3; filename=file_name&quot;.php <br><br>Content-Disposition: form-data; name=key3; filename=file_name\&quot;.php <br><br>Content-Disposition: form-data; name=key3; filename=file_name .php<br><br>Content-Disposition: form-data; name=key3; filename=file_name;.php<br></code></pre></td></tr></table></figure>
+
+<p>前五种情况 flask&#x2F;Java 解析结果都是一致的，会取整体作为 filename 的值，都是含有 php 关键字的，这也说明如果 waf 解析存在差异，将特殊字符直接截断取值，会导致 waf 被绕过。</p>
+<p>最后一种情况，flask&#x2F;Java&#x2F;php 解析都会直接截断，filename&#x3D;file_name，这样后端获取不了，无论 waf 解析方式如何，无法绕过。</p>
+<p>对于 php 而言，前三种会如 flask 以一样，将整体作为 filename 的值，第五种空格类型，php 会截断，最终取 <code>filename=file_name</code>，这种容易理解，当没出现引号时，出现空格，即认为参数值结束。</p>
+<p>然后再测试转义符号的时候，出现了从 <code>\</code> 开始截断，并去 <code>\</code> 后面的值最为 filename 的值，这种解析方式和 boundary 解析也不相同，且双引号和单引号相同效果。实际上 php 并没有把 <code>\</code> 当作转义符号，而是将 filename 参数看当做文件路径，并取出 path 里面文件名的部分。所以这个解析方式和引号跟本没关系，只是 php 在解析 filename 时，会取最后的 <code>\</code> 或者 <code>/</code> 后面的值作为文件名。</p>
+<p><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/027-0.webp" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><strong>有引号包裹的形式</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">Content-Disposition: form-data; name=f; filename=&quot;file_name:.php&quot; <br><br>Content-Disposition: form-data; name=f; filename=&quot;file_name&#x27;.php&quot; <br><br>Content-Disposition: form-data; name=f; filename=&quot;file_name&quot;.php&quot; <br><br>Content-Disposition: form-data; name=f; filename=&quot;file_name\&quot;.php&quot; <br><br>Content-Disposition: form-data; name=f; filename=&quot;file_name .php&quot; <br><br>Content-Disposition: form-data; name=f; filename=&quot;file_name;.php&quot;<br></code></pre></td></tr></table></figure>
+
+<p>flask 解析结果除第三种 filename 取 file_name 之外，其它都会取双引号内整体的值作为 filename，转义符具有转义作用。php 第三种也会解析出 file_name，但是在第四种转义符是具有转义作用的。使用单引号的情况和上文引号部分分析一致。</p>
+<p><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/028-0.webp" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p>对于 Java 来说，除第三种情况外，都是会取引号内整体作为 filename 值，但是第三种情况 Java 会继续取值，那么最后 filename 为 <code>file_name&quot;.php</code>。所以对于 Java 这个异常的特性来说，通常 WAF 会像 php&#x2F;flask 那样在第一次出现闭合双引号时，直接取双引号内内容作为 filename 的取值，这样就可以绕过文件扩展名的检测。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a><strong>参考</strong></h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">do9gy - 腾讯 WAF 挑战回忆录<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">https://t.zsxq.com/UfAEeY3<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">donky16 - 从 RFC 看如何通过 multipart 文件上传绕过 WAF<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">https://t.zsxq.com/fMBM7qz<br></code></pre></td></tr></table></figure>
+
+<p><strong>来源</strong></p>
+<p>作者：geekby</p>
+<p>原文地址：<a target="_blank" rel="noopener" href="https://www.geekby.site/2022/03/waf-bypass/">https://www.geekby.site/2022/03/waf-bypass/</a></p>
+<p>文章来源：HACK学习呀</p>
+<p>如有侵权，请联系删除</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%BD%91%E5%AE%89/" class="category-chain-item">网安</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/" class="category-chain-item">漏洞专题</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/bypass/" class="print-no-link">#bypass</a>
+      
+    </div>
+  
+</div>
+
+
+              
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/08/20/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/" title="绕过CDN查找真实IP方法总结">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">绕过CDN查找真实IP方法总结</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/08/13/%E7%BD%91%E5%AE%89/%E9%BB%91%E5%AE%A2%E5%B7%A5%E5%85%B7/dirscan/" title="dirscan">
+                        <span class="hidden-mobile">dirscan</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

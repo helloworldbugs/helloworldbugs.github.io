@@ -1,0 +1,748 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/%E6%A5%BD.png">
+  <link rel="icon" href="/img/%E6%A5%BD.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="神楽">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="0x00 CDN简述 CDN全称ContentDeliveryNetwork，即内容分发网络，构建在现有网络基础之上的智能虚拟网络，依靠部署在各地的边缘服务器，通过中心平台的负载均衡、内容分发、调度等功能模块，使用户能够就近获取所需内容，降低网络拥塞，提高用户访问响应速度和命中率。百度百科   0x01 域名解析过程 传统访问：用户访问域名–&gt;解析IP–&gt;访问目标主机  简单模式：用户">
+<meta property="og:type" content="article">
+<meta property="og:title" content="绕过CDN查找真实IP方法总结">
+<meta property="og:url" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:site_name" content="神楽的博客">
+<meta property="og:description" content="0x00 CDN简述 CDN全称ContentDeliveryNetwork，即内容分发网络，构建在现有网络基础之上的智能虚拟网络，依靠部署在各地的边缘服务器，通过中心平台的负载均衡、内容分发、调度等功能模块，使用户能够就近获取所需内容，降低网络拥塞，提高用户访问响应速度和命中率。百度百科   0x01 域名解析过程 传统访问：用户访问域名–&gt;解析IP–&gt;访问目标主机  简单模式：用户">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/001-0.webp">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/002-0.webp">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/003-0.webp">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/004-0.webp">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/005-0.webp">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/006-0.webp">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/007-0.webp">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/008-0.webp">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/009-0.webp">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/010-0.webp">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/011-0.webp">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/012-0.webp">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/013-0.webp">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/014-0.webp">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/015-0.webp">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/016-0.png">
+<meta property="article:published_time" content="2024-08-20T07:52:46.000Z">
+<meta property="article:modified_time" content="2024-08-20T07:58:15.465Z">
+<meta property="article:author" content="神楽">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://helloworldbugs.gitlab.io/2024/08/20/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/001-0.webp">
+  
+  
+  
+  <title>绕过CDN查找真实IP方法总结 - 神楽的博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"helloworldbugs.gitlab.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":50,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>神楽的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/guidao.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="绕过CDN查找真实IP方法总结"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-08-20 15:52" pubdate>
+          2024年8月20日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          14 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">绕过CDN查找真实IP方法总结</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2024年8月20日 下午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="0x00-CDN简述"><a href="#0x00-CDN简述" class="headerlink" title="0x00 CDN简述"></a>0x00 CDN简述</h2><blockquote>
+<p>CDN全称ContentDeliveryNetwork，即内容分发网络，构建在现有网络基础之上的智能虚拟网络，依靠部署在各地的边缘服务器，通过中心平台的负载均衡、内容分发、调度等功能模块，使用户能够就近获取所需内容，降低网络拥塞，提高用户访问响应速度和命中率。百度百科</p>
+</blockquote>
+<p><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/001-0.webp" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<h2 id="0x01-域名解析过程"><a href="#0x01-域名解析过程" class="headerlink" title="0x01 域名解析过程"></a>0x01 域名解析过程</h2><ul>
+<li><p>传统访问：用户访问域名–&gt;解析IP–&gt;访问目标主机</p>
+</li>
+<li><p>简单模式：用户访问域名–&gt;CDN节点–&gt;真实IP–&gt;目标主机</p>
+</li>
+<li><p>360网站卫士：用户访问域名–&gt;CDN节点（云WAF）–&gt;真实IP–&gt;目标主机</p>
+</li>
+</ul>
+<p><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/002-0.webp" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><strong>注：</strong>目前市面上大多数的CDN服务商都提供了云WAF配置选项，内置了多种安全防护策略，可对SQL注入、XSS跨站、Webshell上传、后门隔离保护、命令注入、恶意扫描等攻击行为进行有效拦截。</p>
+<h2 id="0x02-CDN配置方法"><a href="#0x02-CDN配置方法" class="headerlink" title="0x02 CDN配置方法"></a>0x02 CDN配置方法</h2><ul>
+<li><p>将域名的NS记录指向CDN厂商提供的DNS服务器。  
+ </p>
+</li>
+<li><p>给域名设置一个cname记录，将它指向CDN厂商提供的另一个域名。</p>
+</li>
+</ul>
+<h2 id="0x03-CDN检测方法"><a href="#0x03-CDN检测方法" class="headerlink" title="0x03 CDN检测方法"></a>0x03 CDN检测方法</h2><p>利用“全球Ping”快速检测目标是否存在CDN，如果得到的IP归属地是某CDN服务商，或者每个地区得到的IP地址都不一样则说明可能存在CDN，可用以下几个网站检测！</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">https://wepcc.com<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">http://ping.chinaz.com<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">https://asm.ca.com/en/ping.php<br></code></pre></td></tr></table></figure>
+
+<p><strong>注：</strong>全球Ping有一定机率可以得到目标服务器真实IP，因为有的CDN服务商可能没有某些地区的CDN节点。<img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/003-0.webp" srcset="/img/loading.gif" lazyload alt="图片">  
+ </p>
+<h2 id="0x04-查找真实IP方法"><a href="#0x04-查找真实IP方法" class="headerlink" title="0x04 查找真实IP方法"></a>0x04 查找真实IP方法</h2><p><strong>(1) phpinfo等探针找到真实IP</strong>  
+ </p>
+<p>通过l.php、phpinfo.php等这类探针文件即可得到真实IP地址，phpinfo.php搜索SERVER_NAME。</p>
+<p><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/004-0.webp" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><strong>(2) 网站根域或子域找到真实IP</strong></p>
+<p>大部分CDN服务都是按流量进行收费的，所以一些网站管理员只会给重要业务部署CDN，也有很多人会忘了给顶级域名部署CDN，所以尽可能的多去搜集一些子域名能提高找到真实IP地址的机率。</p>
+<p><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/005-0.webp" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><strong>注：</strong>有时多个子域名可能不会解析到同一台服务器，而是根据公司业务的重要与非重要性将子域名解析在内网或外网的不同服务器中，需要有一定的分析能力。</p>
+<p><strong>(3) 利用邮件服务器找到真实IP</strong></p>
+<p>Web和Email属同服务器时可以通过Email来查询目标真实IP地址，如果Web和Email属不同服务器时我们通过Email得到的可能只是邮件服务器的IP地址，所以在hosts文件中绑定真实IP后无法访问目标网站也属正常现象。常见发送邮件的功能有：注册用户、找回密码等。</p>
+<p><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/006-0.webp" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/007-0.webp" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/008-0.webp" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p> </p>
+<p><strong>(4) 域名历史解析记录找到真实IP</strong></p>
+<p>通过查询目标域名历史解析记录可能会找到部署CDN前的解析记录（真实IP地址），可以用以下几个网站来查询。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">https://domain.8aq.net    //基于Rapid7 Open Data<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">https://x.threatbook.cn<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">https://webiplookup.com<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">https://viewdns.info/iphistory<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">https://securitytrails.com/#search<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">https://toolbar.netcraft.com/site_report<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/009-0.webp" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/010-0.webp" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/011-0.webp" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/012-0.webp" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><strong>(5) FOFA查询网站标题找到真实IP</strong></p>
+<p>利用“FOFA网络空间安全搜索引擎”搜索目标网站源代码中的title标签内容即可得到真实IP地址。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">title=&quot;*** ***** – Multi Asset Fund&quot;<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/013-0.webp" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><strong>(6) Censys查询SSL证书找到真实IP</strong></p>
+<p>利用“Censys网络空间搜索引擎”搜索目标域名的SSL证书和HASH，<a target="_blank" rel="noopener" href="https://crt.sh上查找他ssl证书的hash,然后再用censys搜索该hash值即可得到真实ip地址./">https://crt.sh上查找他SSL证书的HASH，然后再用Censys搜索该HASH值即可得到真实IP地址。</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">443.https.tls.certificate.parsed.extensions.subject_alt_name.dns_names:***trade.com<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/014-0.webp" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/015-0.webp" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><img src="/2024/08/20/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/016-0.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+<p><strong>(7) 通过分析目标C段来判断真实IP</strong></p>
+<p>这种方法得看目标有多少子域名吧，如果子域够多，且又有多台服务器（同段），找一个没有部署CDN的子域名，然后扫描整个C段查找与目标站Title一致的即可找到他的真实IP地址！</p>
+<p> </p>
+<p>目标站111.test.com解析在192.168.1.10，title：90sec社区，通过333.test.com子域名得到333真实IP地址192.168.1.12，然后扫描整个C段，当扫到192.168.1.10这个IP时发现一个title同为“90sec社区”的网站，域名也是111.test.com，这样就能确定192.168.1.10为真实IP了。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>网站域名</td>
+<td>域名解析IP</td>
+<td>CDN节点IP</td>
+</tr>
+<tr>
+<td>111.test.com（目标）</td>
+<td>192.168.1.10</td>
+<td>8.8.8.8</td>
+</tr>
+<tr>
+<td>222.test.com</td>
+<td>192.168.1.11</td>
+<td>9.9.9.9</td>
+</tr>
+<tr>
+<td>333.test.com</td>
+<td>192.168.1.12</td>
+<td>没有CDN</td>
+</tr>
+</tbody></table>
+<p><strong>(8) 自建CDN节点服务器找到真实IP</strong></p>
+<p>这篇笔记当时没有记录下来，其实就是MS17-010刚出来时很多机器都还没打补丁，在批量过程中打了一台别人自建的CDN节点服务器，然后在里边发现很多解析到这边的IP地址，其实这些IP地址就是某些网站的真实IP，所以这也算是一种思路吧，但是得先拿到CDN节点服务器权限。或者可以通过DDOS攻击方式将其流量耗尽后即会显示真实IP，因为免费和自建CDN的流量都不会很多。  
+ </p>
+<p><strong>(9) 通过目标网站的漏洞找到真实IP</strong>Web安全漏洞：XSS、SSRF、命令执行、文件上传等，但可能需要先绕过云WAF安全防护。</p>
+<p>敏感信息泄露：Apache status、Jboss status、SVN、Github等敏感信息和网页源代码泄露。</p>
+<p> </p>
+<p><strong>(10) 通过社工CDN控制台找到真实IP</strong>  
+ </p>
+<p>通过社会工程学将搜集到的信息组合生成用户名和密码字典对CDN控制台进行爆破或者手工尝试，但是得在没有验证码和登录次数限制的情况下，然后找到他的真实解析IP地址。</p>
+<p><strong>(11) Zmap全网扫描及F5 LTM解码法</strong></p>
+<p>这两种方法都是前辈们以前写的，个人感觉较为复杂，并没有亲自实践过，不知是否真的可行？  
+ </p>
+<p><strong>注意事项：</strong>部署CDN的网站有必要设置严格访问控制策略，仅允许CDN节点访问网站真实服务器80端口，这样设置的好处就是即使在hosts文件中绑定了真实IP后仍然无法访问。<br>笔者曾经在一次渗透测试过程中就遇到过类似情况，就是成功绑定了真实IP后，虽然能够正常访问到目标网站，但是仍然没有绕过云WAF，具体情况有点记不太清了，当时没有去细研究这个问题！</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%BD%91%E5%AE%89/" class="category-chain-item">网安</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/" class="category-chain-item">应急响应</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/10/14/%E5%85%B6%E5%AE%83/%E5%BC%80%E5%90%AFnvidia%E7%9A%84rtx%E8%A7%86%E9%A2%91%E5%A2%9E%E5%BC%BA/" title="开启nvidia的rtx视频增强">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">开启nvidia的rtx视频增强</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/08/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/%E3%80%90%E8%B6%85%E8%AF%A6%E7%BB%86%E3%80%91Post%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0BypassWAF%E6%B1%87%E6%80%BB/" title="【超详细】Post文件上传BypassWAF汇总">
+                        <span class="hidden-mobile">【超详细】Post文件上传BypassWAF汇总</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

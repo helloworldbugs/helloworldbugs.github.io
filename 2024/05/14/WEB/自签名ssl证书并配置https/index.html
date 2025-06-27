@@ -1,0 +1,665 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/%E6%A5%BD.png">
+  <link rel="icon" href="/img/%E6%A5%BD.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="神楽">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="证书格式SSL证书有多种格式：  Apache、Nginx等，使用OpenSSL提供的密码库，生成pem、key、crt等格式的证书文件。 Tomcat、Weblogic、JBoss等，使用Java提供的密码库。通过Java的Keytool工具，生成Java Keystore（jks）格式的证书文件。  常用证书格式信息：  .der，.cer，*.crt 以二进制形式存放证书，只有公钥，不包含私">
+<meta property="og:type" content="article">
+<meta property="og:title" content="自签名ssl证书并配置https">
+<meta property="og:url" content="https://helloworldbugs.gitlab.io/2024/05/14/WEB/%E8%87%AA%E7%AD%BE%E5%90%8Dssl%E8%AF%81%E4%B9%A6%E5%B9%B6%E9%85%8D%E7%BD%AEhttps/index.html">
+<meta property="og:site_name" content="神楽的博客">
+<meta property="og:description" content="证书格式SSL证书有多种格式：  Apache、Nginx等，使用OpenSSL提供的密码库，生成pem、key、crt等格式的证书文件。 Tomcat、Weblogic、JBoss等，使用Java提供的密码库。通过Java的Keytool工具，生成Java Keystore（jks）格式的证书文件。  常用证书格式信息：  .der，.cer，*.crt 以二进制形式存放证书，只有公钥，不包含私">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/05/14/WEB/%E8%87%AA%E7%AD%BE%E5%90%8Dssl%E8%AF%81%E4%B9%A6%E5%B9%B6%E9%85%8D%E7%BD%AEhttps/image.png">
+<meta property="article:published_time" content="2024-05-14T03:57:10.000Z">
+<meta property="article:modified_time" content="2025-04-17T04:17:37.538Z">
+<meta property="article:author" content="神楽">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://helloworldbugs.gitlab.io/2024/05/14/WEB/%E8%87%AA%E7%AD%BE%E5%90%8Dssl%E8%AF%81%E4%B9%A6%E5%B9%B6%E9%85%8D%E7%BD%AEhttps/image.png">
+  
+  
+  
+  <title>自签名ssl证书并配置https - 神楽的博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"helloworldbugs.gitlab.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":50,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>神楽的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/guidao.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="自签名ssl证书并配置https"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-05-14 11:57" pubdate>
+          2024年5月14日 中午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          818 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          7 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">自签名ssl证书并配置https</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2025年4月17日 中午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="证书格式"><a href="#证书格式" class="headerlink" title="证书格式"></a>证书格式</h1><p>SSL证书有多种格式：</p>
+<ol>
+<li>Apache、Nginx等，使用OpenSSL提供的密码库，生成pem、key、crt等格式的证书文件。</li>
+<li>Tomcat、Weblogic、JBoss等，使用Java提供的密码库。通过Java的Keytool工具，生成Java Keystore（jks）格式的证书文件。</li>
+</ol>
+<p><code>常用证书格式信息：</code></p>
+<ul>
+<li><em>.der，</em>.cer，*.crt 以二进制形式存放证书，只有公钥，不包含私钥。</li>
+<li>*.csr 证书请求，这个是需要发给CA用来签名正式证书用的。</li>
+<li>*.pem 一般是文本格式，可以放证书或私钥，或者两者都包含。 *.PEM如果只包含私钥，那一般用 *.KEY代替。</li>
+<li><em>.pfx，</em>.p12 是二进制格式，同时含证书和私钥，一般有密码保护。</li>
+</ul>
+<h1 id="生成证书"><a href="#生成证书" class="headerlink" title="生成证书"></a>生成证书</h1><p>在linux环境下，需要openssl依赖，键入以下命令。</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">sudo openssl req -x509 -nodes -days <span class="hljs-number">3650</span> -newkey rsa:<span class="hljs-number">2048</span> -keyout <span class="hljs-regexp">/etc/</span>ssl<span class="hljs-regexp">/private/</span>ssl-cert-snakeoil.key -out <span class="hljs-regexp">/etc/</span>ssl<span class="hljs-regexp">/certs/</span>ssl-cert-snakeoil.crt<br></code></pre></td></tr></table></figure>
+
+<p>命令解释</p>
+<ul>
+<li><p>openssl：这是用于创建和管理OpenSSL证书，密钥和其他文件的基本命令行工具。</p>
+</li>
+<li><p>req：此子命令指定我们要使用X.509证书签名请求（CSR）管理。“X.509”是SSL和TLS为其密钥和证书管理所遵循的公钥基础结构标准。因为我们想要创建一个新的X.509证书，所以我们使用这个子命令。</p>
+</li>
+<li><p>-x509：这通过告诉实用程序我们要创建自签名证书而不是生成证书签名请求来进一步修改上一个子命令。</p>
+</li>
+<li><p>-nodes：这告诉OpenSSL跳过用密码保护我们的证书的选项。我们需要中间件在服务器启动时能够在没有用户干预的情况下读取文件。</p>
+</li>
+<li><p>-days 3650：此选项设置证书有效的时间长度。我们在这里设置了10年。</p>
+</li>
+<li><p>-newkey rsa:2048：这指定我们要同时生成新证书和新密钥。我们没有创建在上一步中签署证书所需的密钥，因此我们需要将其与证书一起创建。rsa:2048部分告诉它制作一个2048位长的RSA密钥。</p>
+</li>
+<li><p>-keyout：这一行告诉OpenSSL在哪里放置我们正在创建的生成的私钥文件。</p>
+</li>
+<li><p>-out：这告诉OpenSSL在哪里放置我们正在创建的证书。</p>
+</li>
+</ul>
+<p>最重要的一行是请求 <code>Common Name (e.g. server FQDN or YOURname)</code> 的这行。您需要输入与服务器关联的域名或公网IP。</p>
+<p>您创建的两个文件都将放在 <code>/etc/ssl</code> 目录下。</p>
+<h1 id="配置证书"><a href="#配置证书" class="headerlink" title="配置证书"></a>配置证书</h1><h2 id="nginx配置ssl证书"><a href="#nginx配置ssl证书" class="headerlink" title="nginx配置ssl证书"></a>nginx配置ssl证书</h2><p>修改配置文件 <code>/etc/nginx/sites-available/default</code>的server段</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-section">server</span> &#123;<br>    <span class="hljs-attribute">listen</span> <span class="hljs-number">800</span> ssl;<br>    <span class="hljs-attribute">listen</span> [::]:<span class="hljs-number">800</span> ssl;<br>    <span class="hljs-attribute">error_page</span> <span class="hljs-number">497</span> https://<span class="hljs-variable">$host</span>:800<span class="hljs-variable">$request_uri</span>; <span class="hljs-comment">#http强制重定向到https</span><br><br>    <span class="hljs-attribute">ssl_certificate</span>  /etc/ssl/certs/ssl-cert-snakeoil.crt;  <span class="hljs-comment">#证书路径</span><br>    <span class="hljs-attribute">ssl_certificate_key</span> /etc/ssl/private/ssl-cert-snakeoil.key;  <span class="hljs-comment">#私钥路径</span><br><br>&#125;<br><br></code></pre></td></tr></table></figure>
+<h2 id="apache配置ssl证书"><a href="#apache配置ssl证书" class="headerlink" title="apache配置ssl证书"></a>apache配置ssl证书</h2><p>使用 <code>a2enmod</code> 命令启用 <code>mod_sslApache SSL</code> 模块，如果要关闭ssl则是执行：<code>sudo a2enmod ssl</code> 命令：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">sudo</span> a2enmod ssl<br></code></pre></td></tr></table></figure>
+
+<p>使用a2ensite命令启用SSL主机：</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs actionscript">sudo a2ensite <span class="hljs-keyword">default</span>-ssl<br></code></pre></td></tr></table></figure>
+
+<p>修改apache配置文件，将 <code>SSLCertificateFile</code> 和 <code>SSLCertificateKeyFile</code> 这两行的路径更改为实际的证书位置路径，如下图所示。</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gradle">vim <span class="hljs-regexp">/etc/</span>apache2<span class="hljs-regexp">/sites-available/</span><span class="hljs-keyword">default</span>-ssl.conf<br></code></pre></td></tr></table></figure>
+
+
+<p><img src="/2024/05/14/WEB/%E8%87%AA%E7%AD%BE%E5%90%8Dssl%E8%AF%81%E4%B9%A6%E5%B9%B6%E9%85%8D%E7%BD%AEhttps/image.png" srcset="/img/loading.gif" lazyload alt="alt text"></p>
+<p>启用我们的ssl-params.conf文件，读入我们设置的值：</p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">sudo a2enconf ssl-<span class="hljs-keyword">params</span><br></code></pre></td></tr></table></figure>
+
+<p>检查配置是否无误，如果输出中包含输出 <code>Syntax OK</code> ，则表示配置文件没有语法错误</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">sudo</span> apache2ctl configtest<br></code></pre></td></tr></table></figure>
+
+<p>接下来重启Apache以实现我们的更改：</p>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs maxima">sudo systemctl <span class="hljs-built_in">restart</span> apache2<br></code></pre></td></tr></table></figure>
+
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/WEB/" class="category-chain-item">WEB</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/05/14/%E7%BC%96%E7%A8%8B/SQL%E5%AD%A6%E4%B9%A0/" title="SQL学习">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">SQL学习</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/05/14/%E7%BD%91%E5%AE%89/%E9%BB%91%E5%AE%A2%E5%B7%A5%E5%85%B7/kali%E5%AE%89%E8%A3%85OpenVAS/" title="kali安装OpenVAS">
+                        <span class="hidden-mobile">kali安装OpenVAS</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

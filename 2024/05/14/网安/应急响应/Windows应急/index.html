@@ -1,0 +1,943 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/%E6%A5%BD.png">
+  <link rel="icon" href="/img/%E6%A5%BD.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="神楽">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="快捷方式12345windows事件查看器：Win+R 输入eventvwr.msc查看定时任务：Win+R 输入taskschd.msc查看注册表：Win+R 输入regedit查看账户安全：Win+R 输入lusrmgr.msc查看本地组策略：Win+R 输入gpedit.msc  进程排查进程排查核心命令1. 基础进程信息获取 查看所有进程   1tasklist 显示所有进程的映像名称、P">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Windows应急">
+<meta property="og:url" content="https://helloworldbugs.gitlab.io/2024/05/14/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/Windows%E5%BA%94%E6%80%A5/index.html">
+<meta property="og:site_name" content="神楽的博客">
+<meta property="og:description" content="快捷方式12345windows事件查看器：Win+R 输入eventvwr.msc查看定时任务：Win+R 输入taskschd.msc查看注册表：Win+R 输入regedit查看账户安全：Win+R 输入lusrmgr.msc查看本地组策略：Win+R 输入gpedit.msc  进程排查进程排查核心命令1. 基础进程信息获取 查看所有进程   1tasklist 显示所有进程的映像名称、P">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-05-14T14:16:02.000Z">
+<meta property="article:modified_time" content="2025-06-25T10:08:35.540Z">
+<meta property="article:author" content="神楽">
+<meta property="article:tag" content="应急响应">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Windows应急 - 神楽的博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"helloworldbugs.gitlab.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":50,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>神楽的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/guidao.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Windows应急"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-05-14 22:16" pubdate>
+          2024年5月14日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          28 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Windows应急</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2025年6月25日 晚上
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="快捷方式"><a href="#快捷方式" class="headerlink" title="快捷方式"></a>快捷方式</h1><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs powershell">windows事件查看器：Win+<span class="hljs-built_in">R</span> 输入eventvwr.msc<br>查看定时任务：Win+<span class="hljs-built_in">R</span> 输入taskschd.msc<br>查看注册表：Win+<span class="hljs-built_in">R</span> 输入regedit<br>查看账户安全：Win+<span class="hljs-built_in">R</span> 输入lusrmgr.msc<br>查看本地组策略：Win+<span class="hljs-built_in">R</span> 输入gpedit.msc<br></code></pre></td></tr></table></figure>
+
+<h1 id="进程排查"><a href="#进程排查" class="headerlink" title="进程排查"></a>进程排查</h1><h3 id="进程排查核心命令"><a href="#进程排查核心命令" class="headerlink" title="进程排查核心命令"></a>进程排查核心命令</h3><h4 id="1-基础进程信息获取"><a href="#1-基础进程信息获取" class="headerlink" title="1. 基础进程信息获取"></a>1. 基础进程信息获取</h4><ul>
+<li><p><strong>查看所有进程</strong>  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">tasklist<br></code></pre></td></tr></table></figure>
+<p>显示所有进程的映像名称、PID、内存使用等信息。</p>
+</li>
+<li><p><strong>查看进程关联服务</strong>  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">tasklist /svc<br></code></pre></td></tr></table></figure>
+<p>显示每个进程对应的服务名称，帮助识别伪装成系统服务的恶意进程。</p>
+</li>
+<li><p><strong>列出所有进程的 PID 和父进程 PID​​</strong></p>
+</li>
+</ul>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">wmic process get name,processid,parentprocessid<br></code></pre></td></tr></table></figure>
+<p>其中，<code>ParentProcessId</code> 列即为目标进程的父进程 PID。</p>
+<h4 id="2-网络连接与进程关联"><a href="#2-网络连接与进程关联" class="headerlink" title="2. 网络连接与进程关联"></a>2. 网络连接与进程关联</h4><ul>
+<li><p><strong>查看网络连接状态</strong>  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">netstat -ano<br></code></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">netstat -ano | findstr <span class="hljs-string">&quot;ESTABLISHED&quot;</span><br></code></pre></td></tr></table></figure>
+<p>过滤已建立的连接，定位可疑IP和端口。</p>
+</li>
+<li><p><strong>通过PID关联进程</strong>  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">tasklist /svc | findstr <span class="hljs-string">&quot;PID&quot;</span><br></code></pre></td></tr></table></figure>
+<p>根据网络连接中获取的PID，快速定位具体进程。</p>
+</li>
+</ul>
+<h4 id="3-进程路径追踪与终止"><a href="#3-进程路径追踪与终止" class="headerlink" title="3. 进程路径追踪与终止"></a>3. 进程路径追踪与终止</h4><ul>
+<li><strong>查看进程路径</strong>  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">wmic process <span class="hljs-built_in">where</span> processid=[PID] get executablepath,processid,name<br></code></pre></td></tr></table></figure></li>
+</ul>
+<p>获取进程的完整路径，判断是否为系统文件或可疑位置（如临时目录）。</p>
+<ul>
+<li><strong>终止进程</strong>  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">taskkill /PID [PID] /F /T  <span class="hljs-comment"># /F 强制终止，/T 终止子进程</span><br></code></pre></td></tr></table></figure>
+强制终止进程及子进程，适用于顽固恶意进程。</li>
+</ul>
+<h3 id="进阶排查技巧（补充）"><a href="#进阶排查技巧（补充）" class="headerlink" title="进阶排查技巧（补充）"></a>进阶排查技巧（补充）</h3><h4 id="1-进程详细信息分析"><a href="#1-进程详细信息分析" class="headerlink" title="1. 进程详细信息分析"></a>1. 进程详细信息分析</h4><ul>
+<li><p><strong>查看进程命令行参数</strong>  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">wmic process get name,commandline,processid<br></code></pre></td></tr></table></figure>
+<p>分析启动参数，识别异常参数（如加密字符串、远程URL）。</p>
+</li>
+<li><p><strong>进程启动时间检查</strong>  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">wmic process get name,creationdate,processid | findstr [PID]<br></code></pre></td></tr></table></figure>
+<p>对比系统正常进程的启动时间，定位异常时间段启动的进程。</p>
+</li>
+</ul>
+<h4 id="2-进程关联资源排查"><a href="#2-进程关联资源排查" class="headerlink" title="2. 进程关联资源排查"></a>2. 进程关联资源排查</h4><ul>
+<li><p><strong>查看进程加载的DLL</strong>  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">tasklist /m [DLL名称]  <span class="hljs-comment"># 列出加载特定DLL的进程</span><br></code></pre></td></tr></table></figure>
+<p>识别恶意注入的DLL（如无签名、名称随机）。</p>
+</li>
+<li><p><strong>检查进程线程状态</strong><br>使用工具（如 <strong>Process Explorer</strong>）查看线程的CPU占用、堆栈调用，定位高负载线程。</p>
+</li>
+</ul>
+<h4 id="3-自动化工具推荐"><a href="#3-自动化工具推荐" class="headerlink" title="3. 自动化工具推荐"></a>3. 自动化工具推荐</h4><ul>
+<li><p><strong>Process Explorer&#x2F;ProcessMonitor</strong>（微软官方工具）<br>提供图形化界面，显示进程树、线程、句柄、网络连接等详细信息，支持直接挂起&#x2F;终止进程。</p>
+</li>
+<li><p><strong>ProcessHacker&#x2F;OpenArk64</strong><br>检测隐藏进程、内核级恶意驱动，适用于对抗Rootkit。</p>
+</li>
+</ul>
+<h3 id="排查流程优化建议"><a href="#排查流程优化建议" class="headerlink" title="排查流程优化建议"></a>排查流程优化建议</h3><ol>
+<li><strong>网络连接优先</strong>：先通过 <code>netstat -ano</code> 定位异常连接，再关联进程PID。</li>
+<li><strong>路径验证</strong>：检查进程路径是否在系统目录（如 <code>C:\Windows\System32</code>）或常见软件目录，排除伪装进程。</li>
+<li><strong>父进程溯源</strong>：追踪PPID，判断是否为 <code>explorer.exe</code>、<code>svchost.exe</code> 等正常父进程。</li>
+<li><strong>工具结合</strong>：命令行+图形化工具（如Process Explorer）结合使用，提高效率。</li>
+</ol>
+<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><ul>
+<li><strong>权限要求</strong>：部分命令需管理员权限运行（如终止系统进程）。</li>
+<li><strong>备份与记录</strong>：终止进程前记录详细信息，避免误操作影响系统。</li>
+<li><strong>日志关联</strong>：结合系统日志（事件查看器）分析进程创建、服务启动等事件。</li>
+<li><strong>杀软配合</strong>：使用杀毒软件（如D盾、火绒）扫描进程文件，确认是否为已知威胁。</li>
+</ul>
+<h1 id="文件排查"><a href="#文件排查" class="headerlink" title="文件排查"></a>文件排查</h1><blockquote>
+<p><strong>注意：排查前记得打开显示隐藏文件</strong></p>
+</blockquote>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs livescript">临时文件排查<br>黑客往往可能将病毒放在临时目录（tmp/temp），或者将病毒相关文件释放到临时目录。<br>系统盘在C盘的情况下，则通常情况下的临时目录如下：<br>C:<span class="hljs-string">\Users\[用户名]\Local</span> Settings<span class="hljs-string">\Temp</span><br>C:<span class="hljs-string">\Documentsand</span> Settings<span class="hljs-string">\[用户名]\Local</span> Settings<span class="hljs-string">\Temp</span><br>C:<span class="hljs-string">\Users\[用户名]\桌面</span><br>C:<span class="hljs-string">\Documentsand</span> Settings<span class="hljs-string">\[用户名]\桌面</span><br>C:<span class="hljs-string">\Users\[用户名]\Local</span> Settings<span class="hljs-string">\Temporary</span> Internet Files<br>C:<span class="hljs-string">\Documents</span> <span class="hljs-keyword">and</span> Settings<span class="hljs-string">\[用户名]\Local</span> Settings<span class="hljs-string">\Temporary</span> Internet Files<br></code></pre></td></tr></table></figure>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs livescript">浏览器文件排查<br>黑客可能通过浏览器下载恶意文件，或者盗取用户信息，因此需要检查下浏览器的历史访问记录、文件下载记录、cookie信息，对应相关文件目录如下：<br>C:<span class="hljs-string">\Users\[用户名]\Cookies</span><br>C:<span class="hljs-string">\Documents</span> <span class="hljs-keyword">and</span> Settings<span class="hljs-string">\[用户名]\Cookies</span><br>C:<span class="hljs-string">\Users\[用户名]\Local</span> Settings<span class="hljs-string">\History</span><br>C:<span class="hljs-string">\Documents</span> <span class="hljs-keyword">and</span> Settings<span class="hljs-string">\[用户名]\Local</span> Settings<span class="hljs-string">\History</span><br>C:<span class="hljs-string">\Users\[用户名]\Local</span> Settings<span class="hljs-string">\Temporary</span> Internet Files<br>C:<span class="hljs-string">\Documents</span> <span class="hljs-keyword">and</span> Settings<span class="hljs-string">\[用户名]\Local</span> Settings<span class="hljs-string">\Temporary</span> Internet Files<br></code></pre></td></tr></table></figure>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs powershell">最近文件排查<br>Win+<span class="hljs-built_in">R</span> 输入recent<br></code></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs">文件修改时间排查<br>可以根据文件夹内文件列表时间进行排序，查找可疑文件。一般情况下，修改时间越近的文件越可疑。<br></code></pre></td></tr></table></figure>
+<figure class="highlight moonscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs moonscript">hosts文件排查<br>hosts文件是系统配置文件，用于本地DNS查询的域名设置，可以强制将某个域名对应到某个IP上，因此需要检查hosts文件有没有被黑客恶意篡改。<br><span class="hljs-name">C</span>:\Windows\System32\drivers\hosts<br></code></pre></td></tr></table></figure>
+<figure class="highlight nsis"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs nsis"><span class="hljs-params">System</span>32是常见的病毒释放目录，因此需要重点检查该目录。特别注意用随机字符命名的文件夹和隐藏文件<br>C:\Windows\<span class="hljs-params">System</span>32<br></code></pre></td></tr></table></figure>
+
+<h1 id="启动项排查"><a href="#启动项排查" class="headerlink" title="启动项排查"></a>启动项排查</h1><h2 id="注册表项排查"><a href="#注册表项排查" class="headerlink" title="注册表项排查"></a>注册表项排查</h2><h3 id="系统级启动项（所有用户生效）"><a href="#系统级启动项（所有用户生效）" class="headerlink" title="系统级启动项（所有用户生效）"></a>系统级启动项（所有用户生效）</h3><ol>
+<li><strong>常规启动项</strong></li>
+</ol>
+<figure class="highlight moonscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs moonscript">HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run<br></code></pre></td></tr></table></figure>
+<ol start="2">
+<li><strong>一次性启动项（仅运行一次后删除）</strong></li>
+</ol>
+<figure class="highlight moonscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs moonscript">HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce<br></code></pre></td></tr></table></figure>
+<ol start="3">
+<li><strong>扩展一次性启动项（通常用于安装程序）</strong></li>
+</ol>
+<figure class="highlight moonscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs moonscript">HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnceEx<br></code></pre></td></tr></table></figure>
+<ol start="4">
+<li><strong>32位程序在64位系统中的启动项</strong></li>
+</ol>
+<figure class="highlight moonscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs moonscript">HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Run<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="用户级启动项（仅当前用户生效）"><a href="#用户级启动项（仅当前用户生效）" class="headerlink" title="用户级启动项（仅当前用户生效）"></a>用户级启动项（仅当前用户生效）</h3><ol>
+<li><strong>常规启动项</strong></li>
+</ol>
+<figure class="highlight moonscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs moonscript">HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run<br></code></pre></td></tr></table></figure>
+<ol start="2">
+<li><strong>一次性启动项（仅运行一次后删除）</strong></li>
+</ol>
+<figure class="highlight moonscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs moonscript">HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\RunOnce<br></code></pre></td></tr></table></figure>
+<ol start="3">
+<li><strong>扩展一次性启动项</strong></li>
+</ol>
+<figure class="highlight moonscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs moonscript">HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\RunOnceEx<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="其他相关路径"><a href="#其他相关路径" class="headerlink" title="其他相关路径"></a>其他相关路径</h3><ul>
+<li><strong>组策略启动项</strong>（需管理员权限配置，通常影响系统级）</li>
+</ul>
+<figure class="highlight moonscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs moonscript">HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\Run<br></code></pre></td></tr></table></figure>
+<figure class="highlight moonscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs moonscript">HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\Run<br></code></pre></td></tr></table></figure>
+
+<p>步骤：</p>
+<ol>
+<li><p>按下 Win + R，输入 gpedit.msc，打开本地组策略编辑器。</p>
+</li>
+<li><p>导航至：计算机配置 &gt; Windows 设置 &gt; 脚本（启动&#x2F;关机）。</p>
+</li>
+</ol>
+<h3 id="关键说明"><a href="#关键说明" class="headerlink" title="关键说明"></a>关键说明</h3><ul>
+<li><strong>系统级（<code>HKEY_LOCAL_MACHINE</code>）</strong>：需要管理员权限修改，对所有用户生效。</li>
+<li><strong>用户级（<code>HKEY_CURRENT_USER</code>）</strong>：仅影响当前登录用户。</li>
+<li><strong>Run vs. RunOnce</strong><br>  <code>Run</code>：每次用户登录时自动启动。<br>  <code>RunOnce</code>：程序运行一次后，注册表项会被自动删除。常用于安装或配置任务。</li>
+<li><strong>64位系统注意</strong>：64位系统会通过<code>WOW6432Node</code>区分32位程序，但常规路径（如<code>Run</code>）会同时加载64&#x2F;32位程序，无需额外配置。</li>
+</ul>
+<p>如果需要更直观的管理，也可使用系统工具：  </p>
+<ul>
+<li><strong>任务管理器</strong> → “启动”选项卡（适用于Windows 8及以上）。  </li>
+<li><strong>系统配置工具</strong>（<code>msconfig</code>）或第三方工具（如Autoruns）。</li>
+</ul>
+<h2 id="启动文件排查"><a href="#启动文件排查" class="headerlink" title="启动文件排查"></a>启动文件排查</h2><h3 id="系统级启动目录（所有用户生效）"><a href="#系统级启动目录（所有用户生效）" class="headerlink" title="系统级启动目录（所有用户生效）"></a>系统级启动目录（所有用户生效）</h3><ol>
+<li><strong>公共启动目录</strong></li>
+</ol>
+<ul>
+<li>路径：<figure class="highlight moonscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs moonscript"><span class="hljs-name">C</span>:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp<br></code></pre></td></tr></table></figure></li>
+<li>快速访问方法：<br>按下 <code>Win + R</code>，输入 <code>shell:common startup</code> 直接打开。</li>
+</ul>
+<h3 id="用户级启动目录（仅当前用户生效）"><a href="#用户级启动目录（仅当前用户生效）" class="headerlink" title="用户级启动目录（仅当前用户生效）"></a>用户级启动目录（仅当前用户生效）</h3><ol>
+<li><strong>当前用户启动目录</strong></li>
+</ol>
+<ul>
+<li>路径：  <figure class="highlight moonscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs moonscript"><span class="hljs-name">C</span>:\Users\&lt;用户名&gt;\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup<br></code></pre></td></tr></table></figure></li>
+<li>快速访问方法：<br>按下 <code>Win + R</code>，输入 <code>shell:startup</code> 直接打开。</li>
+</ul>
+<h3 id="特殊说明"><a href="#特殊说明" class="headerlink" title="特殊说明"></a>特殊说明</h3><ol>
+<li><strong>兼容性差异</strong>：</li>
+</ol>
+<ul>
+<li>上述路径适用于 Windows Vista&#x2F;7&#x2F;8&#x2F;10&#x2F;11，不同系统版本路径一致。  </li>
+<li>在 Windows XP 中，路径为：<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs livescript">C:<span class="hljs-string">\Documents</span> <span class="hljs-keyword">and</span> Settings<span class="hljs-string">\&lt;用户名&gt;\「开始」菜单\程序\启动`（系统级和用户级）</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+<ol>
+<li><strong>权限要求</strong>：</li>
+</ol>
+<ul>
+<li>系统级目录（<code>ProgramData</code>）需要管理员权限才能修改。  </li>
+<li>用户级目录可直接通过当前用户账户修改。</li>
+</ul>
+<ol start="2">
+<li><strong>隐藏文件夹</strong>：</li>
+</ol>
+<ul>
+<li><code>AppData</code> 和 <code>ProgramData</code> 是隐藏文件夹，需在资源管理器中启用 <strong>“显示隐藏的文件”</strong> 才能看到。</li>
+</ul>
+<h1 id="系统日志排查"><a href="#系统日志排查" class="headerlink" title="系统日志排查"></a>系统日志排查</h1><figure class="highlight moonscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs moonscript">windows日志文件保存位置：<span class="hljs-name">C</span>:\Windows\System32\winevt\Logs<br></code></pre></td></tr></table></figure>
+<h2 id="一、登录相关事件"><a href="#一、登录相关事件" class="headerlink" title="一、登录相关事件"></a>一、登录相关事件</h2><ol>
+<li><strong>4624</strong>（登录成功）</li>
+</ol>
+<ul>
+<li><strong>描述</strong>：记录用户成功登录系统的事件。  </li>
+<li><strong>关键字段</strong>：  </li>
+<li><strong>登录类型</strong>（如类型3为网络登录，类型10为远程桌面登录）  </li>
+<li><strong>源IP</strong>（用于追踪登录来源）  </li>
+<li><strong>应用场景</strong>：排查异常时间或陌生IP的成功登录行为。</li>
+</ul>
+<ol start="2">
+<li><strong>4625</strong>（登录失败）</li>
+</ol>
+<ul>
+<li><strong>描述</strong>：记录用户登录失败的事件，如密码错误或账户不存在。  </li>
+<li><strong>关键字段</strong>：  </li>
+<li><strong>失败原因</strong>（如<code>0xC000006D</code>表示用户名错误，<code>0xC000006A</code>表示密码错误）  </li>
+<li><strong>登录进程</strong>（如<code>NTLM</code>或<code>Kerberos</code>）  </li>
+<li><strong>应用场景</strong>：检测暴力破解攻击或异常账户探测。</li>
+</ul>
+<ol start="3">
+<li><strong>4648</strong>（显式凭证登录）</li>
+</ol>
+<ul>
+<li><strong>描述</strong>：用户使用<code>runas</code>或其他方式显式提供凭证登录（如横向渗透中传递票据）。  </li>
+<li><strong>关键字段</strong>：  </li>
+<li><strong>进程名</strong>（如<code>cmd.exe</code>或<code>powershell.exe</code>）  </li>
+<li><strong>目标用户名</strong>（如提权操作的目标账户）  </li>
+<li><strong>应用场景</strong>：发现横向移动或特权提升行为。</li>
+</ul>
+<ol start="4">
+<li><strong>4672</strong>（特权用户登录）</li>
+</ol>
+<ul>
+<li><strong>描述</strong>：用户以管理员权限登录（如<code>Administrator</code>账户）。  </li>
+<li><strong>应用场景</strong>：监控高权限账户的异常活动。</li>
+</ul>
+<h2 id="二、账户管理事件"><a href="#二、账户管理事件" class="headerlink" title="二、账户管理事件"></a>二、账户管理事件</h2><ol>
+<li><strong>4720</strong>（创建用户）</li>
+</ol>
+<ul>
+<li><strong>描述</strong>：系统中新增本地或域用户。  </li>
+<li><strong>应用场景</strong>：检测攻击者创建隐藏账户（如<code>admin$</code>）。</li>
+</ul>
+<ol start="2">
+<li><strong>4724</strong>（重置密码）</li>
+</ol>
+<ul>
+<li><strong>描述</strong>：用户密码被修改。  </li>
+<li><strong>应用场景</strong>：排查未经授权的密码变更行为。</li>
+</ul>
+<ol start="3">
+<li><strong>4726</strong>（删除用户）</li>
+</ol>
+<ul>
+<li><strong>描述</strong>：用户账户被删除。  </li>
+<li><strong>应用场景</strong>：识别攻击者清除痕迹的操作。</li>
+</ul>
+<ol start="4">
+<li><strong>4732</strong>（用户加入本地组）</li>
+</ol>
+<ul>
+<li><strong>描述</strong>：用户被添加到管理员组或其他特权组。  </li>
+<li><strong>应用场景</strong>：检测提权行为（如将普通用户加入<code>Administrators</code>组）。</li>
+</ul>
+<h2 id="三、进程与服务相关事件"><a href="#三、进程与服务相关事件" class="headerlink" title="三、进程与服务相关事件"></a>三、进程与服务相关事件</h2><ol>
+<li><strong>4688</strong>（进程创建）</li>
+</ol>
+<ul>
+<li><strong>描述</strong>：记录新进程的启动，包括路径、命令行参数和父进程。  </li>
+<li><strong>应用场景</strong>：发现恶意进程（如<code>C:\temp\mimikatz.exe</code>）或异常命令行操作。</li>
+</ul>
+<ol start="2">
+<li><strong>7045</strong>（服务创建）</li>
+</ol>
+<ul>
+<li><strong>描述</strong>：系统中新增服务项。  </li>
+<li><strong>应用场景</strong>：检测后门服务（如攻击者通过服务实现持久化）。</li>
+</ul>
+<h2 id="四、日志操作与系统变更"><a href="#四、日志操作与系统变更" class="headerlink" title="四、日志操作与系统变更"></a>四、日志操作与系统变更</h2><ol>
+<li><strong>104</strong>（日志清除）</li>
+</ol>
+<ul>
+<li><strong>描述</strong>：系统日志被清空（如使用<code>wevtutil</code>工具）。  </li>
+<li><strong>应用场景</strong>：识别攻击者清除痕迹的行为。</li>
+</ul>
+<ol start="2">
+<li><strong>1102</strong>（审计日志清除）</li>
+</ol>
+<ul>
+<li><strong>描述</strong>：安全日志被手动清除。  </li>
+<li><strong>应用场景</strong>：同104，但针对安全日志。</li>
+</ul>
+<ol start="3">
+<li><strong>4697</strong>（服务安装）</li>
+</ol>
+<ul>
+<li><strong>描述</strong>：系统安装新服务。  </li>
+<li><strong>应用场景</strong>：监控恶意服务的植入。</li>
+</ul>
+<h2 id="五、其他关键事件"><a href="#五、其他关键事件" class="headerlink" title="五、其他关键事件"></a>五、其他关键事件</h2><ol>
+<li><strong>4776</strong>（NTLM认证尝试）</li>
+</ol>
+<ul>
+<li><strong>描述</strong>：记录NTLM协议的认证请求（如暴力破解或Pass-the-Hash攻击）。  </li>
+<li><strong>关键字段</strong>：  </li>
+<li><strong>源工作站名</strong>（如<code>localhost</code>可能为本地攻击）  </li>
+<li><strong>错误代码</strong>（如<code>0xC0000064</code>表示账户不存在）  </li>
+<li><strong>应用场景</strong>：检测横向移动或凭证窃取。</li>
+</ul>
+<ol start="2">
+<li><strong>5140</strong>（网络共享访问）</li>
+</ol>
+<ul>
+<li><strong>描述</strong>：用户访问网络共享文件或目录。  </li>
+<li><strong>应用场景</strong>：追踪横向渗透中的文件窃取行为。</li>
+</ul>
+<p><strong>建议</strong>：日常排查时可优先关注<strong>登录事件（4624&#x2F;4625）</strong>、<strong>账户变更（4720&#x2F;4726）</strong>和<strong>进程创建（4688）</strong>，结合源IP、时间戳和进程路径进行关联分析。若需完整事件ID列表，可参考微软官方文档或安全日志分析工具。</p>
+<h1 id="Web日志排查"><a href="#Web日志排查" class="headerlink" title="Web日志排查"></a>Web日志排查</h1><figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs asciidoc">Apache日志：<br>apache日志一般分为access<span class="hljs-emphasis">_log 和 error_log两种：</span><br><span class="hljs-emphasis">access_log记录对apache服务器的请求访问</span><br><span class="hljs-emphasis">error_</span>log记录错误请求，服务器错误<br>存放路径：/apache/logs/<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs applescript">nginx日志：<br>ngnix日志一般分为access.<span class="hljs-built_in">log</span>和<span class="hljs-keyword">error</span>.<span class="hljs-built_in">log</span>两种：<br>access.<span class="hljs-built_in">log</span> 主要记录访问日志<br><span class="hljs-keyword">error</span>.<span class="hljs-built_in">log</span> 主要记录一些错误信息<br>存放路径/Nginx/logs/<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs livescript">IIS日志：<br>存放路径c:<span class="hljs-string">\windows\system32\logFiles</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs fortran">Tomact日志：<br>tomcat日志一般分为catalina.<span class="hljs-keyword">out</span>、localhost、manager、localhost_access_log4种格式日志：<br>catalina.<span class="hljs-keyword">out</span>主要记录运行中残生的信息，如异常错误等<br>localhost.Y-M-D.<span class="hljs-built_in">log</span> 内部代码丢出的异常日志<br>manager.Y-M-D.<span class="hljs-built_in">log</span> 管理日志<br>localhost_access_log 访问日志信息，访问时间、ip地址等<br>存放路径/tomcat/logs<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">Weblogic日志：<br><span class="hljs-keyword">access</span>.<span class="hljs-keyword">log</span>主要记录http请求<br><span class="hljs-keyword">server</span> <span class="hljs-keyword">log</span> 主要记录weblogic启动、关闭、部署等相关信息<br><span class="hljs-keyword">domain</span> <span class="hljs-keyword">log</span> 主要记录weblogic <span class="hljs-keyword">server</span> 的doain运行情况<br></code></pre></td></tr></table></figure>
+
+<h1 id="账号排查"><a href="#账号排查" class="headerlink" title="账号排查"></a>账号排查</h1><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">查看所有用户最后一次登录，修改密码时间，以及账户是否启动：ner <span class="hljs-keyword">user</span> <span class="hljs-title">用户名</span><br><span class="hljs-title">隐藏/克隆账号排查：使用D</span>盾进行扫描<br>可疑账号排查：Win+R 输入lusrmgr.msc（关注管理员群组是否存在可疑账号）<br>排查在线用户：query user<br></code></pre></td></tr></table></figure>
+
+<h1 id="补丁排查"><a href="#补丁排查" class="headerlink" title="补丁排查"></a>补丁排查</h1><figure class="highlight subunit"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs subunit">查看系统补丁信息：systeminfo（重点关注MS08<span class="hljs-string">-067</span>、MS09<span class="hljs-string">-001</span>、MS17<span class="hljs-string">-010</span>）<br></code></pre></td></tr></table></figure>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs dns">MS17-<span class="hljs-number">010</span>补丁：<br>Win7/Win2008R2：KB<span class="hljs-number">4012212</span>、KB<span class="hljs-number">4012215</span><br>Win2012R2：KB<span class="hljs-number">4012213</span>、KB<span class="hljs-number">4012216</span><br>Win2016： KB<span class="hljs-number">4013429</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">MS08</span>-<span class="hljs-number">067</span>补丁：KB958644<br></code></pre></td></tr></table></figure>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">MS09</span>-<span class="hljs-number">001</span>补丁：KB958687<br></code></pre></td></tr></table></figure>
+
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">查看IPV4路由信息：netstat -rn<br>查看DNS解析缓存：ipconfig /displaydns<br></code></pre></td></tr></table></figure>
+
+<h1 id="rdp远程连接记录排查"><a href="#rdp远程连接记录排查" class="headerlink" title="rdp远程连接记录排查"></a>rdp远程连接记录排查</h1><pre><code class="hljs">注册表排查
+</code></pre>
+<figure class="highlight moonscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs moonscript">检查当前用户使用RDP连接过的主机IP：<br>HKEY_CURRENT_USER\Software\Microsoft\Terminal Server Client\Servers<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">查看UsernameHint键值为远程登录的用户名
+</code></pre>
+<figure class="highlight moonscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs moonscript">RDP服务启用状态排查：<br>HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server<br>检查fDenyTSConnections 键值，键值为<span class="hljs-number">0</span>表示已开启远程桌面，键值为<span class="hljs-number">1</span>表示已关闭远程桌面<br></code></pre></td></tr></table></figure>
+<figure class="highlight moonscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs moonscript">RDP远程端口排查：<br>HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp<br>检查PortNumber键值，若为<span class="hljs-number">3389</span>则正常<br></code></pre></td></tr></table></figure>
+<p>更多信息参考文献：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/240184708">https://zhuanlan.zhihu.com/p/240184708</a></p>
+<h1 id="排查工具"><a href="#排查工具" class="headerlink" title="排查工具"></a>排查工具</h1><figure class="highlight erlang-repl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs erlang-repl">系统日志分析工具：evtxLogparse1.<span class="hljs-number">3</span>/LogParser<br>显Windows程序历史记录：userassistview<br>查看最近电脑的使用操作记录：LastActivityView (<span class="hljs-number">0.236</span>, <span class="hljs-number">0.029</span>, <span class="hljs-number">14.01</span><span class="hljs-comment">%)</span><br>查看浏览器历史记录：browsinghistoryview<br>查看进程：PCHunter/ProcessHacker<br>查看启动项：Autoruns<br></code></pre></td></tr></table></figure>
+
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><p><a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/es/210315.html">https://www.freebuf.com/articles/es/210315.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/network/178677.html">https://www.freebuf.com/articles/network/178677.html</a></p>
+<p>web日志文件分析：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_25645753/article/details/111170854">https://blog.csdn.net/qq_25645753/article/details/111170854</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%BD%91%E5%AE%89/" class="category-chain-item">网安</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/" class="category-chain-item">应急响应</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/" class="print-no-link">#应急响应</a>
+      
+    </div>
+  
+</div>
+
+
+              
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/05/14/%E7%BD%91%E5%AE%89/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/Linux%E5%BA%94%E6%80%A5/" title="Linux应急">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Linux应急</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/05/14/%E7%BD%91%E5%AE%89/%E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91/%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/" title="端口转发">
+                        <span class="hidden-mobile">端口转发</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
