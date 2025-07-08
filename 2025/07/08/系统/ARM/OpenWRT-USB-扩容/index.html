@@ -19,21 +19,21 @@
   <meta name="author" content="神楽">
   <meta name="keywords" content="">
   
-    <meta name="description" content="ipv4 api.ipify.org  URL: https:&#x2F;&#x2F;api.ipify.org &#x2F; https:&#x2F;&#x2F;api4.ipify.org &#x2F; https:&#x2F;&#x2F;api64.ipify.org  返回格式: 支持纯文本、JSON、XML 等多种格式，通过 format&#x3D;json 参数指定格式。 特点:   无速率限制，适合高频次调用。   长期稳定，被多个开源项目和开发者推荐">
+    <meta name="description" content="安装依赖1opkg update &amp;&amp; opkg install kmod-usb-core kmod-usb-uhci kmod-usb-storage kmod-usb2 kmod-usb-ohci block-mount mount-utils kmod-fs-ext4 e2fsprogs fdisk lsblk unzip  U盘分区此处省略 移动根目录以下假设 &#x2F;dev&#x2F;">
 <meta property="og:type" content="article">
-<meta property="og:title" content="公网IP查询API">
-<meta property="og:url" content="https://helloworldbugs.gitlab.io/2025/06/10/WEB/%E5%85%AC%E7%BD%91IP%E6%9F%A5%E8%AF%A2API/index.html">
+<meta property="og:title" content="OpenWRT USB 扩容">
+<meta property="og:url" content="https://helloworldbugs.gitlab.io/2025/07/08/%E7%B3%BB%E7%BB%9F/ARM/OpenWRT-USB-%E6%89%A9%E5%AE%B9/index.html">
 <meta property="og:site_name" content="神楽的博客">
-<meta property="og:description" content="ipv4 api.ipify.org  URL: https:&#x2F;&#x2F;api.ipify.org &#x2F; https:&#x2F;&#x2F;api4.ipify.org &#x2F; https:&#x2F;&#x2F;api64.ipify.org  返回格式: 支持纯文本、JSON、XML 等多种格式，通过 format&#x3D;json 参数指定格式。 特点:   无速率限制，适合高频次调用。   长期稳定，被多个开源项目和开发者推荐">
+<meta property="og:description" content="安装依赖1opkg update &amp;&amp; opkg install kmod-usb-core kmod-usb-uhci kmod-usb-storage kmod-usb2 kmod-usb-ohci block-mount mount-utils kmod-fs-ext4 e2fsprogs fdisk lsblk unzip  U盘分区此处省略 移动根目录以下假设 &#x2F;dev&#x2F;">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-06-10T15:37:46.000Z">
-<meta property="article:modified_time" content="2025-06-10T15:45:16.340Z">
+<meta property="article:published_time" content="2025-07-08T07:27:10.000Z">
+<meta property="article:modified_time" content="2025-07-08T07:52:22.497Z">
 <meta property="article:author" content="神楽">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>公网IP查询API - 神楽的博客</title>
+  <title>OpenWRT USB 扩容 - 神楽的博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -199,7 +199,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="公网IP查询API"></span>
+            <span id="subtitle" data-typed-text="OpenWRT USB 扩容"></span>
           
         </div>
 
@@ -210,8 +210,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-06-10 23:37" pubdate>
-          2025年6月10日 晚上
+        <time datetime="2025-07-08 15:27" pubdate>
+          2025年7月8日 下午
         </time>
       </span>
     
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          334 字
+          600 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          3 分钟
+          6 分钟
         
       </span>
     
@@ -270,12 +270,12 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">公网IP查询API</h1>
+            <h1 id="seo-header">OpenWRT USB 扩容</h1>
             
               <p id="updated-time" class="note note-info" style="">
                 
                   
-                    本文最后更新于 2025年6月10日 晚上
+                    本文最后更新于 2025年7月8日 下午
                   
                 
               </p>
@@ -283,77 +283,63 @@
             
               <div class="markdown-body">
                 
-                <h2 id="ipv4"><a href="#ipv4" class="headerlink" title="ipv4"></a>ipv4</h2><ol>
-<li><p><strong><code>api.ipify.org</code></strong></p>
+                <h1 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h1><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm">opkg update &amp;&amp; opkg <span class="hljs-keyword">install </span>kmod-usb-core kmod-usb-uhci kmod-usb-storage kmod-usb2 kmod-usb-ohci <span class="hljs-keyword">block-mount </span>mount-utils kmod-fs-<span class="hljs-keyword">ext4 </span>e<span class="hljs-symbol">2f</span>sprogs fdisk lsblk unzip<br></code></pre></td></tr></table></figure>
+
+<h1 id="U盘分区"><a href="#U盘分区" class="headerlink" title="U盘分区"></a>U盘分区</h1><p>此处省略</p>
+<h1 id="移动根目录"><a href="#移动根目录" class="headerlink" title="移动根目录"></a>移动根目录</h1><p>以下假设 <code>/dev/sda1</code> 为 U 盘上要作为根目录的分区</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">mkdir</span> /mnt/udisk<br>mount /dev/sda1 /mnt/udisk<br><span class="hljs-built_in">mkdir</span> /tmp/root<br>mount --<span class="hljs-built_in">bind</span> / /tmp/root<br>tar -C /tmp/root -cvf - . | tar -C /mnt/udisk -xvf -<br><span class="hljs-built_in">sync</span><br>umount /tmp/root<br></code></pre></td></tr></table></figure>
+
+<p>命令的含义：</p>
 <ul>
-<li><strong>URL</strong>: <a target="_blank" rel="noopener" href="https://api.ipify.org/">https://api.ipify.org</a> &#x2F; <a target="_blank" rel="noopener" href="https://api4.ipify.org/">https://api4.ipify.org</a> &#x2F; <a target="_blank" rel="noopener" href="https://api64.ipify.org/">https://api64.ipify.org</a> </li>
-<li><strong>返回格式</strong>: 支持纯文本、JSON、XML 等多种格式，通过 <code>format=json</code> 参数指定格式。</li>
-<li><strong>特点</strong>:  <ul>
-<li>无速率限制，适合高频次调用。  </li>
-<li>长期稳定，被多个开源项目和开发者推荐。</li>
+<li>创建下面 U 盘分区要挂载的目录</li>
+<li>将 U 盘中要作为根目录分区挂载到 &#x2F;mnt&#x2F;udisk</li>
+<li>创建一个临时目录，用于拷贝根目录文件</li>
+<li>将当前根目录以 bind 的方式挂载到临时目录，此时临时目录里可以看到和根目录一样的文件</li>
+<li>将临时目录的内容打包并解压到 &#x2F;mnt&#x2F;disk，tar 用于保留文件的属性信息</li>
+<li>将所有缓存写入 ROM</li>
+<li>取消挂载</li>
 </ul>
+<h1 id="自动挂载U盘分区为根目录"><a href="#自动挂载U盘分区为根目录" class="headerlink" title="自动挂载U盘分区为根目录"></a>自动挂载U盘分区为根目录</h1><ol>
+<li><p>让系统自己检测分区情况</p>
+<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arcade">block detect &gt; <span class="hljs-regexp">/etc/</span>config/fstab<br></code></pre></td></tr></table></figure>
 </li>
-</ul>
-</li>
-<li><p><strong><code>checkip.amazonaws.com</code></strong></p>
-<ul>
-<li><strong>URL</strong>: <a target="_blank" rel="noopener" href="https://checkip.amazonaws.com/">https://checkip.amazonaws.com</a> </li>
-<li><strong>返回格式</strong>: 纯文本  </li>
-<li><strong>特点</strong>:  <ul>
-<li>亚马逊 AWS 提供的服务，稳定性极高。  </li>
-<li>适合追求简单性和可靠性的场景。</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p><strong><code>api-ipv4.ip.sb/ip</code></strong></p>
-<ul>
-<li><strong>URL</strong>: <a target="_blank" rel="noopener" href="https://api-ipv4.ip.sb/ip">https://api-ipv4.ip.sb/ip</a> </li>
-<li><strong>返回格式</strong>: 纯文本  </li>
-<li><strong>特点</strong>:  <ul>
-<li>阿里云旗下的 Cloudflare CDN 提供的查询接口，稳定性极高。</li>
-<li>适合国内使用场景。</li>
-</ul>
-</li>
-</ul>
-</li>
+<li><p>编辑 <code>/etc/config/fstab</code>，编辑后的内容大致如下:</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">config <span class="hljs-keyword">global</span><br>    <span class="hljs-keyword">option</span> auto_swap <span class="hljs-string">&#x27;1&#x27;</span><br>    <span class="hljs-keyword">option</span> auto_mount <span class="hljs-string">&#x27;1&#x27;</span><br>    <span class="hljs-keyword">option</span> delay_root <span class="hljs-string">&#x27;5&#x27;</span><br>    <span class="hljs-keyword">option</span> check_fs <span class="hljs-string">&#x27;0&#x27;</span><br>    <span class="hljs-keyword">option</span> anon_swap <span class="hljs-string">&#x27;1&#x27;</span><br>    <span class="hljs-keyword">option</span> anon_mount <span class="hljs-string">&#x27;1&#x27;</span><br><br>config mount<br>    <span class="hljs-keyword">option</span> target <span class="hljs-string">&#x27;/&#x27;</span><br>    <span class="hljs-keyword">option</span> <span class="hljs-type">uuid</span> <span class="hljs-string">&#x27;0000-0000&#x27;</span><br>    <span class="hljs-keyword">option</span> enabled <span class="hljs-string">&#x27;1&#x27;</span><br></code></pre></td></tr></table></figure></li>
 </ol>
-<h2 id="ipv6"><a href="#ipv6" class="headerlink" title="ipv6"></a>ipv6</h2><ol>
-<li><p><strong><code>api6.ipify.org</code></strong>  </p>
-<ul>
-<li><strong>URL</strong>: <a target="_blank" rel="noopener" href="https://api6.ipify.org/">https://api6.ipify.org</a></li>
-<li><strong>返回格式</strong>: 支持纯文本、JSON、XML 等多种格式，通过 <code>format=json</code> 参数指定格式。</li>
-<li><strong>特点</strong>:  <ul>
-<li>无速率限制，适合高频次调用。  </li>
-<li>长期稳定，被多个开源项目和开发者推荐。</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p><strong><code>v6.ident.me</code></strong>  </p>
-<ul>
-<li><strong>URL</strong>: <a target="_blank" rel="noopener" href="https://v6.ident.me/">https://v6.ident.me</a></li>
-<li><strong>返回格式</strong>: 纯文本 </li>
-<li><strong>特点</strong>：<ul>
-<li>同时支持ipv4和ipv6，也支持http和https。</li>
-<li>运行情况较稳定，社区使用广泛。</li>
-<li>注：可能依赖个人或小团队维护，不保证长期 SLA。</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p><strong><code>api-ipv6.ip.sb</code></strong>  </p>
-<ul>
-<li><strong>URL</strong>: <a target="_blank" rel="noopener" href="https://api-ipv6.ip.sb/ip">https://api-ipv6.ip.sb/ip</a></li>
-<li><strong>返回格式</strong>: 纯文本 </li>
-<li><strong>特点</strong>：<ul>
-<li>阿里云旗下的 Cloudflare CDN 提供的查询接口，稳定性极高。</li>
-<li>适合国内使用场景。</li>
-</ul>
-</li>
-</ul>
-</li>
+<blockquote>
+<p>第一部分的 <code>global</code> 不需要修改。<br>第二个部分的 <code>mount</code> 中，<code>target</code> 改为 <code>/</code>，即挂载到根目录；uuid 为 U 盘分区的标识符。<br>如果不确定哪个 uuid 是对应刚才的分区，可以执行 <code>block info</code> 查看。</p>
+</blockquote>
+<ol start="3">
+<li>执行 reboot 重启</li>
 </ol>
+<h1 id="取消-var-指向-tmp"><a href="#取消-var-指向-tmp" class="headerlink" title="取消 /var 指向 tmp"></a>取消 <code>/var</code> 指向 <code>tmp</code></h1><p>执行：<code>ls -l /</code> 查看 <code>/var</code> 是否指向临时文件系统。如果看到：<code>var -&gt; tmp</code> ，就表示重启路由后，你对 <code>/var</code> 里文件的修改会丢失。比如应用的日志。</p>
+<p>执行以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">rm</span> /var<br><span class="hljs-built_in">mkdir</span> /var<br><span class="hljs-built_in">cp</span> -r /tmp/* /var/<br>reboot<br></code></pre></td></tr></table></figure>
+<p>命令的含义：</p>
+<ul>
+<li>删除指向临时文件系统的符号链接</li>
+<li>创建一个真正的目录</li>
+<li>将临时文件系统中的文件复制到新创建的目录中</li>
+<li>重启</li>
+</ul>
+<blockquote>
+<p>注意：如果 &#x2F;var 指向 tmp，可能会导致 supervisor 无法正确启动。因为涉及到 &#x2F;var&#x2F;run&#x2F; 文件夹。</p>
+</blockquote>
+<h1 id="swapon分区扩容"><a href="#swapon分区扩容" class="headerlink" title="swapon分区扩容"></a>swapon分区扩容</h1><p>假设设置为 Swap 的分区为 &#x2F;dev&#x2F;sda2，执行以下命令：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs awk">mkswap <span class="hljs-regexp">/dev/</span>sda2<br>swapon <span class="hljs-regexp">/dev/</span>sda2<br></code></pre></td></tr></table></figure>
+
+<p>命令的含义：</p>
+<ul>
+<li>将 &#x2F;dev&#x2F;sda2 设置为 Swap</li>
+<li>启用这个 Swap</li>
+</ul>
+<p>编辑 <code>/etc/config/fstab</code> 在下面多添加：</p>
+<figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs gams">config swap<br>    <span class="hljs-keyword">option</span> enabled <span class="hljs-string">&#x27;1&#x27;</span><br>    <span class="hljs-keyword">option</span> device <span class="hljs-string">&#x27;/dev/sda2&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意：swap 无法通过 UUID 挂载，它只有 PARTUUID。只能通过盘号挂载</p>
+</blockquote>
+<p>参考原文：<a target="_blank" rel="noopener" href="https://schaepher.github.io/2019/10/19/openwrt-expand-storage/">OpenWRT 扩展容量</a></p>
 
                 
               </div>
@@ -372,8 +358,15 @@
     
       <span class="category-chain">
         
-  <a href="/categories/WEB/" class="category-chain-item">WEB</a>
+  <a href="/categories/%E7%B3%BB%E7%BB%9F/" class="category-chain-item">系统</a>
   
+  
+    <span>></span>
+    
+  <a href="/categories/%E7%B3%BB%E7%BB%9F/ARM/" class="category-chain-item">ARM</a>
+  
+  
+
   
 
       </span>
@@ -394,18 +387,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2025/07/08/%E7%B3%BB%E7%BB%9F/ARM/OpenWRT-USB-%E6%89%A9%E5%AE%B9/" title="OpenWRT USB 扩容">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">OpenWRT USB 扩容</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/06/03/%E7%B3%BB%E7%BB%9F/windows/bat%E8%84%9A%E6%9C%AC%E9%9A%90%E8%97%8F%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%AA%97%E5%8F%A3%E6%89%A7%E8%A1%8C/" title="bat脚本隐藏命令行窗口执行">
-                        <span class="hidden-mobile">bat脚本隐藏命令行窗口执行</span>
+                      <a href="/2025/06/10/WEB/%E5%85%AC%E7%BD%91IP%E6%9F%A5%E8%AF%A2API/" title="公网IP查询API">
+                        <span class="hidden-mobile">公网IP查询API</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

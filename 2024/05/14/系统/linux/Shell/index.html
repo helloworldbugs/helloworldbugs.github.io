@@ -27,7 +27,7 @@
 <meta property="og:description" content="RedHat&#x2F;Cent更新1yum makecache   #更新软件包源  1yum -y update   #升级所有包，同时也升级软件和系统内核  1yum -y upgrade  #升级所有包，不升级软件和系统内核  卸载软件1yum erase       # 卸载软件  1rpm -e --nodeps # 卸载软件，卸载依赖  安装webphp+mysql+httpd1yu">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-05-13T16:33:03.000Z">
-<meta property="article:modified_time" content="2025-07-04T07:35:25.408Z">
+<meta property="article:modified_time" content="2025-07-08T04:53:41.794Z">
 <meta property="article:author" content="神楽">
 <meta property="article:tag" content="linux">
 <meta name="twitter:card" content="summary_large_image">
@@ -223,7 +223,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.2k 字
+          1.3k 字
         
       </span>
     
@@ -276,7 +276,7 @@
               <p id="updated-time" class="note note-info" style="">
                 
                   
-                    本文最后更新于 2025年7月4日 下午
+                    本文最后更新于 2025年7月8日 下午
                   
                 
               </p>
@@ -398,17 +398,24 @@
 <p>测试自动挂载是否成功</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs css">sudo mount -<span class="hljs-selector-tag">a</span><br></code></pre></td></tr></table></figure>
 
-<h1 id="文件处理"><a href="#文件处理" class="headerlink" title="文件处理"></a>文件处理</h1><p>使用tar批量解压当前命令下的*.tar.gz后缀的文件</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> $(<span class="hljs-built_in">ls</span> *.tar.gz);<span class="hljs-keyword">do</span> tar zxvf <span class="hljs-variable">$i</span>;<span class="hljs-keyword">done</span><br></code></pre></td></tr></table></figure>
-<p>复制大文件（断点续传）</p>
-<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs elixir">rsync -av --append-verify --progress /path/to/largefile user<span class="hljs-variable">@host</span><span class="hljs-symbol">:/dest/path/</span><br></code></pre></td></tr></table></figure>
-
-<ul>
-<li><code>-a</code>：递归复制，包括子目录和文件。</li>
-<li><code>-v</code>：显示复制过程。</li>
-<li><code>--append-verify</code>：断点续传，并在结束后校验文件完整性。</li>
-<li><code>--progress</code>：显示复制进度。</li>
+<h1 id="文件处理"><a href="#文件处理" class="headerlink" title="文件处理"></a>文件处理</h1><ul>
+<li>使用tar批量解压当前命令下的*.tar.gz后缀的文件</li>
 </ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> $(<span class="hljs-built_in">ls</span> *.tar.gz);<span class="hljs-keyword">do</span> tar zxvf <span class="hljs-variable">$i</span>;<span class="hljs-keyword">done</span><br></code></pre></td></tr></table></figure>
+<ul>
+<li>复制大文件（断点续传）<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs elixir">rsync -av --append-verify --progress /path/to/largefile user<span class="hljs-variable">@host</span><span class="hljs-symbol">:/dest/path/</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+<blockquote>
+<p><code>-a</code>：递归复制，包括子目录和文件。<br><code>-v</code>：显示复制过程。<br><code>--append-verify</code>：断点续传，并在结束后校验文件完整性。<br><code>--progress</code>：显示复制进度。</p>
+</blockquote>
+<ul>
+<li>临时修改时间格式：（方便观察文件改动时间）</li>
+</ul>
+<p>方法 1：设置环境变量（推荐简洁）</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-built_in">export</span> <span class="hljs-attribute">TIME_STYLE</span>=long-iso<br></code></pre></td></tr></table></figure>
+<p>方法 2：定义别名（更自定义）</p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli"><span class="hljs-keyword">alias</span> ll=&#x27;<span class="hljs-keyword">ls</span> -l <span class="hljs-params">--time-style=</span><span class="hljs-string">&quot;+%Y/%m/%d %H:%M:%S&quot;</span>&#x27;<br></code></pre></td></tr></table></figure>
+
 <h1 id="解除root用户登录ssh限制"><a href="#解除root用户登录ssh限制" class="headerlink" title="解除root用户登录ssh限制"></a>解除root用户登录ssh限制</h1><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs swift">sed <span class="hljs-operator">-</span>i &#x27;s<span class="hljs-regexp">/^#\?\s*PermitRootLogin\s\+.*/</span><span class="hljs-type">PermitRootLogin</span> yes<span class="hljs-regexp">/&#x27; /</span>etc<span class="hljs-regexp">/ssh/</span>sshd_config <span class="hljs-operator">||</span> sed <span class="hljs-operator">-</span>i <span class="hljs-operator">-</span><span class="hljs-type">E</span> &#x27;s<span class="hljs-regexp">/^\s*#?\s*PermitRootLogin\s+.*/</span><span class="hljs-type">PermitRootLogin</span> yes<span class="hljs-regexp">/&#x27; /</span>etc<span class="hljs-regexp">/ssh/</span>sshd_config<br></code></pre></td></tr></table></figure>
 <h1 id="cpu性能模式配置"><a href="#cpu性能模式配置" class="headerlink" title="cpu性能模式配置"></a>cpu性能模式配置</h1><p>安装<code>cpufrequtils</code></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text-plain">apt install cpufrequtils<br></code></pre></td></tr></table></figure>
