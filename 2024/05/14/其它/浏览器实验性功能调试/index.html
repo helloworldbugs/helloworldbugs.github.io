@@ -19,15 +19,15 @@
   <meta name="author" content="神楽">
   <meta name="keywords" content="">
   
-    <meta name="description" content="深色模式Android1chrome:&#x2F;&#x2F;flags&#x2F;#darken-websites-checkbox-in-themes-setting  chrome1chrome:&#x2F;&#x2F;flags&#x2F;#enable-force-dark  改善深色主题下打开 Chrome 时会出现短暂的白屏闪烁在“快捷方式”选项卡的“目标”字段末尾添加以下参数： 1--enable-features&#x3D;RemoveRedire">
+    <meta name="description" content="chrome深色模式Android1chrome:&#x2F;&#x2F;flags&#x2F;#darken-websites-checkbox-in-themes-setting  PC1chrome:&#x2F;&#x2F;flags&#x2F;#enable-force-dark  改善深色主题下打开 Chrome 时会出现短暂的白屏闪烁在“快捷方式”选项卡的“目标”字段末尾添加以下参数： 1--enable-features&#x3D;RemoveRedi">
 <meta property="og:type" content="article">
 <meta property="og:title" content="浏览器实验性功能调试">
 <meta property="og:url" content="https://helloworldbugs.gitlab.io/2024/05/14/%E5%85%B6%E5%AE%83/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%AE%9E%E9%AA%8C%E6%80%A7%E5%8A%9F%E8%83%BD%E8%B0%83%E8%AF%95/index.html">
 <meta property="og:site_name" content="神楽的博客">
-<meta property="og:description" content="深色模式Android1chrome:&#x2F;&#x2F;flags&#x2F;#darken-websites-checkbox-in-themes-setting  chrome1chrome:&#x2F;&#x2F;flags&#x2F;#enable-force-dark  改善深色主题下打开 Chrome 时会出现短暂的白屏闪烁在“快捷方式”选项卡的“目标”字段末尾添加以下参数： 1--enable-features&#x3D;RemoveRedire">
+<meta property="og:description" content="chrome深色模式Android1chrome:&#x2F;&#x2F;flags&#x2F;#darken-websites-checkbox-in-themes-setting  PC1chrome:&#x2F;&#x2F;flags&#x2F;#enable-force-dark  改善深色主题下打开 Chrome 时会出现短暂的白屏闪烁在“快捷方式”选项卡的“目标”字段末尾添加以下参数： 1--enable-features&#x3D;RemoveRedi">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-05-13T16:06:55.000Z">
-<meta property="article:modified_time" content="2025-06-05T11:07:46.233Z">
+<meta property="article:modified_time" content="2025-07-15T10:16:05.663Z">
 <meta property="article:author" content="神楽">
 <meta property="article:tag" content="浏览器">
 <meta name="twitter:card" content="summary_large_image">
@@ -223,7 +223,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          558 字
+          304 字
         
       </span>
     
@@ -234,7 +234,7 @@
         
         
         
-          5 分钟
+          3 分钟
         
       </span>
     
@@ -276,7 +276,7 @@
               <p id="updated-time" class="note note-info" style="">
                 
                   
-                    本文最后更新于 2025年6月5日 晚上
+                    本文最后更新于 2025年7月15日 晚上
                   
                 
               </p>
@@ -284,41 +284,33 @@
             
               <div class="markdown-body">
                 
-                <h1 id="深色模式"><a href="#深色模式" class="headerlink" title="深色模式"></a>深色模式</h1><h2 id="Android"><a href="#Android" class="headerlink" title="Android"></a>Android</h2><figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs avrasm"><span class="hljs-symbol">chrome:</span>//flags/<span class="hljs-meta">#darken-websites-checkbox-in-themes-setting</span><br></code></pre></td></tr></table></figure>
+                <h1 id="chrome深色模式"><a href="#chrome深色模式" class="headerlink" title="chrome深色模式"></a>chrome深色模式</h1><h2 id="Android"><a href="#Android" class="headerlink" title="Android"></a>Android</h2><figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs avrasm"><span class="hljs-symbol">chrome:</span>//flags/<span class="hljs-meta">#darken-websites-checkbox-in-themes-setting</span><br></code></pre></td></tr></table></figure>
 
-<h2 id="chrome"><a href="#chrome" class="headerlink" title="chrome"></a>chrome</h2><figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs avrasm"><span class="hljs-symbol">chrome:</span>//flags/<span class="hljs-meta">#enable-force-dark</span><br></code></pre></td></tr></table></figure>
+<h2 id="PC"><a href="#PC" class="headerlink" title="PC"></a>PC</h2><figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs avrasm"><span class="hljs-symbol">chrome:</span>//flags/<span class="hljs-meta">#enable-force-dark</span><br></code></pre></td></tr></table></figure>
 
 <h3 id="改善深色主题下打开-Chrome-时会出现短暂的白屏闪烁"><a href="#改善深色主题下打开-Chrome-时会出现短暂的白屏闪烁" class="headerlink" title="改善深色主题下打开 Chrome 时会出现短暂的白屏闪烁"></a>改善深色主题下打开 Chrome 时会出现短暂的白屏闪烁</h3><p>在“快捷方式”选项卡的“目标”字段末尾添加以下参数：</p>
 <figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">--enable-features</span>=RemoveRedirectionBitmap<br></code></pre></td></tr></table></figure>
+<h1 id="chrome-多线程下载"><a href="#chrome-多线程下载" class="headerlink" title="chrome 多线程下载"></a>chrome 多线程下载</h1><p>默认关闭</p>
+<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs avrasm"><span class="hljs-symbol">chrome:</span>//flags/<span class="hljs-meta">#enable-parallel-downloading</span><br></code></pre></td></tr></table></figure>
 
-<h1 id="多线程下载"><a href="#多线程下载" class="headerlink" title="多线程下载"></a>多线程下载</h1><figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs avrasm"><span class="hljs-symbol">chrome:</span>//flags/<span class="hljs-meta">#enable-parallel-downloading</span><br></code></pre></td></tr></table></figure>
 <h1 id="地址栏显示完整地址"><a href="#地址栏显示完整地址" class="headerlink" title="地址栏显示完整地址"></a>地址栏显示完整地址</h1><h2 id="firefox"><a href="#firefox" class="headerlink" title="firefox"></a>firefox</h2><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs applescript"><span class="hljs-keyword">about</span>:config<br></code></pre></td></tr></table></figure>
 
 <figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus">browser<span class="hljs-selector-class">.urlbar</span>.trimURLs<br></code></pre></td></tr></table></figure>
-
-<h1 id="平滑滚动"><a href="#平滑滚动" class="headerlink" title="平滑滚动"></a>平滑滚动</h1><figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs avrasm"><span class="hljs-symbol">chrome:</span>//flags/<span class="hljs-meta">#smooth-scrolling</span><br></code></pre></td></tr></table></figure>
 
 <h1 id="解除赋予权限去除“由贵单位管理”功能选项"><a href="#解除赋予权限去除“由贵单位管理”功能选项" class="headerlink" title="解除赋予权限去除“由贵单位管理”功能选项"></a>解除赋予权限去除“由贵单位管理”功能选项</h1><p>谷歌 Chrome 浏览器地址栏输入 <code>Chrome://policy</code> ，即可看到调用企业策略的第三方软件或者是用户主动安装的第三方扩展等</p>
 <ol>
 <li>Windows系统按WIN+R输入“RegEdit”运行注册表管理</li>
 <li>删除注册表<code>\HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\</code>下对应的文件夹（删除整个<code>Chrome</code>目录）</li>
 </ol>
-<h1 id="firefox-配置备份"><a href="#firefox-配置备份" class="headerlink" title="firefox 配置备份"></a>firefox 配置备份</h1><p>设置 &gt; 帮助 &gt; 更多排障信息 &gt; 配置文件夹 &gt; 打开文件夹</p>
-<p><a target="_blank" rel="noopener" href="https://www.mozilla.org/en-US/firefox/new/?xv=refresh-new&v=b">firefox浏览器国际版下载地址</a></p>
-<h1 id="设置Chrome忽略网站证书错误"><a href="#设置Chrome忽略网站证书错误" class="headerlink" title="设置Chrome忽略网站证书错误"></a>设置Chrome忽略网站证书错误</h1><p>某些用户可能经常会遇到Chrome浏览器提示网站证书错误的情况,尤其是在Google升级证书检查力度之后,访问Google时已经不能在浏览器界面中忽略证书错误访问.</p>
-<p>比如说公司的IT修改过证书就会遇到这种情况。</p>
-<p>解决这个问题很简单,只需要修改你平时用来启动Chrome的快捷方式就可以忽略掉证书错误.</p>
-<p>具体的操作方法是这样的:</p>
-<ol>
-<li>找到你的Chrome快捷方式.</li>
-<li>右键图标,选择属性</li>
-<li>找到”目标”文本框,里面的内容是你的Chrome程序路径,类似这样<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs 1c"><span class="hljs-string">&quot;C:\Program Files\Google\Chrome\Application\chrome.exe&quot;</span><br></code></pre></td></tr></table></figure></li>
-<li>在这段文本的最后面添加一个空格,然后在空格后面添加<figure class="highlight brainfuck"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs brainfuck"><span class="hljs-literal">--</span><span class="hljs-comment">ignore</span><span class="hljs-literal">-</span><span class="hljs-comment">certificate</span><span class="hljs-literal">-</span><span class="hljs-comment">errors</span> <span class="hljs-literal">--</span><span class="hljs-comment">test</span><span class="hljs-literal">-</span><span class="hljs-comment">type</span><br></code></pre></td></tr></table></figure></li>
-<li>修改后的”目标”文本应该类似于这样: <figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs fsharp"><span class="hljs-string">&quot;C:\Program Files\Google\Chrome\Application\chrome.exe&quot;</span> <span class="hljs-operator">--</span><span class="hljs-built_in">ignore</span><span class="hljs-operator">-</span>certificate<span class="hljs-operator">-</span>errors <span class="hljs-operator">--</span>test<span class="hljs-operator">-</span><span class="hljs-keyword">type</span><br></code></pre></td></tr></table></figure></li>
-<li>点击确定</li>
-<li>重新打开你的Chrome浏览器</li>
-</ol>
-<p>执行上述操作后,以后你每次通过该快捷方式打开Chrome,都会从根本上忽略掉浏览器中的所有证书错误.</p>
+<h1 id="firefox-1"><a href="#firefox-1" class="headerlink" title="firefox"></a>firefox</h1><p><a target="_blank" rel="noopener" href="https://www.mozilla.org/en-US/firefox/new/?xv=refresh-new&v=b">firefox浏览器国际版下载地址</a></p>
+<h2 id="全量备份迁移"><a href="#全量备份迁移" class="headerlink" title="全量备份迁移"></a>全量备份迁移</h2><p>设置 &gt; 帮助 &gt; 更多排障信息 &gt; 配置文件夹 &gt; 打开文件夹</p>
+<h2 id="还原工具栏按钮、扩展图标位置布局"><a href="#还原工具栏按钮、扩展图标位置布局" class="headerlink" title="还原工具栏按钮、扩展图标位置布局"></a>还原工具栏按钮、扩展图标位置布局</h2><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs applescript"><span class="hljs-keyword">about</span>:config<br></code></pre></td></tr></table></figure>
+<figure class="highlight pf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pf">browser.uiCustomization.<span class="hljs-keyword">state</span><br></code></pre></td></tr></table></figure>
+
+
+<h1 id="设置Chrome忽略网站证书错误"><a href="#设置Chrome忽略网站证书错误" class="headerlink" title="设置Chrome忽略网站证书错误"></a>设置Chrome忽略网站证书错误</h1><p>在“快捷方式”选项卡的“目标”字段末尾添加以下参数：</p>
+<figure class="highlight brainfuck"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs brainfuck"><span class="hljs-literal">--</span><span class="hljs-comment">ignore</span><span class="hljs-literal">-</span><span class="hljs-comment">certificate</span><span class="hljs-literal">-</span><span class="hljs-comment">errors</span> <span class="hljs-literal">--</span><span class="hljs-comment">test</span><span class="hljs-literal">-</span><span class="hljs-comment">type</span><br></code></pre></td></tr></table></figure>
+
 <h1 id="切换-ANGLE-图形后端"><a href="#切换-ANGLE-图形后端" class="headerlink" title="切换 ANGLE 图形后端"></a>切换 ANGLE 图形后端</h1><p>用于改善一些渲染异常问题</p>
 <figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs avrasm"><span class="hljs-symbol">chrome:</span>//flags/<span class="hljs-meta">#use-angle</span><br></code></pre></td></tr></table></figure>
                 
