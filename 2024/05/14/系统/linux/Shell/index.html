@@ -27,7 +27,7 @@
 <meta property="og:description" content="RedHat&#x2F;Cent更新1yum makecache   #更新软件包源  1yum -y update   #升级所有包，同时也升级软件和系统内核  1yum -y upgrade  #升级所有包，不升级软件和系统内核  卸载软件1yum erase       # 卸载软件  1rpm -e --nodeps # 卸载软件，卸载依赖  安装webphp+mysql+httpd1yu">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-05-13T16:33:03.000Z">
-<meta property="article:modified_time" content="2025-07-08T04:53:41.794Z">
+<meta property="article:modified_time" content="2025-08-14T18:21:52.540Z">
 <meta property="article:author" content="神楽">
 <meta property="article:tag" content="linux">
 <meta name="twitter:card" content="summary_large_image">
@@ -223,7 +223,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.3k 字
+          1.4k 字
         
       </span>
     
@@ -234,7 +234,7 @@
         
         
         
-          11 分钟
+          12 分钟
         
       </span>
     
@@ -276,7 +276,7 @@
               <p id="updated-time" class="note note-info" style="">
                 
                   
-                    本文最后更新于 2025年7月8日 下午
+                    本文最后更新于 2025年8月15日 凌晨
                   
                 
               </p>
@@ -415,6 +415,13 @@
 <figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-built_in">export</span> <span class="hljs-attribute">TIME_STYLE</span>=long-iso<br></code></pre></td></tr></table></figure>
 <p>方法 2：定义别名（更自定义）</p>
 <figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli"><span class="hljs-keyword">alias</span> ll=&#x27;<span class="hljs-keyword">ls</span> -l <span class="hljs-params">--time-style=</span><span class="hljs-string">&quot;+%Y/%m/%d %H:%M:%S&quot;</span>&#x27;<br></code></pre></td></tr></table></figure>
+
+<h1 id="shell脚本报错：-’-r’-command-not-found"><a href="#shell脚本报错：-’-r’-command-not-found" class="headerlink" title="shell脚本报错：$’\r’: command not found"></a>shell脚本报错：$’\r’: command not found</h1><p><strong>原因</strong></p>
+<p>可能是在 Windows 上写的这个脚本，或者从 Windows 系统复制过来的（例如用记事本编辑过），导致行尾多了 <code>\r</code>。</p>
+<p>Bash 在解析时把 <code>\r</code> 当成命令的一部分，就出现了 <code>$&#39;\r&#39;: command not found</code> 这样的提示。</p>
+<p><strong>解决办法</strong></p>
+<p>在 Linux 里执行以下命令去掉行尾的 <code>\r</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sed -i <span class="hljs-string">&#x27;s/\r$//&#x27;</span> &lt;脚本文件名&gt;<br></code></pre></td></tr></table></figure>
 
 <h1 id="解除root用户登录ssh限制"><a href="#解除root用户登录ssh限制" class="headerlink" title="解除root用户登录ssh限制"></a>解除root用户登录ssh限制</h1><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs swift">sed <span class="hljs-operator">-</span>i &#x27;s<span class="hljs-regexp">/^#\?\s*PermitRootLogin\s\+.*/</span><span class="hljs-type">PermitRootLogin</span> yes<span class="hljs-regexp">/&#x27; /</span>etc<span class="hljs-regexp">/ssh/</span>sshd_config <span class="hljs-operator">||</span> sed <span class="hljs-operator">-</span>i <span class="hljs-operator">-</span><span class="hljs-type">E</span> &#x27;s<span class="hljs-regexp">/^\s*#?\s*PermitRootLogin\s+.*/</span><span class="hljs-type">PermitRootLogin</span> yes<span class="hljs-regexp">/&#x27; /</span>etc<span class="hljs-regexp">/ssh/</span>sshd_config<br></code></pre></td></tr></table></figure>
 <h1 id="cpu性能模式配置"><a href="#cpu性能模式配置" class="headerlink" title="cpu性能模式配置"></a>cpu性能模式配置</h1><p>安装<code>cpufrequtils</code></p>

@@ -19,16 +19,16 @@
   <meta name="author" content="神楽">
   <meta name="keywords" content="">
   
-    <meta name="description" content="存储策略和分区调整 适合新部署pve的时候做的调整  删除分区 1lvremove pve&#x2F;data  扩容到根分区 1lvextend -l +100%FREE -r pve&#x2F;root  去除未订阅提示适用版本：v6-8  ps:不要使用pvetools工具的去除订阅提示功能，会有系统级的bug，导致系统不稳定，频繁卡死  逐行执行 1sed -i_orig &quot;s&#x2F;data.statu">
+    <meta name="description" content="存储策略和分区调整 适合新部署pve的时候做的调整  删除分区 1lvremove pve&#x2F;data  扩容到根分区 1lvextend -l +100%FREE -r pve&#x2F;root  去除未订阅提示适用版本：v6-v8  ps:不要使用pvetools工具的去除订阅提示功能，会有系统级的bug，导致系统不稳定，频繁卡死  逐行执行 1sed -i_orig &quot;s&#x2F;data.stat">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Proxmox VE">
 <meta property="og:url" content="https://helloworldbugs.gitlab.io/2024/05/30/%E7%B3%BB%E7%BB%9F/linux/ProxmoxVE/index.html">
 <meta property="og:site_name" content="神楽的博客">
-<meta property="og:description" content="存储策略和分区调整 适合新部署pve的时候做的调整  删除分区 1lvremove pve&#x2F;data  扩容到根分区 1lvextend -l +100%FREE -r pve&#x2F;root  去除未订阅提示适用版本：v6-8  ps:不要使用pvetools工具的去除订阅提示功能，会有系统级的bug，导致系统不稳定，频繁卡死  逐行执行 1sed -i_orig &quot;s&#x2F;data.statu">
+<meta property="og:description" content="存储策略和分区调整 适合新部署pve的时候做的调整  删除分区 1lvremove pve&#x2F;data  扩容到根分区 1lvextend -l +100%FREE -r pve&#x2F;root  去除未订阅提示适用版本：v6-v8  ps:不要使用pvetools工具的去除订阅提示功能，会有系统级的bug，导致系统不稳定，频繁卡死  逐行执行 1sed -i_orig &quot;s&#x2F;data.stat">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://helloworldbugs.gitlab.io/2024/05/30/%E7%B3%BB%E7%BB%9F/linux/ProxmoxVE/image.png">
 <meta property="article:published_time" content="2024-05-30T07:45:32.000Z">
-<meta property="article:modified_time" content="2025-07-03T16:21:25.777Z">
+<meta property="article:modified_time" content="2025-08-14T19:17:20.741Z">
 <meta property="article:author" content="神楽">
 <meta property="article:tag" content="pev">
 <meta name="twitter:card" content="summary_large_image">
@@ -225,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          631 字
+          781 字
         
       </span>
     
@@ -236,7 +236,7 @@
         
         
         
-          6 分钟
+          7 分钟
         
       </span>
     
@@ -278,7 +278,7 @@
               <p id="updated-time" class="note note-info" style="">
                 
                   
-                    本文最后更新于 2025年7月4日 凌晨
+                    本文最后更新于 2025年8月15日 凌晨
                   
                 
               </p>
@@ -295,7 +295,7 @@
 <p>扩容到根分区</p>
 <figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">lvextend</span> -l +<span class="hljs-number">100</span>%FREE -r pve/root<br></code></pre></td></tr></table></figure>
 
-<h3 id="去除未订阅提示"><a href="#去除未订阅提示" class="headerlink" title="去除未订阅提示"></a>去除未订阅提示</h3><p>适用版本：v6-8</p>
+<h3 id="去除未订阅提示"><a href="#去除未订阅提示" class="headerlink" title="去除未订阅提示"></a>去除未订阅提示</h3><p>适用版本：v6-v8</p>
 <blockquote>
 <p>ps:不要使用pvetools工具的去除订阅提示功能，会有系统级的bug，导致系统不稳定，频繁卡死</p>
 </blockquote>
@@ -309,7 +309,7 @@
 <figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">systemctl restart pveproxy</span><br></code></pre></td></tr></table></figure>
 
 
-<h3 id="显示硬件健康信息"><a href="#显示硬件健康信息" class="headerlink" title="显示硬件健康信息"></a>显示硬件健康信息</h3><p>实测在v8.4.1成功</p>
+<h3 id="显示硬件健康信息"><a href="#显示硬件健康信息" class="headerlink" title="显示硬件健康信息"></a>显示硬件健康信息</h3><p>实测在v8-v9.0.5测试成功</p>
 <p>直接执行以下命令，脚本来自GitHub项目：<a target="_blank" rel="noopener" href="https://github.com/a904055262/PVE-manager-status">PVE-manager-status</a></p>
 <figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">(curl -Lf -o <span class="hljs-regexp">/tmp/</span>temp.sh https:<span class="hljs-regexp">//</span>raw.githubusercontent.com<span class="hljs-regexp">/a904055262/</span>PVE-manager-status<span class="hljs-regexp">/main/</span>showtempcpufreq.sh || curl -Lf -o <span class="hljs-regexp">/tmp/</span>temp.sh https:<span class="hljs-regexp">//mi</span>rror.ghproxy.com<span class="hljs-regexp">/https:/</span><span class="hljs-regexp">/raw.githubusercontent.com/</span>a904055262<span class="hljs-regexp">/PVE-manager-status/m</span>ain<span class="hljs-regexp">/showtempcpufreq.sh) &amp;&amp; chmod +x /</span>tmp<span class="hljs-regexp">/temp.sh &amp;&amp; /</span>tmp/temp.sh remod<br></code></pre></td></tr></table></figure>
 
@@ -318,19 +318,19 @@
 <p>没有显示功耗的，请执行下面的命令安装依赖，请确保安装成功，就是最后的一行的输出，必须为 “成功!” 才表示安装成功了</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">apt update ; apt install linux-cpupower &amp;&amp; modprobe msr &amp;&amp; <span class="hljs-built_in">echo</span> msr &gt; /etc/modules-load.d/turbostat-msr.conf &amp;&amp; <span class="hljs-built_in">chmod</span> +s /usr/sbin/turbostat &amp;&amp; <span class="hljs-built_in">echo</span> 成功！<br></code></pre></td></tr></table></figure>
 
-<h3 id="pve修改id和名称"><a href="#pve修改id和名称" class="headerlink" title="pve修改id和名称"></a>pve修改id和名称</h3><h4 id="pve修改kvm虚拟机ID"><a href="#pve修改kvm虚拟机ID" class="headerlink" title="pve修改kvm虚拟机ID"></a>pve修改kvm虚拟机ID</h4><ol>
+<h3 id="pve修改id和名称"><a href="#pve修改id和名称" class="headerlink" title="pve修改id和名称"></a>pve修改id和名称</h3><h4 id="kvm虚拟机ID修改"><a href="#kvm虚拟机ID修改" class="headerlink" title="kvm虚拟机ID修改"></a>kvm虚拟机ID修改</h4><ol>
 <li>关闭需要更改 ID 的虚拟机</li>
 <li>重命名配置文件名，以及修改配置文件的硬盘位置（共2处）。<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">cd <span class="hljs-regexp">/etc/</span>pve<span class="hljs-regexp">/nodes/</span>PVE<span class="hljs-regexp">/qemu-server/</span><br></code></pre></td></tr></table></figure></li>
 <li>重命名硬盘文件名以及目录<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">cd <span class="hljs-regexp">/var/</span>lib<span class="hljs-regexp">/vz/im</span>ages<br></code></pre></td></tr></table></figure></li>
 <li>重命名备份文件<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gradle">cd <span class="hljs-regexp">/var/</span>lib<span class="hljs-regexp">/vz/</span><span class="hljs-keyword">dump</span><br></code></pre></td></tr></table></figure></li>
 </ol>
-<h4 id="pve修改lxc容器ID"><a href="#pve修改lxc容器ID" class="headerlink" title="pve修改lxc容器ID"></a>pve修改lxc容器ID</h4><ol>
+<h4 id="lxc容器ID修改"><a href="#lxc容器ID修改" class="headerlink" title="lxc容器ID修改"></a>lxc容器ID修改</h4><ol>
 <li>关闭需要更改 ID 的lxc容器</li>
 <li>重命名配置文件名，以及修改配置文件​内容<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">cd <span class="hljs-regexp">/etc/</span>pve<span class="hljs-regexp">/nodes/</span>PVE<span class="hljs-regexp">/lxc/</span><br></code></pre></td></tr></table></figure></li>
 <li>修改存储卷路径<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">cd <span class="hljs-regexp">/var/</span>lib<span class="hljs-regexp">/vz/im</span>ages/<br></code></pre></td></tr></table></figure></li>
 <li>重命名备份文件<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gradle">cd <span class="hljs-regexp">/var/</span>lib<span class="hljs-regexp">/vz/</span><span class="hljs-keyword">dump</span><br></code></pre></td></tr></table></figure></li>
 </ol>
-<h4 id="pve修改lxc容器名称"><a href="#pve修改lxc容器名称" class="headerlink" title="pve修改lxc容器名称"></a>pve修改lxc容器名称</h4><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-regexp">/etc/</span>pve<span class="hljs-regexp">/lxc/</span>&lt;容器id&gt;.conf<br></code></pre></td></tr></table></figure>
+<h4 id="lxc容器名称修改"><a href="#lxc容器名称修改" class="headerlink" title="lxc容器名称修改"></a>lxc容器名称修改</h4><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-regexp">/etc/</span>pve<span class="hljs-regexp">/lxc/</span>&lt;容器id&gt;.conf<br></code></pre></td></tr></table></figure>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">/var/lib/lxc/&lt;容器<span class="hljs-built_in">id</span>&gt;/config<br></code></pre></td></tr></table></figure>
 
 <h3 id="pvetools问题"><a href="#pvetools问题" class="headerlink" title="pvetools问题"></a>pvetools问题</h3><h4 id="pvetools开启过CPU省电后-取消省电后不能睿频了"><a href="#pvetools开启过CPU省电后-取消省电后不能睿频了" class="headerlink" title="pvetools开启过CPU省电后 取消省电后不能睿频了"></a>pvetools开启过CPU省电后 取消省电后不能睿频了</h4><ol>
@@ -345,10 +345,20 @@
 <figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">vim <span class="hljs-regexp">/usr/</span>share<span class="hljs-regexp">/perl5/</span>PVE/Cluster.pm<br></code></pre></td></tr></table></figure>
 
 <p>定位到<code>alarm(60)</code> ，将60更改为您想要的任何超时，数字单位是秒。 然后重启pve系统</p>
-<h3 id="pve存储库"><a href="#pve存储库" class="headerlink" title="pve存储库"></a>pve存储库</h3><figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs avrasm">echo <span class="hljs-string">&quot;deb http://download.proxmox.com/debian/pve bookworm pve-no-subscription&quot;</span> &gt; /etc/apt/sources<span class="hljs-meta">.list</span>.d/pve-no-subscription<span class="hljs-meta">.list</span><br></code></pre></td></tr></table></figure>
-
 <p>可以在web管理界面选择禁用或者启用自动更新</p>
-
+<h1 id="幽灵文件占用ID无法使用"><a href="#幽灵文件占用ID无法使用" class="headerlink" title="幽灵文件占用ID无法使用"></a>幽灵文件占用ID无法使用</h1><p><strong>现象</strong></p>
+<p>某个id无法使用，但是在配置文件目录看不到文件，也无法新建覆盖</p>
+<p><strong>原因</strong></p>
+<p><code>/etc/pve</code> 不是本地磁盘目录，而是由 <code>pmxcfs（Proxmox Cluster File System）</code>挂载的 FUSE 文件系统。<code>pve-cluster</code> 服务负责管理 <code>pmxcfs</code>。而 <code>/etc/pve</code> 目录下的文件是由 <code>/var/lib/pve-cluster/config.db</code> 这个 SQLite 数据库文件映射的。</p>
+<p><strong>解决办法</strong></p>
+<p>如果发现幽灵文件异常占用，可以编辑<code>/var/lib/pve-cluster/config.db</code>文件</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stata">sqlite3 /<span class="hljs-keyword">var</span>/lib/pve-<span class="hljs-keyword">cluster</span>/config.<span class="hljs-keyword">db</span><br></code></pre></td></tr></table></figure>
+<p>查找异常数据</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">sqlite&gt; <span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> tree <span class="hljs-keyword">WHERE</span> <span class="hljs-type">name</span> <span class="hljs-keyword">like</span> <span class="hljs-string">&#x27;113%&#x27;</span>;<br></code></pre></td></tr></table></figure>
+<p>删除异常数据</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">sqlite&gt; <span class="hljs-keyword">DELETE</span> <span class="hljs-keyword">FROM</span> tree <span class="hljs-keyword">WHERE</span> <span class="hljs-type">name</span>=<span class="hljs-string">&#x27;113.conf&#x27;</span>;<br></code></pre></td></tr></table></figure>
+<p>然后重启 <code>pve-cluster</code> 即可解决。</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">systemctl <span class="hljs-keyword">restart</span> pve-<span class="hljs-keyword">cluster</span><br></code></pre></td></tr></table></figure>
                 
               </div>
             
