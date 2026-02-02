@@ -27,7 +27,7 @@
 <meta property="og:description" content="RedHat&#x2F;Cent更新1yum makecache   #更新软件包源  1yum -y update   #升级所有包，同时也升级软件和系统内核  1yum -y upgrade  #升级所有包，不升级软件和系统内核  卸载软件1yum erase       # 卸载软件  1rpm -e --nodeps # 卸载软件，卸载依赖  安装webphp+mysql+httpd1yu">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-05-13T16:33:03.000Z">
-<meta property="article:modified_time" content="2026-01-07T17:56:16.649Z">
+<meta property="article:modified_time" content="2026-01-07T18:28:13.684Z">
 <meta property="article:author" content="神楽">
 <meta property="article:tag" content="linux">
 <meta name="twitter:card" content="summary_large_image">
@@ -223,7 +223,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.4k 字
+          1.5k 字
         
       </span>
     
@@ -234,7 +234,7 @@
         
         
         
-          12 分钟
+          13 分钟
         
       </span>
     
@@ -397,7 +397,13 @@
 
 <p>测试自动挂载是否成功</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs css">sudo mount -<span class="hljs-selector-tag">a</span><br></code></pre></td></tr></table></figure>
+<h1 id="重启网卡"><a href="#重启网卡" class="headerlink" title="重启网卡"></a>重启网卡</h1><h2 id="ip-link"><a href="#ip-link" class="headerlink" title="ip link"></a><code>ip link</code></h2><p>只要是使用了较新版本内核（2.2 版本以后）的 Linux 系统，都能原生支持这个操作。<code>ip</code>命令直接通过 Netlink 协议与 Linux 内核通信，该命令属于<code>iproute2</code>工具套件，它是现代 Linux 网络管理的标准。</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">ip link <span class="hljs-built_in">set</span> eth0 down &amp;&amp;<span class="hljs-built_in"> ip </span>link <span class="hljs-built_in">set</span> eth0 up<br></code></pre></td></tr></table></figure>
 
+<h2 id="ifconfig"><a href="#ifconfig" class="headerlink" title="ifconfig"></a><code>ifconfig</code></h2><p>在只装有旧版 net-tools 包（既 ifconfig 命令）的老机器上通用。</p>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs 1c">ifdown eth0 <span class="hljs-meta">&amp;&amp; ifup eth0</span><br></code></pre></td></tr></table></figure>
+<p>或</p>
+<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs x86asm">ifconfig eth0 <span class="hljs-meta">down</span> &amp;&amp; ifconfig eth0 <span class="hljs-meta">up</span><br></code></pre></td></tr></table></figure>
 <h1 id="文件处理"><a href="#文件处理" class="headerlink" title="文件处理"></a>文件处理</h1><ul>
 <li>使用tar批量解压当前命令下的*.tar.gz后缀的文件</li>
 </ul>

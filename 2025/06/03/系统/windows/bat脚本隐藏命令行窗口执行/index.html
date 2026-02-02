@@ -27,7 +27,7 @@
 <meta property="og:description" content="bat 脚本隐藏命令行窗口执行使用 mshta 启动隐藏窗口在批处理文件中添加以下代码，可以通过 mshta 启动自身，并隐藏窗口： 12345@echo offif &quot;%1&quot;&#x3D;&#x3D;&quot;h&quot; goto beginstart mshta vbscript:createobject(&quot;wscript.shell&quot;).run(&quot;&amp;quo">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-06-03T14:56:17.000Z">
-<meta property="article:modified_time" content="2025-06-03T16:03:41.190Z">
+<meta property="article:modified_time" content="2026-01-28T15:08:32.851Z">
 <meta property="article:author" content="神楽">
 <meta name="twitter:card" content="summary_large_image">
   
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          624 字
+          729 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          6 分钟
+          7 分钟
         
       </span>
     
@@ -275,7 +275,7 @@
               <p id="updated-time" class="note note-info" style="">
                 
                   
-                    本文最后更新于 2025年6月4日 凌晨
+                    本文最后更新于 2026年1月28日 晚上
                   
                 
               </p>
@@ -313,12 +313,21 @@
 <li><p>双击运行该 <code>.vbs</code> 文件，您的批处理脚本将以隐藏窗口的方式执行。</p>
 </li>
 </ol>
-<h2 id="计划任务隐藏-bat-脚本命令行窗口"><a href="#计划任务隐藏-bat-脚本命令行窗口" class="headerlink" title="计划任务隐藏 bat 脚本命令行窗口"></a>计划任务隐藏 bat 脚本命令行窗口</h2><h3 id="在任务计划程序中直接调用-mshta"><a href="#在任务计划程序中直接调用-mshta" class="headerlink" title="在任务计划程序中直接调用 mshta"></a>在任务计划程序中直接调用 <code>mshta</code></h3><p>在任务计划程序中配置任务时，在“操作”选项卡中设置：</p>
+<h2 id="计划任务隐藏-bat-脚本命令行窗口"><a href="#计划任务隐藏-bat-脚本命令行窗口" class="headerlink" title="计划任务隐藏 bat 脚本命令行窗口"></a>计划任务隐藏 bat 脚本命令行窗口</h2><h3 id="在任务计划程序中直接调用-mshta"><a href="#在任务计划程序中直接调用-mshta" class="headerlink" title="在任务计划程序中直接调用 mshta"></a>在任务计划程序中直接调用 <code>mshta</code></h3><p>（此方法在高版本 windows11 已无法使用）</p>
+<p>在任务计划程序中配置任务时，在“操作”选项卡中设置：</p>
 <ul>
 <li><strong>程序或脚本</strong>：<code>mshta</code></li>
 <li><strong>添加参数</strong>：<code>vbscript:createobject(&quot;wscript.shell&quot;).run(&quot;&quot;&quot;C:\路径\到\您的脚本.bat&quot;&quot;&quot;,0)(window.close)</code></li>
 </ul>
 <p>请将 <code>C:\路径\到\您的脚本.bat</code> 替换为您的批处理文件的实际路径。</p>
+<h3 id="配合-powershell-启动-bat-脚本"><a href="#配合-powershell-启动-bat-脚本" class="headerlink" title="配合 powershell 启动 bat 脚本"></a>配合 powershell 启动 bat 脚本</h3><p>启动之初会一闪而过一个窗口，然后会自动关闭</p>
+<p>powershell命令：</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmake">powershell -WindowStyle Hidden -<span class="hljs-keyword">Command</span> <span class="hljs-string">&quot;cmd.exe /c &#x27;C:\路径\脚本.bat&#x27;&quot;</span><br></code></pre></td></tr></table></figure>
+<p>在计划任务中配置任务时，在“操作”选项卡中设置：</p>
+<ul>
+<li><strong>程序或脚本</strong>：<code>powershell.exe</code></li>
+<li><strong>添加参数</strong>：<code>-WindowStyle Hidden -Command &quot;cmd.exe /c &#39;C:\路径\脚本.bat&#39;&quot;</code></li>
+</ul>
 <h3 id="使用-VBScript-启动批处理文件"><a href="#使用-VBScript-启动批处理文件" class="headerlink" title="使用 VBScript 启动批处理文件"></a>使用 VBScript 启动批处理文件</h3><p>创建一个 <code>.vbs</code> 文件，通过 VBScript 启动批处理文件，并设置窗口隐藏：</p>
 <ol>
 <li><p>打开记事本，输入以下内容：</p>
