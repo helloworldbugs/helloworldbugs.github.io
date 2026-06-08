@@ -1,0 +1,910 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/%E6%A5%BD.png">
+  <link rel="icon" href="/img/%E6%A5%BD.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="神楽">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="用 HTTP&#x2F;3 实现无端口号访问 众所周知，家庭宽带默认封禁80和443端口，导致个人建站都要加上端口号才能访问。但是HTTP3的到来让这个难题有了可解之法。   目录 用 HTTP&#x2F;3 实现无端口号访问 目录 1. 问题背景 2. HTTP&#x2F;3 与 QUIC 核心概念 HTTP&#x2F;3 四大优势 浏览器支持情况（截至 2025）   3. 原理：如何”隐藏”">
+<meta property="og:type" content="article">
+<meta property="og:title" content="用 HTTP3 实现无端口号访问">
+<meta property="og:url" content="https://helloworldbugs.gitlab.io/2026/06/09/WEB/%E7%94%A8-HTTP3-%E5%AE%9E%E7%8E%B0%E6%97%A0%E7%AB%AF%E5%8F%A3%E5%8F%B7%E8%AE%BF%E9%97%AE/index.html">
+<meta property="og:site_name" content="神楽的博客">
+<meta property="og:description" content="用 HTTP&#x2F;3 实现无端口号访问 众所周知，家庭宽带默认封禁80和443端口，导致个人建站都要加上端口号才能访问。但是HTTP3的到来让这个难题有了可解之法。   目录 用 HTTP&#x2F;3 实现无端口号访问 目录 1. 问题背景 2. HTTP&#x2F;3 与 QUIC 核心概念 HTTP&#x2F;3 四大优势 浏览器支持情况（截至 2025）   3. 原理：如何”隐藏”">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-08T17:02:33.000Z">
+<meta property="article:modified_time" content="2026-06-08T17:11:16.698Z">
+<meta property="article:author" content="神楽">
+<meta property="article:tag" content="web">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>用 HTTP3 实现无端口号访问 - 神楽的博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"helloworldbugs.gitlab.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":50,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>神楽的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/guidao.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="用 HTTP3 实现无端口号访问"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-06-09 01:02" pubdate>
+          2026年6月9日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          14 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">用 HTTP3 实现无端口号访问</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2026年6月9日 凌晨
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="用-HTTP-3-实现无端口号访问"><a href="#用-HTTP-3-实现无端口号访问" class="headerlink" title="用 HTTP&#x2F;3 实现无端口号访问"></a>用 HTTP&#x2F;3 实现无端口号访问</h1><blockquote>
+<p>众所周知，家庭宽带默认封禁80和443端口，导致个人建站都要加上端口号才能访问。但是HTTP3的到来让这个难题有了可解之法。</p>
+</blockquote>
+<hr>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#%E7%94%A8-http3-%E5%AE%9E%E7%8E%B0%E6%97%A0%E7%AB%AF%E5%8F%A3%E5%8F%B7%E8%AE%BF%E9%97%AE">用 HTTP&#x2F;3 实现无端口号访问</a><ul>
+<li><a href="#%E7%9B%AE%E5%BD%95">目录</a></li>
+<li><a href="#1-%E9%97%AE%E9%A2%98%E8%83%8C%E6%99%AF">1. 问题背景</a></li>
+<li><a href="#2-http3-%E4%B8%8E-quic-%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5">2. HTTP&#x2F;3 与 QUIC 核心概念</a><ul>
+<li><a href="#http3-%E5%9B%9B%E5%A4%A7%E4%BC%98%E5%8A%BF">HTTP&#x2F;3 四大优势</a></li>
+<li><a href="#%E6%B5%8F%E8%A7%88%E5%99%A8%E6%94%AF%E6%8C%81%E6%83%85%E5%86%B5%E6%88%AA%E8%87%B3-2025">浏览器支持情况（截至 2025）</a></li>
+</ul>
+</li>
+<li><a href="#3-%E5%8E%9F%E7%90%86%E5%A6%82%E4%BD%95%E9%9A%90%E8%97%8F%E7%AB%AF%E5%8F%A3%E5%8F%B7">3. 原理：如何”隐藏”端口号</a><ul>
+<li><a href="#%E4%B8%A4%E7%A7%8D%E7%AB%AF%E5%8F%A3%E5%8F%91%E7%8E%B0%E6%9C%BA%E5%88%B6">两种端口发现机制</a></li>
+<li><a href="#%E8%BE%85%E5%8A%A9%E6%8A%80%E6%9C%AFdohdns-over-https">辅助技术：DoH（DNS over HTTPS）</a></li>
+</ul>
+</li>
+<li><a href="#4-%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C">4. 准备工作</a></li>
+<li><a href="#5-%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BE%A7-nginx-%E9%85%8D%E7%BD%AE">5. 服务器侧 Nginx 配置</a><ul>
+<li><a href="#nginx-%E9%85%8D%E7%BD%AE%E7%A4%BA%E4%BE%8B">Nginx 配置示例</a></li>
+<li><a href="#%E5%85%B3%E9%94%AE%E9%85%8D%E7%BD%AE%E9%A1%B9%E8%AF%A6%E8%A7%A3">关键配置项详解</a></li>
+<li><a href="#%E9%AA%8C%E8%AF%81%E9%85%8D%E7%BD%AE">验证配置</a></li>
+</ul>
+</li>
+<li><a href="#6-%E4%BA%91%E4%BE%A7%E9%85%8D%E7%BD%AE-dns-https-%E8%AE%B0%E5%BD%95">6. 云侧配置 DNS HTTPS 记录</a><ul>
+<li><a href="#%E4%BB%A5%E9%98%BF%E9%87%8C%E4%BA%91-dns-%E4%B8%BA%E4%BE%8B">以阿里云 DNS 为例</a></li>
+<li><a href="#%E9%AA%8C%E8%AF%81-dns-%E8%AE%B0%E5%BD%95">验证 DNS 记录</a></li>
+</ul>
+</li>
+<li><a href="#7-%E5%AE%A2%E6%88%B7%E7%AB%AF%E9%85%8D%E7%BD%AE%E4%B8%8E%E9%AA%8C%E8%AF%81">7. 客户端配置与验证</a><ul>
+<li><a href="#%E4%B8%BB%E6%B5%81%E6%B5%8F%E8%A7%88%E5%99%A8">主流浏览器</a></li>
+<li><a href="#%E9%AA%8C%E8%AF%81">验证</a></li>
+</ul>
+</li>
+<li><a href="#8-%E6%96%B9%E6%A1%88%E5%AF%B9%E6%AF%94%E5%90%84%E6%98%BE%E7%A5%9E%E9%80%9A">8. 方案对比：各显神通</a></li>
+<li><a href="#9-%E7%BB%93%E8%AF%AD">9. 结语</a></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="1-问题背景"><a href="#1-问题背景" class="headerlink" title="1. 问题背景"></a>1. 问题背景</h2><p>家庭宽带虽然有时能拿到公网 IP，但运营商对 80 和 443 端口管控极严——你根本无法在这两个标准端口上对外提供服务。</p>
+<pre><code class=" mermaid">graph LR
+    A[你的家庭服务器] --&gt;|443 被运营商封锁 ✗| B[互联网用户]
+    A --&gt;|改用 4430 端口| C[&quot;访问需带端口号&lt;br&gt;https://例.com:4430 ✗&quot;]
+</code></pre>
+
+<p>直接后果：</p>
+<ul>
+<li>❌ 无法用标准 HTTPS 端口对外提供 Web 服务</li>
+<li>❌ 非标准端口虽能用，但 URL 必须带丑陋的端口号：<code>https://example.com:4430</code></li>
+<li>❌ 个人博客、静态网站、API 服务部署体验极差</li>
+</ul>
+<blockquote>
+<p>好消息：<strong>HTTP&#x2F;3</strong>（RFC 9114，2022 年正式标准化）基于 QUIC&#x2F;UDP 传输，端口不再是硬编码的 443，结合 <strong>DNS HTTPS 记录</strong>（RFC 9460&#x2F;9461）即可实现端口的”隐形”配置。</p>
+</blockquote>
+<hr>
+<h2 id="2-HTTP-3-与-QUIC-核心概念"><a href="#2-HTTP-3-与-QUIC-核心概念" class="headerlink" title="2. HTTP&#x2F;3 与 QUIC 核心概念"></a>2. HTTP&#x2F;3 与 QUIC 核心概念</h2><p>HTTP&#x2F;3 是 HTTP 协议的第三代版本，与 HTTP&#x2F;1.1 和 HTTP&#x2F;2 最大的区别在于底层传输协议：</p>
+<pre><code class=" mermaid">graph TB
+    subgraph &quot;HTTP/1.1 &amp; HTTP/2&quot;
+        HTTP11[&quot;HTTP/1.1 / HTTP/2&quot;]
+        TCP[&quot;TCP&quot;]
+        TLS[&quot;TLS&quot;]
+        HTTP11 --&gt; TCP --&gt; TLS
+    end
+
+    subgraph &quot;HTTP/3&quot;
+        H3[&quot;HTTP/3&quot;]
+        QUIC[&quot;QUIC&quot;]
+        UDP[&quot;UDP&quot;]
+        H3 --&gt; QUIC --&gt; UDP
+    end
+</code></pre>
+
+<h3 id="HTTP-3-四大优势"><a href="#HTTP-3-四大优势" class="headerlink" title="HTTP&#x2F;3 四大优势"></a>HTTP&#x2F;3 四大优势</h3><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>解决队头阻塞</strong></td>
+<td>TCP 要求数据按序传输，一个丢包全队等待；QUIC 多流独立传输，互不影响</td>
+</tr>
+<tr>
+<td><strong>更快连接</strong></td>
+<td>内置 TLS 1.3，支持 <strong>0-RTT</strong> 握手，首次连接即可发送数据</td>
+</tr>
+<tr>
+<td><strong>动态端口</strong></td>
+<td>端口不固定，可通过 DNS 或响应头动态发现</td>
+</tr>
+<tr>
+<td><strong>强制安全</strong></td>
+<td>加密内置，无需额外配置 TLS 层</td>
+</tr>
+</tbody></table>
+<h3 id="浏览器支持情况（截至-2025）"><a href="#浏览器支持情况（截至-2025）" class="headerlink" title="浏览器支持情况（截至 2025）"></a>浏览器支持情况（截至 2025）</h3><table>
+<thead>
+<tr>
+<th>浏览器</th>
+<th>最低版本</th>
+<th>状态</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Chrome</td>
+<td>v87+</td>
+<td>✅ 默认启用</td>
+</tr>
+<tr>
+<td>Firefox</td>
+<td>v88+</td>
+<td>✅ 默认启用</td>
+</tr>
+<tr>
+<td>Edge</td>
+<td>v87+</td>
+<td>✅ 默认启用</td>
+</tr>
+<tr>
+<td>Safari</td>
+<td>全版本</td>
+<td>✅ 默认启用</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>**整体浏览器支持率达 94%**，生产环境已完全可用了。</p>
+</blockquote>
+<hr>
+<h2 id="3-原理：如何”隐藏”端口号"><a href="#3-原理：如何”隐藏”端口号" class="headerlink" title="3. 原理：如何”隐藏”端口号"></a>3. 原理：如何”隐藏”端口号</h2><p>核心流程如下：</p>
+<pre><code class=" mermaid">sequenceDiagram
+    participant Browser as 浏览器
+    participant DNS as DNS 服务器
+    participant Server as 服务器(端口4430)
+
+    Browser-&gt;&gt;DNS: 查询 HTTPS 记录 (h3.example.com)
+    DNS--&gt;&gt;Browser: alpn=&quot;h3,h3-29&quot; port=&quot;4430&quot;
+    Browser-&gt;&gt;Server: HTTP/3 over UDP :4430
+    Server--&gt;&gt;Browser: 🎉 内容正常返回
+
+    Note over Browser: 用户输入的是 https://h3.example.com&lt;br&gt;浏览器自动使用 4430 端口
+</code></pre>
+
+<h3 id="两种端口发现机制"><a href="#两种端口发现机制" class="headerlink" title="两种端口发现机制"></a>两种端口发现机制</h3><table>
+<thead>
+<tr>
+<th>机制</th>
+<th>工作方式</th>
+<th>优缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Alt-Svc 头</strong></td>
+<td>服务器在 HTTP&#x2F;2 响应中告知 HTTP&#x2F;3 端口</td>
+<td>首次连接仍需 HTTP&#x2F;2，多一次握手</td>
+</tr>
+<tr>
+<td><strong>DNS HTTPS 记录</strong> ✅</td>
+<td>直接在 DNS 中声明 HTTP&#x2F;3 端口</td>
+<td>零额外握手，推荐方案</td>
+</tr>
+</tbody></table>
+<h3 id="辅助技术：DoH（DNS-over-HTTPS）"><a href="#辅助技术：DoH（DNS-over-HTTPS）" class="headerlink" title="辅助技术：DoH（DNS over HTTPS）"></a>辅助技术：DoH（DNS over HTTPS）</h3><p>加密 DNS 查询，防止运营商劫持或干扰 DNS 解析结果，推荐配合使用。</p>
+<hr>
+<h2 id="4-准备工作"><a href="#4-准备工作" class="headerlink" title="4. 准备工作"></a>4. 准备工作</h2><p>确保你已拥有</p>
+<ul>
+<li>公网 IP</li>
+<li>域名</li>
+</ul>
+<hr>
+<h2 id="5-服务器侧-Nginx-配置"><a href="#5-服务器侧-Nginx-配置" class="headerlink" title="5. 服务器侧 Nginx 配置"></a>5. 服务器侧 Nginx 配置</h2><h3 id="Nginx-配置示例"><a href="#Nginx-配置示例" class="headerlink" title="Nginx 配置示例"></a>Nginx 配置示例</h3><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-section">http</span> &#123;<br>    <span class="hljs-comment"># 开启 HTTP/3 协议</span><br>    <span class="hljs-section">server</span> &#123;<br>        <span class="hljs-comment"># HTTP/3 监听 UDP 4430 端口</span><br>        <span class="hljs-attribute">listen</span> <span class="hljs-number">4430</span> quic;<br>        <span class="hljs-comment"># HTTP/2 回退监听 TCP 4430 端口（兼容不支持 HTTP/3 的客户端）</span><br>        <span class="hljs-attribute">listen</span> <span class="hljs-number">4430</span> ssl;<br><br>        <span class="hljs-attribute">server_name</span> h3.example.com;<br><br>        <span class="hljs-attribute">ssl_certificate</span>     /etc/letsencrypt/live/example.com/fullchain.pem;<br>        <span class="hljs-attribute">ssl_certificate_key</span> /etc/letsencrypt/live/example.com/privkey.pem;<br><br>        <span class="hljs-comment"># 允许的 HTTP/3 ALPN</span><br>        <span class="hljs-attribute">ssl_protocols</span> TLSv1.<span class="hljs-number">3</span>;<br>        <span class="hljs-attribute">ssl_early_data</span> <span class="hljs-literal">on</span>;<br><br>        <span class="hljs-comment"># 关键：告知浏览器支持 HTTP/3</span><br>        <span class="hljs-attribute">add_header</span> Alt-Svc <span class="hljs-string">&#x27;h3=&quot;:4430&quot;; ma=86400&#x27;</span>;<br><br>        <span class="hljs-section">location</span> / &#123;<br>            <span class="hljs-attribute">root</span>   /var/www/html;<br>            <span class="hljs-attribute">index</span>  index.html;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="关键配置项详解"><a href="#关键配置项详解" class="headerlink" title="关键配置项详解"></a>关键配置项详解</h3><table>
+<thead>
+<tr>
+<th>指令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>listen 4430 quic</code></td>
+<td>启用 HTTP&#x2F;3 over QUIC（UDP）</td>
+</tr>
+<tr>
+<td><code>listen 4430 ssl</code></td>
+<td>回退到 HTTP&#x2F;2 over TLS（TCP）</td>
+</tr>
+<tr>
+<td><code>ssl_protocols TLSv1.3</code></td>
+<td>HTTP&#x2F;3 强制要求 TLS 1.3</td>
+</tr>
+<tr>
+<td><code>Alt-Svc</code></td>
+<td>通知客户端服务器也支持 HTTP&#x2F;3</td>
+</tr>
+<tr>
+<td><code>ssl_early_data on</code></td>
+<td>开启 0-RTT，减少握手延迟</td>
+</tr>
+</tbody></table>
+<h3 id="验证配置"><a href="#验证配置" class="headerlink" title="验证配置"></a>验证配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 检查配置是否正确</span><br>nginx -t<br><br><span class="hljs-comment"># 重启 Nginx</span><br>nginx -s reload<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>服务启动后，先通过 <code>https://h3.example.com:4430</code> 验证能否正常访问。</p>
+</blockquote>
+<hr>
+<h2 id="6-云侧配置-DNS-HTTPS-记录"><a href="#6-云侧配置-DNS-HTTPS-记录" class="headerlink" title="6. 云侧配置 DNS HTTPS 记录"></a>6. 云侧配置 DNS HTTPS 记录</h2><p>这是<strong>整个方案最核心的一步</strong>——通过 DNS 告诉浏览器使用 HTTP&#x2F;3 和自定义端口。</p>
+<h3 id="以阿里云-DNS-为例"><a href="#以阿里云-DNS-为例" class="headerlink" title="以阿里云 DNS 为例"></a>以阿里云 DNS 为例</h3><pre><code class=" mermaid">graph TD
+    A[登录阿里云 DNS 控制台] --&gt; B[进入域名解析设置]
+    B --&gt; C[点击&quot;添加记录&quot;]
+    C --&gt; D&#123;&quot;记录类型: &lt;b&gt;HTTPS&lt;/b&gt;&quot;&#125;
+    D --&gt; E[主机记录: h3]
+    D --&gt; F[目标: .]
+    D --&gt; G[值: alpn=&quot;h3,h3-29&quot; port=&quot;4430&quot;]
+    E --&gt; H[保存生效]
+    F --&gt; H
+    G --&gt; H
+</code></pre>
+
+<p><strong>详细参数说明：</strong></p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>记录类型</td>
+<td><code>HTTPS</code></td>
+<td>SVCB&#x2F;HTTPS 记录，非传统记录类型</td>
+</tr>
+<tr>
+<td>主机记录</td>
+<td><code>h3</code></td>
+<td>子域名，最终为 <code>h3.example.com</code></td>
+</tr>
+<tr>
+<td>目标</td>
+<td><code>.</code></td>
+<td><code>.</code>表示自身域名</td>
+</tr>
+<tr>
+<td><strong>值</strong></td>
+<td><code>alpn=&quot;h3&quot; port=&quot;4430&quot;</code></td>
+<td><strong>声明 HTTP&#x2F;3 协议和指定端口</strong></td>
+</tr>
+</tbody></table>
+<h3 id="验证-DNS-记录"><a href="#验证-DNS-记录" class="headerlink" title="验证 DNS 记录"></a>验证 DNS 记录</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">dig HTTPS h3.example.com<br><br>; &lt;&lt;&gt;&gt; 应答示例 &lt;&lt;&gt;&gt;<br>; 预期能看到 alpn=<span class="hljs-string">&quot;h3&quot;</span> port=<span class="hljs-string">&quot;4430&quot;</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>⚠️ HTTPS 记录与 CNAME 记录冲突，如有 CNAME 需先删除。</p>
+</blockquote>
+<hr>
+<h2 id="7-客户端配置与验证"><a href="#7-客户端配置与验证" class="headerlink" title="7. 客户端配置与验证"></a>7. 客户端配置与验证</h2><h3 id="主流浏览器"><a href="#主流浏览器" class="headerlink" title="主流浏览器"></a>主流浏览器</h3><ul>
+<li>Firefox - 已<strong>默认支持 HTTP&#x2F;3 和 DNS HTTPS 记录</strong>，直接访问 <code>https://h3.example.com</code> 即可。</li>
+<li>Chrome - 默认支持，但是似乎不是很友好</li>
+</ul>
+<h3 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h3><p>HTTP&#x2F;3支持情况验证：<a target="_blank" rel="noopener" href="https://quic.nginx.org/">https://quic.nginx.org</a></p>
+<h2 id="8-方案对比：各显神通"><a href="#8-方案对比：各显神通" class="headerlink" title="8. 方案对比：各显神通"></a>8. 方案对比：各显神通</h2><table>
+<thead>
+<tr>
+<th>方案</th>
+<th>优点</th>
+<th>缺点</th>
+<th>推荐场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>✅ HTTP&#x2F;3 + DNS HTTPS</strong></td>
+<td>无端口号、原生支持、零中转</td>
+<td>需公网 IP、配置门槛中等</td>
+<td><strong>本文推荐方案</strong></td>
+</tr>
+<tr>
+<td>✅ Cloudflare Tunnel</td>
+<td>无需公网 IP、自动 HTTPS</td>
+<td>流量经过 CF、延迟增加</td>
+<td>无公网 IP 用户</td>
+</tr>
+<tr>
+<td>✅ FRP + Nginx 反代</td>
+<td>速度快、可自控</td>
+<td>需 VPS 中转、配置复杂</td>
+<td>追求性能与可控性</td>
+</tr>
+<tr>
+<td>❌ 非标准 TCP 端口</td>
+<td>最简单</td>
+<td>URL 必须带端口号</td>
+<td>临时测试</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="9-结语"><a href="#9-结语" class="headerlink" title="9. 结语"></a>9. 结语</h2><p>通过 HTTP&#x2F;3 + DNS HTTPS 记录，我们成功实现了：</p>
+<ul>
+<li>✅ <strong>无端口号</strong>：浏览器自动发现 UDP 4430 端口</li>
+<li>✅ <strong>标准 HTTPS</strong>：完整 TLS 加密，不受运营商 443 封锁影响</li>
+<li>✅ <strong>链路直达</strong>：无需 CDN 或隧道中转，延迟最低</li>
+</ul>
+<p>这套方案特别适合<strong>有公网 IP 的家庭宽带用户</strong>搭建个人博客、NAS 反向代理或小型 API 服务。随着 HTTP&#x2F;3 浏览器覆盖率已达 94%+，现在是时候拥抱这项技术了。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/WEB/" class="category-chain-item">WEB</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/web/" class="print-no-link">#web</a>
+      
+    </div>
+  
+</div>
+
+
+              
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/06/09/%E6%8E%A2%E7%B4%A2/%E6%AC%A2%E8%BF%8E%E6%9D%A5%E5%88%B0%E5%8C%BA%E5%9D%97%E9%93%BE%E7%9A%84%E4%B8%96%E7%95%8C-%EF%BC%81%EF%BC%81%EF%BC%81/" title="欢迎来到区块链的世界~！！！">
+                        <span class="hidden-mobile">欢迎来到区块链的世界~！！！</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
