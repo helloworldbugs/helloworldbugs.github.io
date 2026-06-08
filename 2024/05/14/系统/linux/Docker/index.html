@@ -27,7 +27,7 @@
 <meta property="og:description" content="安装 ps:  docker.io 是 Debian 团队维护的 docker-ce 是 docker 官方维护的社区版（Community Edition） docker-ee 是 docker 官方维护的商业版（Enterprise Edition）   docker安装官方脚本1curl -fsSL https:&#x2F;&#x2F;get.docker.com | bash -s docker --mirr">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-05-13T16:00:50.000Z">
-<meta property="article:modified_time" content="2025-04-18T05:28:52.861Z">
+<meta property="article:modified_time" content="2026-02-22T14:02:11.280Z">
 <meta property="article:author" content="神楽">
 <meta property="article:tag" content="docker">
 <meta name="twitter:card" content="summary_large_image">
@@ -223,7 +223,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          993 字
+          1k 字
         
       </span>
     
@@ -276,7 +276,7 @@
               <p id="updated-time" class="note note-info" style="">
                 
                   
-                    本文最后更新于 2025年4月18日 下午
+                    本文最后更新于 2026年2月22日 晚上
                   
                 
               </p>
@@ -353,19 +353,25 @@
 
 <h3 id="拉取镜像"><a href="#拉取镜像" class="headerlink" title="拉取镜像"></a>拉取镜像</h3><figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs 1c">docker pull &lt;images_name&gt;:latest    <span class="hljs-comment">//latest为最新镜像的意思</span><br></code></pre></td></tr></table></figure>
 
-<h3 id="设置容器开机自启"><a href="#设置容器开机自启" class="headerlink" title="设置容器开机自启"></a>设置容器开机自启</h3><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">--restart</span>=always //容器初次启动添加的参数<br></code></pre></td></tr></table></figure>
+<h3 id="设置容器开机自启"><a href="#设置容器开机自启" class="headerlink" title="设置容器开机自启"></a>设置容器开机自启</h3><p>&#x2F;&#x2F;容器初次启动添加的参数</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">--restart</span>=always<br></code></pre></td></tr></table></figure>
 
-<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli">docker update <span class="hljs-params">--restart=always</span> &lt;docker_ID&gt; <span class="hljs-string">//</span>已启动的容器设置<br></code></pre></td></tr></table></figure>
+<p>&#x2F;&#x2F;已启动的容器设置</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">docker <span class="hljs-keyword">update</span> <span class="hljs-comment">--restart=always &lt;docker_ID&gt;</span><br></code></pre></td></tr></table></figure>
 
-<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stata">docker <span class="hljs-keyword">update</span> --restart=<span class="hljs-keyword">no</span> &lt;docker_ID&gt; <span class="hljs-comment">//取消开机自启动</span><br></code></pre></td></tr></table></figure>
+<p>&#x2F;&#x2F;取消开机自启动</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vim">docker <span class="hljs-keyword">update</span> --restart=<span class="hljs-keyword">no</span> <span class="hljs-symbol">&lt;docker_ID&gt;</span><br></code></pre></td></tr></table></figure>
 
-<figure class="highlight dust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dust"><span class="language-xml">docker ps -aq | xargs -I </span><span class="hljs-template-variable">&#123;&#125;</span><span class="language-xml"> docker update --restart=always </span><span class="hljs-template-variable">&#123;&#125;</span><span class="language-xml">   //批量给所有容器添加自启动标签</span><br></code></pre></td></tr></table></figure>
+<p>&#x2F;&#x2F;批量给所有容器添加自启动标签</p>
+<figure class="highlight dust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dust"><span class="language-xml">docker ps -aq | xargs -I </span><span class="hljs-template-variable">&#123;&#125;</span><span class="language-xml"> docker update --restart=always </span><span class="hljs-template-variable">&#123;&#125;</span><br></code></pre></td></tr></table></figure>
 
 <h3 id="将文件从本机上传到docker容器"><a href="#将文件从本机上传到docker容器" class="headerlink" title="将文件从本机上传到docker容器"></a>将文件从本机上传到docker容器</h3><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vim">docker <span class="hljs-keyword">cp</span> <span class="hljs-symbol">&lt;local_path&gt;</span> <span class="hljs-symbol">&lt;docker_ID&gt;</span>:<span class="hljs-symbol">&lt;docker_path&gt;</span><br></code></pre></td></tr></table></figure>
 
 <h3 id="从docker容器中下载文件"><a href="#从docker容器中下载文件" class="headerlink" title="从docker容器中下载文件"></a>从docker容器中下载文件</h3><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vim">docker <span class="hljs-keyword">cp</span> <span class="hljs-symbol">&lt;docker_ID&gt;</span>:<span class="hljs-symbol">&lt;local_path&gt;</span> <span class="hljs-symbol">&lt;local_path&gt;</span><br></code></pre></td></tr></table></figure>
 
 <h3 id="将容器保存为镜像"><a href="#将容器保存为镜像" class="headerlink" title="将容器保存为镜像"></a>将容器保存为镜像</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml">docker commit <span class="hljs-tag">&lt;<span class="hljs-name">docker_ID</span>&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-name">要保存的镜像名称</span>&gt;</span>:v1.1<br></code></pre></td></tr></table></figure>
+
+<h3 id="自动保持-docker-容器镜像最新"><a href="#自动保持-docker-容器镜像最新" class="headerlink" title="自动保持 docker 容器镜像最新"></a>自动保持 docker 容器镜像最新</h3><figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs livescript">docker run -d <span class="hljs-string">\</span><br>    --name watchtower <span class="hljs-string">\</span><br>    -v /<span class="hljs-keyword">var</span>/run/docker.sock:/<span class="hljs-keyword">var</span>/run/docker.sock <span class="hljs-string">\</span><br>    containrrr/watchtower<br></code></pre></td></tr></table></figure>
 
 <h2 id="批量操作"><a href="#批量操作" class="headerlink" title="批量操作"></a>批量操作</h2><p>给所有容器添加自启动标签</p>
 <figure class="highlight dust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dust"><span class="language-xml">docker ps -aq | xargs -I </span><span class="hljs-template-variable">&#123;&#125;</span><span class="language-xml"> docker update --restart=always </span><span class="hljs-template-variable">&#123;&#125;</span><br></code></pre></td></tr></table></figure>
@@ -400,6 +406,7 @@
 </ol>
 <p>一句话命令（测试）</p>
 <figure class="highlight nsis"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs nsis">mkdir -p /etc/<span class="hljs-params">system</span>d/<span class="hljs-params">system</span>/docker.service.d &amp;&amp; echo -e <span class="hljs-string">&#x27;[Service]\nEnvironment=&quot;HTTP_PROXY=http://10.0.0.100:10808&quot;\nEnvironment=&quot;HTTPS_PROXY=http://10.0.0.100:10808&quot;&#x27;</span> &gt; /etc/<span class="hljs-params">system</span>d/<span class="hljs-params">system</span>/docker.service.d/http-proxy.conf &amp;&amp; <span class="hljs-params">system</span>ctl daemon-reload &amp;&amp; <span class="hljs-params">system</span>ctl restart docker<br></code></pre></td></tr></table></figure>
+
                 
               </div>
             
