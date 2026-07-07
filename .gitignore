@@ -37,4 +37,4 @@ generated/
 test-results/
 playwright-report/
 .playwright-mcp
-.lycheecache
+.lycheecache.omo
