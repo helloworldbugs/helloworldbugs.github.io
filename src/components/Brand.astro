@@ -67,9 +67,7 @@ function formatWordCount(count: number): string {
     {
       shouldShowSubtitle && (
         <p class="text-2xl color-grey-0 m-0 mt-2.5 flex gap-2.5">
-          <span class="flex items-center">=</span>
-          <span>{subtitle}</span>
-          <span class="flex items-center">=</span>
+          <span id="hitokoto-text">{subtitle}</span>
         </p>
       )
     }
@@ -137,13 +135,66 @@ function formatWordCount(count: number): string {
   window.addEventListener("scroll", handleScroll, { passive: true });
 </script>
 
+<!-- 一言 API 动态副标题 -->
+<script>
+  async function fetchHitokoto() {
+    const el = document.getElementById("hitokoto-text");
+    if (!el) return;
+    try {
+      const res = await fetch("https://v1.hitokoto.cn/?c=k&c=d");
+      const data = await res.json();
+      const text = data.hitokoto;
+      typeText(el, text);
+    } catch {
+      el.textContent = "神楽的博客";
+    }
+  }
+
+  function typeText(el, text, speed = 80) {
+    el.textContent = "";
+    el.style.borderRight = "2px solid #fff";
+    let i = 0;
+    const timer = setInterval(() => {
+      el.textContent += text[i];
+      i++;
+      if (i >= text.length) {
+        clearInterval(timer);
+        el.style.borderRight = "none";
+      }
+    }, speed);
+  }
+
+  fetchHitokoto();
+</script>
+
 <style>
   #brand {
     z-index: auto;
     transition: all 0.3s ease;
     position: fixed;
     height: 50vh;
-    color: var(--grey-0);
+    color: #fff;
+  }
+
+  /* 封面图上的文字加描边/阴影，防止和背景融为一体 */
+  #brand h1 {
+    color: #fff !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6), 0 0 30px rgba(0, 0, 0, 0.4);
+  }
+
+  #brand p {
+    color: rgba(255, 255, 255, 0.9) !important;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  #brand .artboard {
+    color: #fff;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  }
+
+  #hitokoto-text {
+    display: inline-block;
+    min-width: 2em;
   }
 
   #brand.affix {

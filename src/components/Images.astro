@@ -17,10 +17,11 @@ import cover3 from "@/assets/images/cover-3.avif";
 import cover4 from "@/assets/images/cover-4.avif";
 import cover5 from "@/assets/images/cover-5.avif";
 import cover6 from "@/assets/images/cover-6.avif";
+import cover7 from "@/assets/images/guidao.jpg";
 
 import avatarImg from "@/assets/avatar.avif";
 
-export const covers = [cover1, cover2, cover3, cover4, cover5, cover6];
+export const covers = [cover1, cover2, cover3, cover4, cover5, cover6, cover7];
 
 // 统一的封面预设表：用于 fixedCover（固定封面）等需要从配置字符串解析成 ImageMetadata 的场景
 // 说明：Astro 的 <Image /> 更适合接收 ImageMetadata（静态导入结果），而不是任意字符串。
@@ -31,6 +32,7 @@ export const coverPresets: Record<string, ImageMetadata> = {
   "cover-4": cover4,
   "cover-5": cover5,
   "cover-6": cover6,
+  "cover-7": cover7,
 };
 
 /**

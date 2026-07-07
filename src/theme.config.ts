@@ -5,6 +5,28 @@ export default defineConfig({
   siteName: "神楽的博客",
   locale: "zh-CN",
 
+  brand: {
+    title: "",
+    subtitle: "",
+    logo: "",
+  },
+
+  cover: {
+    enable: true,
+    fixedCover: {
+      enable: true,
+      url: "cover-7",
+    },
+  },
+
+  layout: {
+    mode: "two-column",
+  },
+
+  widgets: {
+    randomPosts: false,
+  },
+
   nav: [
     { href: "/categories/", text: "分类",  icon: "i-ri-book-shelf-fill" },
     { href: "/tags/",       text: "标签",  icon: "i-ri-price-tag-3-fill" },
