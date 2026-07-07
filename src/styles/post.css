@@ -661,6 +661,8 @@
   overflow: auto;
 }
 
+/* Fix: also style tables directly for markdown-rendered tables without .table-container wrapper */
+.md table,
 .table-container table {
   border-collapse: collapse;
   border-spacing: 0;
@@ -670,14 +672,19 @@
   overflow: auto;
 }
 
+.md table tbody tr:nth-of-type(even),
 .table-container table tbody tr:nth-of-type(even) {
   background: var(--grey-0);
 }
 
+.md table tbody tr:hover,
 .table-container table tbody tr:hover {
   background: var(--grey-2);
 }
 
+.md table caption,
+.md table th,
+.md table td,
 .table-container table caption,
 .table-container table th,
 .table-container table td {
@@ -687,12 +694,15 @@
   vertical-align: middle;
 }
 
+.md table th,
+.md table td,
 .table-container table th,
 .table-container table td {
   border: 0.0625rem solid var(--grey-3);
   border-bottom: 0.1875rem solid var(--grey-3);
 }
 
+.md table th,
 .table-container table th {
   font-weight: 700;
   padding-bottom: 0.625rem;
