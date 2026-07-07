@@ -9,7 +9,7 @@ tags: []
 
 > CDN全称ContentDeliveryNetwork，即内容分发网络，构建在现有网络基础之上的智能虚拟网络，依靠部署在各地的边缘服务器，通过中心平台的负载均衡、内容分发、调度等功能模块，使用户能够就近获取所需内容，降低网络拥塞，提高用户访问响应速度和命中率。百度百科
 
-![](/images/posts/网安/应急响应/绕过CDN查找真实IP方法总结/001-0.webp)
+![](/images/posts/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/001-0.webp)
 
 ## 0x01 域名解析过程
 
@@ -20,7 +20,7 @@ tags: []
 *   360网站卫士：用户访问域名-->CDN节点（云WAF）-->真实IP-->目标主机
     
 
-![](/images/posts/网安/应急响应/绕过CDN查找真实IP方法总结/002-0.webp)
+![](/images/posts/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/002-0.webp)
 
 **注：**目前市面上大多数的CDN服务商都提供了云WAF配置选项，内置了多种安全防护策略，可对SQL注入、XSS跨站、Webshell上传、后门隔离保护、命令注入、恶意扫描等攻击行为进行有效拦截。
 
@@ -48,7 +48,7 @@ http://ping.chinaz.com
 https://asm.ca.com/en/ping.php
 ```
 
-**注：**全球Ping有一定机率可以得到目标服务器真实IP，因为有的CDN服务商可能没有某些地区的CDN节点。![](/images/posts/网安/应急响应/绕过CDN查找真实IP方法总结/003-0.webp)  
+**注：**全球Ping有一定机率可以得到目标服务器真实IP，因为有的CDN服务商可能没有某些地区的CDN节点。![](/images/posts/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/003-0.webp)  
  
 
 ## 0x04 查找真实IP方法
@@ -58,13 +58,13 @@ https://asm.ca.com/en/ping.php
 
 通过l.php、phpinfo.php等这类探针文件即可得到真实IP地址，phpinfo.php搜索SERVER\_NAME。
 
-![](/images/posts/网安/应急响应/绕过CDN查找真实IP方法总结/004-0.webp)
+![](/images/posts/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/004-0.webp)
 
 **(2) 网站根域或子域找到真实IP**
 
 大部分CDN服务都是按流量进行收费的，所以一些网站管理员只会给重要业务部署CDN，也有很多人会忘了给顶级域名部署CDN，所以尽可能的多去搜集一些子域名能提高找到真实IP地址的机率。
 
-![](/images/posts/网安/应急响应/绕过CDN查找真实IP方法总结/005-0.webp)
+![](/images/posts/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/005-0.webp)
 
 **注：**有时多个子域名可能不会解析到同一台服务器，而是根据公司业务的重要与非重要性将子域名解析在内网或外网的不同服务器中，需要有一定的分析能力。
 
@@ -72,11 +72,11 @@ https://asm.ca.com/en/ping.php
 
 Web和Email属同服务器时可以通过Email来查询目标真实IP地址，如果Web和Email属不同服务器时我们通过Email得到的可能只是邮件服务器的IP地址，所以在hosts文件中绑定真实IP后无法访问目标网站也属正常现象。常见发送邮件的功能有：注册用户、找回密码等。
 
-![](/images/posts/网安/应急响应/绕过CDN查找真实IP方法总结/006-0.webp)
+![](/images/posts/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/006-0.webp)
 
-![](/images/posts/网安/应急响应/绕过CDN查找真实IP方法总结/007-0.webp)
+![](/images/posts/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/007-0.webp)
 
-![](/images/posts/网安/应急响应/绕过CDN查找真实IP方法总结/008-0.webp)
+![](/images/posts/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/008-0.webp)
 
   
  
@@ -109,13 +109,13 @@ https://securitytrails.com/#search
 https://toolbar.netcraft.com/site_report
 ```
 
-![](/images/posts/网安/应急响应/绕过CDN查找真实IP方法总结/009-0.webp)
+![](/images/posts/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/009-0.webp)
 
-![](/images/posts/网安/应急响应/绕过CDN查找真实IP方法总结/010-0.webp)
+![](/images/posts/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/010-0.webp)
 
-![](/images/posts/网安/应急响应/绕过CDN查找真实IP方法总结/011-0.webp)
+![](/images/posts/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/011-0.webp)
 
-![](/images/posts/网安/应急响应/绕过CDN查找真实IP方法总结/012-0.webp)
+![](/images/posts/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/012-0.webp)
 
 **(5) FOFA查询网站标题找到真实IP**
 
@@ -125,7 +125,7 @@ https://toolbar.netcraft.com/site_report
 title="*** ***** – Multi Asset Fund"
 ```
 
-![](/images/posts/网安/应急响应/绕过CDN查找真实IP方法总结/013-0.webp)
+![](/images/posts/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/013-0.webp)
 
 **(6) Censys查询SSL证书找到真实IP**
 
@@ -135,11 +135,11 @@ title="*** ***** – Multi Asset Fund"
 443.https.tls.certificate.parsed.extensions.subject_alt_name.dns_names:***trade.com
 ```
 
-![](/images/posts/网安/应急响应/绕过CDN查找真实IP方法总结/014-0.webp)
+![](/images/posts/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/014-0.webp)
 
-![](/images/posts/网安/应急响应/绕过CDN查找真实IP方法总结/015-0.webp)
+![](/images/posts/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/015-0.webp)
 
-![](/images/posts/网安/应急响应/绕过CDN查找真实IP方法总结/016-0.png)
+![](/images/posts/%E7%BB%95%E8%BF%87CDN%E6%9F%A5%E6%89%BE%E7%9C%9F%E5%AE%9EIP%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/016-0.png)
 
 **(7) 通过分析目标C段来判断真实IP**
 

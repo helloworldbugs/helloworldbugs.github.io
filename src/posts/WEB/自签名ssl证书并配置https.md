@@ -89,7 +89,7 @@ vim /etc/apache2/sites-available/default-ssl.conf
 ```
 
 
-![](/images/posts/WEB/image.png)
+![](/images/posts/%E8%87%AA%E7%AD%BE%E5%90%8Dssl%E8%AF%81%E4%B9%A6%E5%B9%B6%E9%85%8D%E7%BD%AEhttps/image.png)
 
 
 启用我们的ssl-params.conf文件，读入我们设置的值：

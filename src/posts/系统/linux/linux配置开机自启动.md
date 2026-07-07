@@ -14,7 +14,7 @@ tags: []
 vim /lib/systemd/system/rc-local.service
 ```
 
-![](/images/posts/系统/linux/linux配置开机自启动/image.png)
+![](/images/posts/linux%E9%85%8D%E7%BD%AE%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF%E5%8A%A8/image.png)
 
 一般正常的启动文件主要分成三部分
 

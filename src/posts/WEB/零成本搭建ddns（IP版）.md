@@ -70,6 +70,6 @@ if ($current_url != $ipaddr) {
 ```
 以下是在wordpress站点的首页index文件改造示例，直接把代码加在顶部就行
 
-![](/images/posts/WEB/零成本搭建ddns（IP版）/image.png)
+![](/images/posts/%E9%9B%B6%E6%88%90%E6%9C%AC%E6%90%AD%E5%BB%BAddns%EF%BC%88IP%E7%89%88%EF%BC%89/image.png)
 
 弄好之后，我们每次就直接访问花生壳的域名，然后url就会马上自动跳转到对应的公网ip上，对我们操作几乎是无感知的，不会有任何影响
