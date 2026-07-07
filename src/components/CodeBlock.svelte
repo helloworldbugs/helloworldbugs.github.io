@@ -7,8 +7,6 @@
   import ArrowUpSLine from "@/assets/icons/arrow-up-s-line.svg";
   import CheckFill from "@/assets/icons/check-fill.svg";
   import FileCopyFill from "@/assets/icons/file-copy-fill.svg";
-  import FullscreenLine from "@/assets/icons/fullscreen-line.svg";
-  import FullscreenExitLine from "@/assets/icons/fullscreen-exit-line.svg";
 
   let container = $state<HTMLElement | null>(null);
   let copied = $state(false);
@@ -190,19 +188,9 @@
           ? CheckFill.src
           : FileCopyFill.src}); -webkit-mask-image: url({copied
           ? CheckFill.src
-          : FileCopyFill.src});"
+          : FileCopyFill.src}); margin-left: auto;"
         onclick={copyCode}
         aria-label="Copy code"
-      ></button>
-      <button
-        class="action-btn"
-        style="mask-image: url({isFullscreen
-          ? FullscreenExitLine.src
-          : FullscreenLine.src}); -webkit-mask-image: url({isFullscreen
-          ? FullscreenExitLine.src
-          : FullscreenLine.src});"
-        onclick={toggleFullscreen}
-        aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
       ></button>
     </div>
   </div>
