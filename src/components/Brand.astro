@@ -143,7 +143,7 @@ function formatWordCount(count: number): string {
     try {
       const res = await fetch("https://v1.hitokoto.cn/?c=k&c=d");
       const data = await res.json();
-      const text = data.hitokoto;
+      const text = data.hitokoto + " —— " + (data.from || "一言");
       typeText(el, text);
     } catch {
       el.textContent = "神楽的博客";
