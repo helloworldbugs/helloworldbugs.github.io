@@ -35,6 +35,10 @@
 <style>
   :global(.menu-title) {
     display: block;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1;
+    align-self: center;
   }
 
   :global(.desktop-only) {

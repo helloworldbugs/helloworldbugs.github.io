@@ -27,6 +27,11 @@ export default defineConfig({
     randomPosts: false,
   },
 
+  sidebar: {
+    author: "神楽",
+    description: "编程 | 网安 | 系统运维",
+  },
+
   home: {
     title: {
       behavior: "custom",

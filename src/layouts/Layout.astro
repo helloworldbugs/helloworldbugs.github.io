@@ -176,8 +176,18 @@ import SearchPage from "@/components/search/SearchPage.svelte";
       (function() {
         var theme = localStorage.getItem("shokax-color-scheme");
         var isDark = theme === "dark" || (!theme && window.matchMedia("(prefers-color-scheme: dark)").matches);
-        document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light");
+        var d = document.documentElement;
+        d.setAttribute("data-theme", isDark ? "dark" : "light");
+        d.style.colorScheme = isDark ? "dark" : "light";
       })();
+
+      // View Transition 时在新页面展示前就应用主题
+      document.addEventListener("astro:before-swap", function() {
+        var theme = localStorage.getItem("shokax-color-scheme");
+        var isDark = theme === "dark" || (!theme && window.matchMedia("(prefers-color-scheme: dark)").matches);
+        document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light");
+        document.documentElement.style.colorScheme = isDark ? "dark" : "light";
+      });
     </script>
 
     <Analytics />
