@@ -50,7 +50,7 @@ pyinstaller -F <主程序py文件> -p <py项目目录路径>
 
 具体参数可参考下图
 
-<!-- img: /assets/images/posts/编程/Python学习记录/image.png -->
+![](/images/posts/编程/Python学习记录/image.png)
 
 1. 经过漫长的跑马灯等待，最后一句提示：`Building EXE from EXE-00.toc completed successfully`，即表示打包完成
 

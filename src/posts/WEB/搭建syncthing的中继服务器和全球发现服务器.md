@@ -74,7 +74,7 @@ iptables -I INPUT -p tcp --dport 22070 -j ACCEPT
 cat /var/log/stdiscosrv.log
 ```
 
-<!-- img: /assets/images/posts/WEB/搭建syncthing的中继服务器和全球发现服务器/image-3.png -->
+![](/images/posts/WEB/搭建syncthing的中继服务器和全球发现服务器/image-3.png)
 
 3. 配置到客户端
 
@@ -94,7 +94,7 @@ default, https://你的ip或域名:8443/?id=服务器ID
 cat /var/log/strelaysrv.log
 ```
 
-<!-- img: /assets/images/posts/WEB/搭建syncthing的中继服务器和全球发现服务器/image-1.png -->
+![](/images/posts/WEB/搭建syncthing的中继服务器和全球发现服务器/image-1.png)
 
 3. 看到`relay:`开头那一行就是uri,如上图所示，直接复制下来，把`0.0.0.0`改成自己的ip或域名
 
@@ -110,7 +110,7 @@ default, relay://10.0.0.120:22067/?id=xxxx
 
 位置在右上角：操作->设置->连接
 
-<!-- img: /assets/images/posts/WEB/搭建syncthing的中继服务器和全球发现服务器/image-2.png -->
+![](/images/posts/WEB/搭建syncthing的中继服务器和全球发现服务器/image-2.png)
 
 参数`default`表示使用公共的服务器。如果不想用公共的服务器，则可以把`default`参数去掉
 

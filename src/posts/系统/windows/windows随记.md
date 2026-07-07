@@ -107,7 +107,7 @@ HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WaaSMedicSvc
 
 修改FailureActions键，修改010和018左起第5个值为00
 
-<!-- img: /assets/images/posts/系统/windows/windows随记/fcf72bad0d8ebea5682c834c31937f70-1.png -->
+![](/images/posts/系统/windows/windows随记/fcf72bad0d8ebea5682c834c31937f70-1.png)
 
 # 解决windows系统显示SATA盘为可弹出设备
 

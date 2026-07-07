@@ -67,7 +67,7 @@ curl -Lf -o /tmp/temp.sh https://raw.githubusercontent.com/helloworldbugs/PVE-ma
 
 效果图如下：
 
-<!-- img: /assets/images/posts/系统/linux/ProxmoxVE/image.png -->
+![](/images/posts/系统/linux/ProxmoxVE/image.png)
 
 没有显示功耗的，请执行下面的命令安装依赖，请确保安装成功，就是最后的一行的输出，必须为 “成功!” 才表示安装成功了
 

