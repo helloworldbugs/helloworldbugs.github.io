@@ -174,8 +174,8 @@ import SearchPage from "@/components/search/SearchPage.svelte";
     <!-- 防止夜间模式闪烁：在页面渲染前立即应用主题 -->
     <script is:inline>
       (function() {
-        const theme = localStorage.getItem("theme") || "auto";
-        const isDark = theme === "dark" || (theme === "auto" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+        var theme = localStorage.getItem("shokax-color-scheme");
+        var isDark = theme === "dark" || (!theme && window.matchMedia("(prefers-color-scheme: dark)").matches);
         document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light");
       })();
     </script>
