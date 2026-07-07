@@ -7,7 +7,7 @@ export default defineConfig({
 
   brand: {
     title: "",
-    subtitle: "",
+    subtitle: ".",
     logo: "",
   },
 
@@ -25,6 +25,13 @@ export default defineConfig({
 
   widgets: {
     randomPosts: false,
+  },
+
+  home: {
+    title: {
+      behavior: "custom",
+      customTitle: "神楽的博客",
+    },
   },
 
   nav: [

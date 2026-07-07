@@ -58,7 +58,7 @@ function formatWordCount(count: number): string {
 
     {
       displayTitle && (
-        <h1 class="letter-space-2  color-grey-0 text-5xl leading-tight tracking-wider font-600">
+        <h1 class="letter-space-2 color-grey-0 text-5xl leading-tight tracking-wider font-600">
           {displayTitle}
         </h1>
       )
@@ -66,8 +66,8 @@ function formatWordCount(count: number): string {
 
     {
       shouldShowSubtitle && (
-        <p class="text-2xl color-grey-0 m-0 mt-2.5 flex gap-2.5">
-          <span id="hitokoto-text">{subtitle}</span>
+        <p class="m-0 mt-2.5">
+          <span id="hitokoto-text" class="text-3xl font-bold">{subtitle}</span>
         </p>
       )
     }

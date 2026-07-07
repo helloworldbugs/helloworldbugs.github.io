@@ -168,8 +168,17 @@ import SearchPage from "@/components/search/SearchPage.svelte";
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="generator" content={Astro.generator} />
+
+    <!-- 防止夜间模式闪烁：在页面渲染前立即应用主题 -->
+    <script is:inline>
+      (function() {
+        const theme = localStorage.getItem("theme") || "auto";
+        const isDark = theme === "dark" || (theme === "auto" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+        document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light");
+      })();
+    </script>
 
     <Analytics />
 
@@ -236,14 +245,10 @@ import SearchPage from "@/components/search/SearchPage.svelte";
       import "@/toolkit/initMdxComponents";
     </script>
     <script>
-      // Font plugin disabled on Windows
-      document.addEventListener("pagereveal", () => {
-        // Font loading handled by CSS
-      });
-      document.addEventListener("DOMContentLoaded", () => {
-        document.body.style.fontFamily = css.family as string;
-        document.documentElement.style.setProperty("--pf-font", css.family as string);
-      });
+      // Font plugin disabled on Windows (causes no issue, just no-op handlers)
+      const css = { family: "" };
+      document.addEventListener("pagereveal", () => {});
+      document.addEventListener("DOMContentLoaded", () => {});
     </script>
     <script>
       type VisibilityTitleScriptConfig = {
