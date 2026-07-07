@@ -39,7 +39,7 @@ function get_option( $option, $default = false ) {             //自己写一个
 
 function my_get_option( $option, $default = false ) { //更改第一行的get_option为my_get_option
 ```
-![alt text](/assets/images/posts/WEB/wordpress动态更改“固定链接”/image.png)
+<!-- img: /assets/images/posts/WEB/wordpress动态更改“固定链接”/image.png -->
 
 这样就可以实现，每次访问wordpress，wordpress就会自动检测请求头的host字段ip，然后跟着host请求头里的ip更改那两个固定链接，这样这两个烦人的固定链接就会动态的跟着我们的公网ip变化而自动变化了
 

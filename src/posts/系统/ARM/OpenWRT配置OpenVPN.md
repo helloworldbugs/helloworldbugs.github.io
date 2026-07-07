@@ -98,28 +98,28 @@ EOF
 
 选择一个`模板`新建一个配置，点击右边`编辑`进入配置
 
-![alt text](/assets/images/posts/系统/ARM/OpenWRT配置OpenVPN/image-3.png)
+<!-- img: /assets/images/posts/系统/ARM/OpenWRT配置OpenVPN/image-3.png -->
 
 左上角切换到`高级配置`设置界面，切换到`配置分类-VPN`页面
 
 在左下角的`--更多选项--`选择并添加一个`push`选项，用来配置推送内网网段的路由
 
-![alt text](/assets/images/posts/系统/ARM/OpenWRT配置OpenVPN/image-4.png)
+<!-- img: /assets/images/posts/系统/ARM/OpenWRT配置OpenVPN/image-4.png -->
 
 再添加一个`client-to-client`选项，并且勾上，表示允许vpn客户端之间互相访问
 
-![alt text](/assets/images/posts/系统/ARM/OpenWRT配置OpenVPN/image-2.png)
+<!-- img: /assets/images/posts/系统/ARM/OpenWRT配置OpenVPN/image-2.png -->
 
 最后切换到`加密算法`页面，按照上面生成的文件选择好
 
-![alt text](/assets/images/posts/系统/ARM/OpenWRT配置OpenVPN/image-5.png)
+<!-- img: /assets/images/posts/系统/ARM/OpenWRT配置OpenVPN/image-5.png -->
 
 ### 防火墙配置
 
 `防火墙-常规设置-区域` 新添加一个`区域` 配置放行区域和转发
 
-![alt text](/assets/images/posts/系统/ARM/OpenWRT配置OpenVPN/image.png)
+<!-- img: /assets/images/posts/系统/ARM/OpenWRT配置OpenVPN/image.png -->
 
-![alt text](/assets/images/posts/系统/ARM/OpenWRT配置OpenVPN/image-1.png)
+<!-- img: /assets/images/posts/系统/ARM/OpenWRT配置OpenVPN/image-1.png -->
 
 到这里配置基本完成，可以用客户端进行连接测试了
