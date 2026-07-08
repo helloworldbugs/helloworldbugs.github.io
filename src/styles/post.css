@@ -462,6 +462,12 @@
   margin-bottom: 0;
 }
 
+/* 限制 mermaid 失败错误框高度，避免撑破布局 */
+pre.mermaid[data-processed]:not(:has(svg)) {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
 .md ul ul,
 .md ul ol,
 .md dd ul,
