@@ -207,18 +207,18 @@
   --grey-9-a6: oklch(0.321 0 0 / 0.6);
   --grey-2-a0: oklch(0.361 0 0 / 0);
 
-  --color-pink-light: oklch(0.313 0.011 347.9);
-  --color-cyan-light: oklch(0.321 0.006 174.8);
+  --color-pink-light: oklch(0.88 0.06 255 / 0.72);
+  --color-cyan-light: oklch(0.88 0.04 245 / 0.72);
 
-  --color-red: oklch(0.616 0.175 21.6);
-  --color-pink: oklch(0.709 0.118 351.2 / 0.8);
-  --color-orange: oklch(0.721 0.122 42.4 / 0.8);
-  --color-yellow: oklch(0.934 0.04 102);
-  --color-green: oklch(0.765 0.088 143.7);
-  --color-aqua: oklch(0.848 0.047 197.5);
-  --color-blue: oklch(0.864 0.052 240.1);
-  --color-purple: oklch(0.786 0.066 330.3);
-  --color-grey: oklch(0.885 0 0);
+  --color-red:    oklch(0.48 0.14 255);
+  --color-pink:   oklch(0.52 0.14 255);
+  --color-orange: oklch(0.55 0.12 250);
+  --color-yellow: oklch(0.58 0.10 245);
+  --color-green:  oklch(0.50 0.12 240);
+  --color-aqua:   oklch(0.56 0.13 250);
+  --color-blue:   oklch(0.52 0.16 255);
+  --color-purple: oklch(0.42 0.12 255);
+  --color-grey:   oklch(0.885 0 0);
 
   --body-bg-shadow: oklch(0 0 0);
   --box-bg-shadow: oklch(0 0 0);
