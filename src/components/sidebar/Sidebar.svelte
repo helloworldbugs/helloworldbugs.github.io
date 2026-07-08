@@ -264,6 +264,7 @@
 
     #sidebar.on {
       display: block;
+      overflow-y: auto;
     }
   }
 

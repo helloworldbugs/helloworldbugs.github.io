@@ -1,6 +1,7 @@
 <script lang='ts'>
   import type { TocItem } from './SidebarTypes'
   import { onMount } from 'svelte'
+  import { sidebarOpen } from '../../stores/sidebarStore'
 
   interface Props {
     toc?: TocItem[]
@@ -35,6 +36,10 @@
         behavior: 'smooth',
       })
       activeIndex = index
+      // 移动端点击目录后自动关闭侧边栏
+      if (window.innerWidth < 1024) {
+        sidebarOpen.set(false)
+      }
     }
   }
 
