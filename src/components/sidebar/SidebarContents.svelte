@@ -13,6 +13,7 @@
   let activeIndex = $state(0)
   let currentItems = $state(new Set<number>())
   let containerElement: HTMLElement | null = $state(null)
+  let observerPaused = false
 
   // Helper function to render nested TOC items
   function getTocItemClass(index: number): string {
@@ -31,11 +32,22 @@
     const target = document.getElementById(id)
     if (target) {
       const scrollTop = target.offsetTop - 100
+      // 立即高亮点击的目录
+      activeIndex = index
+      currentItems = new Set([index])
+      let currentToc = toc[index]
+      for (let i = index - 1; i >= 0; i--) {
+        if (toc[i].level < currentToc.level) {
+          currentItems.add(i)
+          currentToc = toc[i]
+        }
+      }
+      // 锁定，防止 IntersectionObserver 覆盖
+      observerPaused = true
       window.scrollTo({
         top: scrollTop,
         behavior: 'smooth',
       })
-      activeIndex = index
       // 移动端点击目录后自动关闭侧边栏
       if (window.innerWidth < 1024) {
         sidebarOpen.set(false)
@@ -109,10 +121,9 @@
 
     const observer = new IntersectionObserver(
       (entries) => {
-        if (activeLock === null) {
-          const index = findIndex(entries)
-          activateNavByIndex(index)
-        }
+        if (observerPaused) return
+        const index = findIndex(entries)
+        activateNavByIndex(index)
       },
       {
         rootMargin: '0px 0px -100% 0px',
@@ -124,6 +135,9 @@
       if (element)
         observer.observe(element)
     })
+
+    // 手动点击目录后等滚动结束再恢复自动跟踪
+    window.addEventListener('scrollend', () => { observerPaused = false }, { passive: true })
 
     return () => {
       observer.disconnect()
