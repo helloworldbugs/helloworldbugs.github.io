@@ -34,9 +34,9 @@ Google Voice 回收政策要求用户必须在3个月内保持账号活跃，否
 >
 > 2) 地址信息要Google地图上能定位到的，要具备一定的真实性，才能提高审核的成功率。
 
-<!-- image: Google Voice携号转网永久保号教程/image-13.png -->
+![](/images/posts/Google%20Voice%E6%90%BA%E5%8F%B7%E8%BD%AC%E7%BD%91%E6%B0%B8%E4%B9%85%E4%BF%9D%E5%8F%B7%E6%95%99%E7%A8%8B/image-13.png)
 
-<!-- image: Google Voice携号转网永久保号教程/image-7.png -->
+![](/images/posts/Google%20Voice%E6%90%BA%E5%8F%B7%E8%BD%AC%E7%BD%91%E6%B0%B8%E4%B9%85%E4%BF%9D%E5%8F%B7%E6%95%99%E7%A8%8B/image-7.png)
 
 # 步骤
 
@@ -44,16 +44,16 @@ Google Voice 回收政策要求用户必须在3个月内保持账号活跃，否
 
 将手机卡插入手机，打开流量，等待10分钟左右联网，[点击前往](https://my.ultramobile.com/paygo/activation/) 激活实体卡，按照提示激活。
 
-<!-- image: Google Voice携号转网永久保号教程/image-8.png -->
+![](/images/posts/Google%20Voice%E6%90%BA%E5%8F%B7%E8%BD%AC%E7%BD%91%E6%B0%B8%E4%B9%85%E4%BF%9D%E5%8F%B7%E6%95%99%E7%A8%8B/image-8.png)
 
 填写邮编，然后会根据邮编给我们分配手机号码
-<!-- image: Google Voice携号转网永久保号教程/image-9.png -->
+![](/images/posts/Google%20Voice%E6%90%BA%E5%8F%B7%E8%BD%AC%E7%BD%91%E6%B0%B8%E4%B9%85%E4%BF%9D%E5%8F%B7%E6%95%99%E7%A8%8B/image-9.png)
 
 可以跳过这个付款信息
-<!-- image: Google Voice携号转网永久保号教程/image-10.png -->
+![](/images/posts/Google%20Voice%E6%90%BA%E5%8F%B7%E8%BD%AC%E7%BD%91%E6%B0%B8%E4%B9%85%E4%BF%9D%E5%8F%B7%E6%95%99%E7%A8%8B/image-10.png)
 
 设置账户密码，用于登录账户后台
-<!-- image: Google Voice携号转网永久保号教程/image-11.png -->
+![](/images/posts/Google%20Voice%E6%90%BA%E5%8F%B7%E8%BD%AC%E7%BD%91%E6%B0%B8%E4%B9%85%E4%BF%9D%E5%8F%B7%E6%95%99%E7%A8%8B/image-11.png)
 
 其它步骤的按照要求操作填写即可，可以跳过的一律跳过
 
@@ -67,7 +67,7 @@ Google Voice 回收政策要求用户必须在3个月内保持账号活跃，否
 
 > 如果填写洲名称的时候遇到简写要求，需要自己找一下美国的大洲的简写填进去
 
-<!-- image: Google Voice携号转网永久保号教程/image-5.png -->
+![](/images/posts/Google%20Voice%E6%90%BA%E5%8F%B7%E8%BD%AC%E7%BD%91%E6%B0%B8%E4%B9%85%E4%BF%9D%E5%8F%B7%E6%95%99%E7%A8%8B/image-5.png)
 
 ## 获取携号转网账号和PIN码
 
@@ -75,34 +75,34 @@ Google Voice 回收政策要求用户必须在3个月内保持账号活跃，否
 
 > 注意这个携号转网的账号和手机号不一样
 
-<!-- image: Google Voice携号转网永久保号教程/image-4.png -->
+![](/images/posts/Google%20Voice%E6%90%BA%E5%8F%B7%E8%BD%AC%E7%BD%91%E6%B0%B8%E4%B9%85%E4%BF%9D%E5%8F%B7%E6%95%99%E7%A8%8B/image-4.png)
 
-<!-- image: Google Voice携号转网永久保号教程/image-12.png -->
+![](/images/posts/Google%20Voice%E6%90%BA%E5%8F%B7%E8%BD%AC%E7%BD%91%E6%B0%B8%E4%B9%85%E4%BF%9D%E5%8F%B7%E6%95%99%E7%A8%8B/image-12.png)
 
 
 ## 开始携号转网
 
 登录[Google Voice](https://voice.google.com/)去操作携号转网，然后根据要求填写信息，注意个人信息和地址要按照PayGo上的911地址来对着写，不然审核不通过，最后使用visa信用卡完成付款，等待审核就好了。
 
-<!-- image: Google Voice携号转网永久保号教程/image-3.png -->
+![](/images/posts/Google%20Voice%E6%90%BA%E5%8F%B7%E8%BD%AC%E7%BD%91%E6%B0%B8%E4%B9%85%E4%BF%9D%E5%8F%B7%E6%95%99%E7%A8%8B/image-3.png)
 
 
-<!-- image: Google Voice携号转网永久保号教程/image.png -->
+![](/images/posts/Google%20Voice%E6%90%BA%E5%8F%B7%E8%BD%AC%E7%BD%91%E6%B0%B8%E4%B9%85%E4%BF%9D%E5%8F%B7%E6%95%99%E7%A8%8B/image.png)
 
 
-<!-- image: Google Voice携号转网永久保号教程/image-1.png -->
+![](/images/posts/Google%20Voice%E6%90%BA%E5%8F%B7%E8%BD%AC%E7%BD%91%E6%B0%B8%E4%B9%85%E4%BF%9D%E5%8F%B7%E6%95%99%E7%A8%8B/image-1.png)
 
 填写携号转网的账号和PIN码，注意账号和手机号完全不一样，还有下面的个人信息，填写PayGo上的911地址，不能出错，否则无法转网成功
 
 > 如果填写洲名称的时候遇到简写要求，需要自己找一下美国的大洲的简写填进去
 
-<!-- image: Google Voice携号转网永久保号教程/image-2.png -->
+![](/images/posts/Google%20Voice%E6%90%BA%E5%8F%B7%E8%BD%AC%E7%BD%91%E6%B0%B8%E4%B9%85%E4%BF%9D%E5%8F%B7%E6%95%99%E7%A8%8B/image-2.png)
 
 
 # 永久保留
 
 携号转网成功之后，Google Voice账号里会看到绑定有两个号码，转进来的号码是永久保留的，原先的号码下多了一个永久保留了的按钮,点击永久保留即可
-<!-- image: Google Voice携号转网永久保号教程/image-6.png -->
+![](/images/posts/Google%20Voice%E6%90%BA%E5%8F%B7%E8%BD%AC%E7%BD%91%E6%B0%B8%E4%B9%85%E4%BF%9D%E5%8F%B7%E6%95%99%E7%A8%8B/image-6.png)
 
 
 # 参考链接:
