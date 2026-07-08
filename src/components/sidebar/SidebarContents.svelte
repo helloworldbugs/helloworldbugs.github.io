@@ -13,6 +13,7 @@
   let activeIndex = $state(0)
   let currentItems = $state(new Set<number>())
   let containerElement: HTMLElement | null = $state(null)
+  let manualScrolling = false
 
   // Helper function to render nested TOC items
   function getTocItemClass(index: number): string {
@@ -31,15 +32,18 @@
     const target = document.getElementById(id)
     if (target) {
       const scrollTop = target.offsetTop - 100
-      window.scrollTo({
-        top: scrollTop,
-        behavior: 'smooth',
-      })
       activeIndex = index
       // 移动端点击目录后自动关闭侧边栏
       if (window.innerWidth < 1024) {
         sidebarOpen.set(false)
       }
+      // 手动点击时加锁，等滚动结束再放开 IntersectionObserver
+      manualScrolling = true
+      window.scrollTo({
+        top: scrollTop,
+        behavior: 'smooth',
+      })
+      setTimeout(() => { manualScrolling = false }, 1000)
     }
   }
 
@@ -54,8 +58,6 @@
 
     if (sections.length === 0)
       return
-
-    const activeLock: number | null = null
 
     const activateNavByIndex = (index: number): void => {
       if (index < 0 || index >= toc.length)
@@ -109,7 +111,7 @@
 
     const observer = new IntersectionObserver(
       (entries) => {
-        if (activeLock === null) {
+        if (!manualScrolling) {
           const index = findIndex(entries)
           activateNavByIndex(index)
         }
