@@ -30,7 +30,7 @@
     event.preventDefault()
     const target = document.getElementById(id)
     if (target) {
-      const scrollTop = target.offsetTop - 60
+      const scrollTop = target.offsetTop
       window.scrollTo({
         top: scrollTop,
         behavior: 'smooth',
