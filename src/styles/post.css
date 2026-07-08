@@ -3,6 +3,8 @@
 /* Post Block */
 .post.block {
   padding: 0 2rem;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 /* Post Content */
