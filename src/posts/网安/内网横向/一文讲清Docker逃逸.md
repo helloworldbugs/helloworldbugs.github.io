@@ -3,6 +3,7 @@ title: "一文讲清Docker逃逸"
 date: 2024-08-07
 description: "docker是一个用Go语言实现的开源项目，可以方便地创建和使用容器，docker将程序以及程序所有的依赖都打包到docker container，这样程序可以在任何环境都会有一致的表现，这里程序运行的依赖也就是容器就好比集装箱，容器所处的操作系统环境就好比货船或港口，程序的表现只和集装箱有关系(容器)，和集装箱..."
 tags: ["docker"]
+categories: ["${folder}"]
 ---
 
 **Docker**

@@ -3,6 +3,7 @@ title: "PHP伪协议总结"
 date: 2024-11-20
 description: "--------------------"
 tags: []
+categories: ["${folder}"]
 ---
 
 `file://` **协议**

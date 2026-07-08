@@ -3,6 +3,7 @@ title: "绕过CDN查找真实IP方法总结"
 date: 2024-08-20
 description: "传统访问：用户访问域名-->解析IP-->访问目标主机"
 tags: []
+categories: ["${folder}"]
 ---
 
 ## 0x00 CDN简述

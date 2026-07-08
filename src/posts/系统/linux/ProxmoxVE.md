@@ -3,6 +3,7 @@ title: "Proxmox VE"
 date: 2024-05-30
 description: "实测在v8-v9.0.5测试成功"
 tags: ["pev"]
+categories: ["${folder}"]
 ---
 
 ### 存储策略和分区调整

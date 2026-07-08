@@ -3,6 +3,7 @@ title: "Linux提权（二）"
 date: 2024-11-14
 description: "Web&用户-Capability能力"
 tags: []
+categories: ["${folder}"]
 ---
 
 **Web&用户-Capability能力**

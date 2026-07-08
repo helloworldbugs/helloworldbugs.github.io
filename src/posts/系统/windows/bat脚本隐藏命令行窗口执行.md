@@ -3,6 +3,7 @@ title: "bat脚本隐藏命令行窗口执行"
 date: 2025-06-03
 description: "在批处理文件中添加以下代码，可以通过 mshta 启动自身，并隐藏窗口："
 tags: []
+categories: ["${folder}"]
 ---
 
 ---

@@ -3,6 +3,7 @@ title: "【超详细】Post文件上传BypassWAF汇总"
 date: 2024-08-20
 description: "本文介绍的思路主要围绕针对于 POST 参数的 multipart/form-data 进行讨论。"
 tags: ["bypass"]
+categories: ["${folder}"]
 ---
 
 本文介绍的思路主要围绕针对于 POST 参数的 `multipart/form-data` 进行讨论。

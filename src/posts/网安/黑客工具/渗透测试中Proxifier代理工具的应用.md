@@ -3,6 +3,7 @@ title: "渗透测试中Proxifier代理工具的应用"
 date: 2024-05-17
 description: "本文我们需要用到一个工具：Proxifier，有不少师傅应该听过它的大名。"
 tags: ["代理"]
+categories: ["${folder}"]
 ---
 
 # Proxifier介绍

@@ -3,6 +3,7 @@ title: "xss各种姿势的学习"
 date: 2024-10-31
 description: "搭建很简单，这里就不讲了。"
 tags: []
+categories: ["${folder}"]
 ---
 
 靶场搭建

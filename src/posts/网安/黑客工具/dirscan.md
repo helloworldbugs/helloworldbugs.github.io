@@ -3,6 +3,7 @@ title: "dirscan"
 date: 2024-08-13
 description: "orf/dirscan"
 tags: []
+categories: ["${folder}"]
 ---
 
 # 项目地址

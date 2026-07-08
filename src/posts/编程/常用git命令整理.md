@@ -3,6 +3,7 @@ title: "常用git命令整理"
 date: 2024-05-07
 description: "- 作用：生成密钥文件，用于连接远程仓库"
 tags: ["git"]
+categories: ["${folder}"]
 ---
 
 # 初始化与配置

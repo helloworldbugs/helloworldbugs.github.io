@@ -3,6 +3,7 @@ title: "python脚本excel转Markdown(含合并单元格)"
 date: 2024-05-21
 description: "自从我把博客从wordpress转到hexo上就踩了很多坑，其中就包括一个很棘手的问题，就是Markdown语法的表格不支持单元格合并，即使网上有很多excel转Markdown的在线工具可以用，但是都不支持单元格合并。于是我就自己用python写了简单的转换工具出来，希望可以帮助到各位。"
 tags: ["python"]
+categories: ["${folder}"]
 ---
 
 # 前言

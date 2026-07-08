@@ -3,6 +3,7 @@ title: "开启nvidia的rtx视频增强"
 date: 2024-10-14
 description: "1. 首先更新到最新的nvidia驱动"
 tags: []
+categories: ["${folder}"]
 ---
 
 >RTX显卡由于具有特殊的硬件单元，可以通过将低分辨率画面转化为高分辨率画面。在游戏上老黄给了DLSS（Deep Learning Super Sampling，深度学习超级采样）技术。DLSS实际上就是将低分辨率的游戏画面变成高分辨率的画面，这样可以实现低分辨率的高帧率和高分辨率的高画质。AMD的FSR和Intel的XeSS的目的都是差不多的。
