@@ -2,7 +2,7 @@
 title: "AOSP"
 date: 2024-05-14
 categories: ["${folder}"]
-description: "（此方法适用于virtualAB分区）"
+description: ""
 tags: []
 ---
 

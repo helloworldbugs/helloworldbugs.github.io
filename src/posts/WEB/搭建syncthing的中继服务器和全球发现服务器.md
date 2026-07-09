@@ -1,7 +1,7 @@
----
+﻿---
 title: "搭建syncthing的中继服务器和全球发现服务器"
 date: 2024-05-14
-description: "1. 下载：https://github.com/syncthing/discosrv/releases"
+description: ""
 tags: []
 categories: ["${folder}"]
 ---

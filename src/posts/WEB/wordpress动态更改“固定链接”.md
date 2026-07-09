@@ -2,7 +2,7 @@
 title: "wordpress动态更改“固定链接”"
 date: 2024-05-13
 categories: ["${folder}"]
-description: "wordpress有两个固定链接，定义了站点的访问url，以及各种媒体文件的超链接等。当我们是用动态公网ip来访问wordpress的时候，因为是动态ip的缘故，公网ip可能会一直变，但是这个wordpress的固定链接不会变，就会导致我们的公网ip每变一次，就访问不了wordpress，然后就要上数据库去改那两..."
+description: ""
 tags: ["wordpress"]
 ---
 

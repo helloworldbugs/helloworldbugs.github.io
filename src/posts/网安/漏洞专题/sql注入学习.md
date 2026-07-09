@@ -1,7 +1,7 @@
----
+﻿---
 title: "sql注入学习"
 date: 2024-05-18
-description: "- HTTP头注入(XFF注入、UA注入、REFERER注入)"
+description: ""
 tags: ["sql注入"]
 categories: ["${folder}"]
 ---

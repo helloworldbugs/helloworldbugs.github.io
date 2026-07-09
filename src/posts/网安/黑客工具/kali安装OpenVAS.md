@@ -2,7 +2,7 @@
 title: "kali安装OpenVAS"
 date: 2024-05-14
 categories: ["${folder}"]
-description: "如果检测失败按照提示执行修复命令就可以了"
+description: ""
 tags: []
 ---
 

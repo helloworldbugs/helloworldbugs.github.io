@@ -1,7 +1,7 @@
----
+﻿---
 title: "用 HTTP3 实现无端口号访问"
 date: 2026-06-09
-description: "家庭宽带虽然有时能拿到公网 IP，但运营商对 80 和 443 端口管控极严——你根本无法在这两个标准端口上对外提供服务。"
+description: ""
 tags: ["web"]
 categories: ["${folder}"]
 ---

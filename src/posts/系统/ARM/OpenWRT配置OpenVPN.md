@@ -1,7 +1,7 @@
----
+﻿---
 title: "原版OpenWRT配置OpenVPN"
 date: 2025-03-31
-description: "1. 安装OpenVPN以及所需工具"
+description: ""
 tags: ["openvpn", "openwrt"]
 categories: ["${folder}"]
 ---

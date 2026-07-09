@@ -1,7 +1,7 @@
----
+﻿---
 title: "OpenWRT 扩容"
 date: 2025-07-08
-description: "建议安装磁盘管理工具插件 luci-app-diskman 进行分区，安装好后访问位置在：左侧导航栏->系统->磁盘管理/挂载点。磁盘管理和挂载都更直观方便。"
+description: ""
 tags: []
 categories: ["${folder}"]
 ---

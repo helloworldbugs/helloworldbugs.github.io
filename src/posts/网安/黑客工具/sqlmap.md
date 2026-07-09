@@ -2,7 +2,7 @@
 title: "sqlmap"
 date: 2024-05-14
 categories: ["${folder}"]
-description: "根据实际情况，可以同时使用多个脚本，使用-v参数可以看到payload的变化。"
+description: ""
 tags: []
 ---
 

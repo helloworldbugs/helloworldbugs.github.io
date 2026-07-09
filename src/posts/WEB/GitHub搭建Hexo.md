@@ -2,7 +2,7 @@
 title: "GitHub搭建Hexo"
 date: 2024-04-29
 categories: ["${folder}"]
-description: "随着我的WordPress博客内容越写越多，对稳定性要求越来越高，自己的个人服务器上的也不晓得什么时候会暴毙，思虑再三下，决定把博客迁移到GitHub上，以hexo搭建一个静态博客，只要GitHub不倒，我的博客就不会倒，这样就永生不灭了。"
+description: ""
 tags: ["hexoH"]
 ---
 

@@ -1,7 +1,7 @@
----
+﻿---
 title: "dirscan"
 date: 2024-08-13
-description: "orf/dirscan"
+description: ""
 tags: []
 categories: ["${folder}"]
 ---

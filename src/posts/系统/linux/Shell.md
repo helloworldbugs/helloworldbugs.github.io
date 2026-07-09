@@ -2,7 +2,7 @@
 title: "Shell"
 date: 2024-05-14
 categories: ["${folder}"]
-description: "解决问题：（N: 无法安全地用该源进行更新，所以默认禁用该源。）"
+description: ""
 tags: ["linux"]
 ---
 

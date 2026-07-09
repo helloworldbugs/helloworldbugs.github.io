@@ -2,7 +2,7 @@
 title: "Linux应急"
 date: 2024-05-14
 categories: ["${folder}"]
-description: "更多可参考：<https://blog.csdn.net/yingchaoyuan/article/details/109199868>"
+description: ""
 tags: ["应急响应"]
 ---
 

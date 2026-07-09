@@ -1,7 +1,7 @@
----
+﻿---
 title: "开启nvidia的rtx视频增强"
 date: 2024-10-14
-description: "1. 首先更新到最新的nvidia驱动"
+description: ""
 tags: []
 categories: ["${folder}"]
 ---

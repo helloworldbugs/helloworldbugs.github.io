@@ -1,7 +1,7 @@
----
+﻿---
 title: "windows改网卡mac地址"
 date: 2024-05-30
-description: "控制面板打开需要改的网卡,进入属性"
+description: ""
 tags: []
 categories: ["${folder}"]
 ---

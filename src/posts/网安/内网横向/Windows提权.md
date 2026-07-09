@@ -1,7 +1,7 @@
----
+﻿---
 title: "Windows提权"
 date: 2024-06-06
-description: "1. 在本地cmd执行systeminfo > 1.txt"
+description: ""
 tags: []
 categories: ["${folder}"]
 ---

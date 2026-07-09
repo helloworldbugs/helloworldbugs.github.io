@@ -2,7 +2,7 @@
 title: "linux配置开机自启动"
 date: 2024-05-14
 categories: ["${folder}"]
-description: "打开 rc-local.service 脚本内容，内容如下"
+description: ""
 tags: []
 ---
 

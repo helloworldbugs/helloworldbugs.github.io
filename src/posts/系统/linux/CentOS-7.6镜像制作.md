@@ -1,7 +1,7 @@
----
+﻿---
 title: "CentOS 7.6镜像制作"
 date: 2024-05-14
-description: "用U盘安装CentOS，运行到 alua： not attached就停止了"
+description: ""
 tags: ["iso"]
 categories: ["${folder}"]
 ---

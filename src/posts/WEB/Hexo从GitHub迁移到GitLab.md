@@ -2,7 +2,7 @@
 title: "Hexo从GitHub迁移到GitLab"
 date: 2024-04-30
 categories: ["${folder}"]
-description: "原本用github搭建的hexo，后来听说gitlab更合适hexo，能实现云端编译、私有库page公开、搜索引擎收录、节点较快等等一系列优点，于是改用gitlab。网上的教程质量也是参差不齐，于是自己整理一番"
+description: ""
 tags: ["hexoH"]
 ---
 

@@ -2,7 +2,7 @@
 title: "Python学习记录"
 date: 2024-05-14
 categories: ["${folder}"]
-description: "1. 安装Pyinstaller"
+description: ""
 tags: ["python"]
 ---
 

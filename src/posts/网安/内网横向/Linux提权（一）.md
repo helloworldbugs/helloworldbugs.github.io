@@ -1,7 +1,7 @@
----
+﻿---
 title: "Linux提权（一）"
 date: 2024-06-26
-description: "系统用户：UID(0-999)"
+description: ""
 tags: ["提权"]
 categories: ["${folder}"]
 ---

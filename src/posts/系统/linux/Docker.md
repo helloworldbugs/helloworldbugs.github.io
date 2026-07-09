@@ -1,7 +1,7 @@
----
+﻿---
 title: "Docker"
 date: 2024-05-14
-description: "建议直接安装apt库的docker-io版"
+description: ""
 tags: ["docker"]
 categories: ["${folder}"]
 ---

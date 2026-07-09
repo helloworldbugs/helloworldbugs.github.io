@@ -1,7 +1,7 @@
----
+﻿---
 title: "PHP伪协议总结"
 date: 2024-11-20
-description: "--------------------"
+description: ""
 tags: []
 categories: ["${folder}"]
 ---
