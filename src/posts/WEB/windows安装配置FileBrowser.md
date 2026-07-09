@@ -1,7 +1,7 @@
----
+﻿---
 title: "windows安装配置FileBrowser"
 date: 2024-05-13
-categories: ["web"]
+categories: ["${folder}"]
 description: "项目地址：<https://github.com/filebrowser/filebrowser>"
 tags: []
 ---

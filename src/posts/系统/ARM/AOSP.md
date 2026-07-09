@@ -1,7 +1,7 @@
----
+﻿---
 title: "AOSP"
 date: 2024-05-14
-categories: ["系统", "ARM"]
+categories: ["${folder}"]
 description: "（此方法适用于virtualAB分区）"
 tags: []
 ---

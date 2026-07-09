@@ -1,7 +1,7 @@
----
+﻿---
 title: "Windows应急"
 date: 2024-05-14
-categories: ["网安", "应急响应"]
+categories: ["${folder}"]
 description: "显示所有进程的映像名称、PID、内存使用等信息。"
 tags: ["应急响应"]
 ---

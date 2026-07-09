@@ -1,7 +1,7 @@
----
+﻿---
 title: "kali安装OpenVAS"
 date: 2024-05-14
-categories: ["网安", "黑客工具"]
+categories: ["${folder}"]
 description: "如果检测失败按照提示执行修复命令就可以了"
 tags: []
 ---

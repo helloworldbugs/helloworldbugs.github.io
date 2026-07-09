@@ -1,7 +1,7 @@
----
+﻿---
 title: "windows随记"
 date: 2024-05-10
-categories: ["系统", "windows"]
+categories: ["${folder}"]
 description: "|:----|:----|"
 tags: ["windows"]
 ---

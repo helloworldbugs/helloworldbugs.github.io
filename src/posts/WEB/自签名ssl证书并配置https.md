@@ -1,7 +1,7 @@
----
+﻿---
 title: "自签名ssl证书并配置https"
 date: 2024-05-14
-categories: ["web"]
+categories: ["${folder}"]
 description: "SSL证书有多种格式："
 tags: []
 ---

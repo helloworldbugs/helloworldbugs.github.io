@@ -1,7 +1,7 @@
----
+﻿---
 title: "Windows下实现VPN掉线自动断网"
 date: 2024-05-14
-categories: ["网安", "身份隐匿"]
+categories: ["${folder}"]
 description: "在渗透测试过程中，一般VPN代理来进行渗透，但是如果VPN突然掉线了，那么就很可能使用我们的真实IP就暴露了。如何保证一旦VPN掉线就自动断网？"
 tags: ["隐藏"]
 ---
