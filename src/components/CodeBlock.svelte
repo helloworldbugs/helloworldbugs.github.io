@@ -226,7 +226,7 @@
     border-radius: 0.5rem;
     overflow: hidden;
     box-shadow: var(--codeblock-shadow);
-    font-family: "Maple Mono", "Courier New", monospace;
+    font-family: "Fira Code", "Courier New", monospace;
   }
 
   .dark.codeblock {
