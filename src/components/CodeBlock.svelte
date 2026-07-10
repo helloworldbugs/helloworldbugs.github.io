@@ -386,7 +386,7 @@
 
   /* 核心：处理插槽内的样式 */
   :global(code-block pre *) {
-    font-family: "Fira Code", "Courier New", Courier, monospace;
+    font-family: "DejaVu Sans Mono", "Courier New", Courier, monospace;
     font-size: 0.925rem;
     line-height: 1.25rem;
     line-break: anywhere;
