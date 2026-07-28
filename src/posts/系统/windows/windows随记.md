@@ -71,8 +71,9 @@ win+r运行：
 rundll32.exe shell32.dll,Control_RunDLL desk.cpl,,0
 ```
 
-# 关闭Windows Defender（安全中心）
+# 关闭 Windows Defender（安全中心）
 
+## 常规项关闭
 win+r：regedit
 
 ```
@@ -87,7 +88,34 @@ win+r：regedit
 
 修改start值为4（禁用）
 
+## 彻底关闭后台服务
+```
+计算机\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WinDefend
+```
+修改start值为4（禁用）
 
+> 此项需要到PE系统里禁用，具体教程如下：
+
+1. 进入PE：进入PE系统后，按快捷键 `Win + R` 打开运行窗口，输入 `regedit` 并回车，打开注册表编辑器。
+2. 定位主键：在左侧列表中，用鼠标点击选中需要修改的第一层级主键（如 `HKEY_LOCAL_MACHINE`）。
+3. 加载配置单元：点击顶部菜单栏的“文件”，选择“加载配置单元”。
+4. 寻找原系统文件：在弹出的窗口中，找到原系统盘（通常是 C 盘），进入 `C:\Windows\System32\config` 文件夹。
+5. 选择并挂载：根据需要修改的注册表第二层级部分选择对应文件（如 `SYSTEM`、`SOFTWARE`、`DEFAULT` 等），点击打开，并为它取一个临时名称（例如 MyTest）。
+6. 修改与卸载：展开刚才新建的临时项进行修改。修改完成后，再次选中该临时项，点击“文件”中的“卸载配置单元”，保存退出即可。
+
+# 去除Win10右键菜单使用Windows Defender扫描
+
+cmd管理员权限执行：
+
+```
+regsvr32 /u "%ProgramFiles%\Windows Defender\shellext.dll"
+```
+    
+要恢复执行：
+
+```
+regsvr32 "%ProgramFiles%\Windows Defender\shellext.dll"
+```
 
 # 禁用windows自动更新
 
@@ -140,27 +168,6 @@ control userpasswords2
 
 用户 -> 属性 -> 组成员
 
-# cmd命令行重启服务
-
-列出当前的服务名称
-
-```
-sc query | findstr <服务名称>
-```
-
-停止服务
-
-```
-net stop <服务名称>
-```
-
-启动服务
-
-```
-net start <服务名称>
-```
-
-
 # win11右键菜单样式切换回win10样式(cmd命令)
 
 
@@ -199,30 +206,6 @@ HKEY_CLASSES_ROOT\Directory\shell\cmd
 
  -  `Extended` : 隐藏cmd命令行窗口
 
-# win11关机被软件阻止的解决办法
-
-win+r：regedit
-
-```
-计算机\HKEY_CURRENT_USER\Control Panel\Desktop
-```
-
-新建字符串值：AutoEndTasks , 键值为：1
-
-# 去除Win10右键菜单使用Windows Defender扫描
-
-cmd管理员权限执行：
-
-```
-regsvr32 /u "%ProgramFiles%\Windows Defender\shellext.dll"
-```
-    
-要恢复执行：
-
-```
-regsvr32 "%ProgramFiles%\Windows Defender\shellext.dll"
-```
-
 
 # Windows系统封装初始化工具
 ```
@@ -241,19 +224,19 @@ chkdsk #: /f /r /x
 ## 临时代理
 http协议
 ```
-set http_proxy=http://127.0.0.1:10808
-set https_proxy=http://127.0.0.1:10808
+set http_proxy=http://127.0.0.1:7890
+set https_proxy=http://127.0.0.1:7890
 ```
 socks协议
 ```
-set http_proxy=socks5://127.0.0.1:10808
-set https_proxy=socks5://127.0.0.1:10808
+set http_proxy=socks5://127.0.0.1:7890
+set https_proxy=socks5://127.0.0.1:7890
 ```
 ## 环境变量设置永久代理
 ```
-HTTP_PROXY  = http://127.0.0.1:7890
-HTTPS_PROXY = http://127.0.0.1:7890
-NO_PROXY    = localhost,127.0.0.1,::1
+setx NO_PROXY    = localhost,127.0.0.1,::1
+setx HTTP_PROXY  = http://127.0.0.1:7890
+setx HTTPS_PROXY = http://127.0.0.1:7890
 ```
 
 # 关机被阻止解决方法-“此应用程序阻止关机”
