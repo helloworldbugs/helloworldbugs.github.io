@@ -232,12 +232,13 @@ socks协议
 set http_proxy=socks5://127.0.0.1:7890
 set https_proxy=socks5://127.0.0.1:7890
 ```
-## 环境变量设置永久代理
+## 设置用户环境变量
 ```
-setx NO_PROXY    = localhost,127.0.0.1,::1
-setx HTTP_PROXY  = http://127.0.0.1:7890
-setx HTTPS_PROXY = http://127.0.0.1:7890
+setx NO_PROXY "localhost,127.0.0.1,::1"
+setx HTTP_PROXY "http://127.0.0.1:7890"
+setx HTTPS_PROXY "http://127.0.0.1:7890"
 ```
+> 设置系统全局环境变量（所有用户，需管理员 CMD）需要在后面加 `/M` 参数
 
 # 关机被阻止解决方法-“此应用程序阻止关机”
 
