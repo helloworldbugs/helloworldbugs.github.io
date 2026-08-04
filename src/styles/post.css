@@ -7,6 +7,13 @@
   word-break: break-word;
 }
 
+/* 代码块和表格溢出处理 */
+.post.block pre,
+.post.block table {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
 /* Post Content */
 .md {
   word-wrap: break-word;
