@@ -16,31 +16,28 @@ jobs:
   build:
     name: Code standards & build
     runs-on: ubuntu-latest
-    timeout-minutes: 3
+    timeout-minutes: 10
 
     steps:
       - name: "☁️ Checkout repository"
         uses: actions/checkout@v4
 
-      - name: "📦 Install pnpm"
-        uses: pnpm/action-setup@v4
+      - name: "🥟 Setup Bun"
+        uses: oven-sh/setup-bun@v2
         with:
-          version: "11.3.0"
-
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "24"
-          cache: "pnpm"
+          bun-version: 1.3.12
 
       - name: "📦 Install dependencies"
-        run: pnpm install --frozen-lockfile
+        run: bun install --frozen-lockfile
 
       - name: "🔎 Lint code"
-        run: pnpm run lint
+        run: bun run lint:check
 
       - name: "📝 Checking code format"
-        run: pnpm run format:check
+        run: bun run format:check
+
+      - name: "🧠 Type check"
+        run: bun run check
 
       - name: "🚀 Build the project"
-        run: pnpm run build
+        run: bun run build

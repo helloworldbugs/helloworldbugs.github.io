@@ -262,9 +262,30 @@
       height: 100%;
     }
 
+    /* Same column layout on the drawer: the quick bar keeps its own space at
+       the bottom of the drawer and never overlaps the panels above it. */
     #sidebar.on {
-      display: block;
-      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    #sidebar.on > .inner {
+      flex: 1 1 auto;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      /* keeps the absolutely positioned tabs horizontally centred (they were
+         centred by the row layout's justify-content: space-around) */
+      align-items: center;
+      overflow: hidden;
+    }
+
+    #sidebar.on .panels {
+      flex: 1 1 auto;
+      min-height: 0;
     }
   }
 
@@ -283,14 +304,29 @@
     z-index: var(--z-content);
   }
 
+  /* Affixed sidebar: stack the panels and the quick bar in one column. The
+     panel scroll area then ends above the quick bar instead of running
+     underneath it, so the bar can never cover a TOC link. */
   #sidebar.affix > .inner {
     position: fixed;
     width: 15rem;
     top: 0;
+    /* margin-top: 3.5rem already offsets the inner box, so subtract it so the
+       inner box ends exactly at the bottom of the viewport. */
+    height: calc(100vh - 3.5rem);
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    /* keeps the absolutely positioned tabs horizontally centred (they were
+       centred by the row layout's justify-content: space-around) */
+    align-items: center;
+    overflow: hidden;
   }
 
   #sidebar.affix .panels {
-    height: 100vh;
+    height: auto;
+    min-height: 0;
+    flex: 1 1 auto;
   }
 
   /* Panels */
@@ -307,6 +343,7 @@
     -webkit-overflow-scrolling: touch;
     width: auto;
     height: 100%;
+    scrollbar-width: none;
   }
 
   @media (max-width: 1023px) {

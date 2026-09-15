@@ -101,6 +101,9 @@
     bottom: 0.125rem;
     list-style: none;
     background: transparent;
+    /* The bar is a flex sibling of the panel scroll area: it keeps its natural
+       height so the panels flex to fill the remaining space above it. */
+    flex: 0 0 auto;
   }
 
   #quick.visible {

@@ -2,7 +2,8 @@
 
 <script lang="ts">
   import { onDestroy, onMount } from "svelte";
-  const css = ""; // Font plugin disabled on Windows
+  // 字体插件在 Windows 上被禁用（见 astro.config.mjs），字体变量暂时为空
+  const css: { family: string } = { family: "" };
   import ArrowDownSLine from "@/assets/icons/arrow-down-s-line.svg";
   import ArrowUpSLine from "@/assets/icons/arrow-up-s-line.svg";
   import CheckFill from "@/assets/icons/check-fill.svg";
@@ -199,7 +200,7 @@
     <div
       bind:this={container}
       class="content-wrapper"
-      style="font-family: {css.family};"
+      style={css.family ? `font-family: ${css.family};` : undefined}
     >
       <slot />
     </div>

@@ -150,7 +150,7 @@ function formatWordCount(count: number): string {
     }
   }
 
-  function typeText(el, text, speed = 80) {
+  function typeText(el: HTMLElement, text: string, speed = 80) {
     el.textContent = "";
     el.style.borderRight = "2px solid #fff";
     let i = 0;
