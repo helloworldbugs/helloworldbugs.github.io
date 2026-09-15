@@ -6,7 +6,7 @@ tags: []
 categories: ["${folder}"]
 ---
 
-# 搭建发现服务器
+# 搭建发现服务器 stdiscosrv
 
 1. 下载：https://github.com/syncthing/discosrv/releases
 
@@ -32,7 +32,7 @@ iptables -I INPUT -p tcp --dport 8443 -j ACCEPT
 
 为了确保发现服务器能够正常工作，建议开放TCP和UDP两个协议的端口。
 
-# 搭建中继服务器
+# 搭建中继服务器 strelaysrv
 
 1. 下载：https://github.com/syncthing/relaysrv/releases
 

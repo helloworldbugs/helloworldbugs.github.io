@@ -13,27 +13,23 @@ categories: ["${folder}"]
 ## 示例1：大量主机全端口快速扫描
 
 ```
-nmap -iL ip.txt -p- -sS -sV -T4 -Pn -n --min-rate 1000 --min-parallelism 512 --min-hostgroup 4 --max-retries 1 --host-timeout 30m --scan-delay 100ms --max-scan-delay 500ms --open -v -oA out
+nmap -iL ip.txt -p- -sS -sV --version-intensity 2 -Pn -n --min-rate 1000 --max-rate 2000 --max-retries 2 -T4 --open -oA 20260911
 ```
 ### 命令解释：
 
- - -iL ip.txt 从文件读取所有目标 IP 段
- - -p- 确保扫描所有端口（1–65535）
- - -sS 快速且隐蔽的 SYN 扫描
- - -sV 获取服务版本信息，较 -A 更高效
- - -T4 选用快速模板，兼顾速度和可靠性
- - -Pn 跳过主机发现，直接扫目标列表
- - -n 关闭 DNS 解析，减少延时
- - --min-rate 500 高并发发包（低：100–300，中：300-500，高：750–1000）
- - --min-parallelism 512 高并发探测端口（低：64–128，中：256–512，高：750–1024）
- - --min-hostgroup 4 批量轮询多个主机，减少空闲等待
- - --max-retries 2 最多重试 2 次，避免过度等待（默认重试10次）
- - --host-timeout 30m 单主机最长 30 分钟，防止拖慢整体扫描
- - --scan-delay 100ms 每包至少等待 100ms，避免触发目标限速
- - --max-scan-delay 500ms 若 Nmap 检测到丢包，可自动增长延迟，但不超过 500ms
- - --open 过滤闭合端口，只列出开放端口条目
- - -v 输出更详细进度，便于监控
- - -oA out 同时输出三种格式，便于整理与留存
+ - -iL ip.txt : 从文件读取目标列表
+ - -p- : 扫描所有 65535 个端口
+ - -sS : TCP SYN 扫描（半开扫描，隐蔽且快速）
+ - -sV : 探测服务版本信息
+ - --version-intensity 2 : 定义服务版本探测强度，取值0-9，默认强度7
+ - -Pn : 跳过主机发现，视所有目标为在线
+ - -n : 不进行 DNS 反向解析
+ - --min-rate 1000 : 最小发包速率每秒 1000 包
+ - --max-rate 2000 : 最大发包速率每秒 2000 包
+ - --max-retries 2 : 最大重传次数为 2 次
+ - -T4 : 时间模板等级（范围 T0-T5；T0最慢/隐蔽，T3默认，T4激进/常用，T5最快/易丢包）
+ - --open : 仅显示状态为 “Open” 的端口
+ - -oA out : 以三种格式（nmap, xml, gnmap）输出结果，前缀为 out
 
 该命令兼顾扫描速度与覆盖率，并保留丰富的输出格式和可调参数，适合对千级 IP 进行全端口互联网暴露面扫描。
 

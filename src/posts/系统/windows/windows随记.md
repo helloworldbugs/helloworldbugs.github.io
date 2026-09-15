@@ -251,9 +251,13 @@ setx HTTPS_PROXY "http://127.0.0.1:7890"
 
 以管理员身份打开PowerShell。
 
-- 列出被隔离的文件
+- 查看近30天检测历史
 ```
 Get-MpThreatDetection | Where-Object { $_.InitialDetectionTime -gt (Get-Date).AddDays(-30) } | Format-Table -Property InitialDetectionTime,Resources
+```
+- 查看当前隔离区
+```
+& "$env:ProgramFiles\Windows Defender\MpCmdRun.exe" -Restore -ListAll
 ```
 - 批量还原文件
 ```
