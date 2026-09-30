@@ -79,7 +79,7 @@
   style={showNav ? "" : "transform: translateY(-100%);"}
 >
   <div
-    class="mb-0 ml-auto mr-auto mt-0 flex flex-nowrap h-full w-[calc(100%-0.625rem)] w-85%"
+    class="mb-0 ml-auto mr-auto mt-0 flex flex-nowrap h-full w-[calc(100%-0.625rem)]"
   >
     <LeftNavBtn clickCallback={clickToggleCallback} />
     <MenuBar {name} {navLinks} />

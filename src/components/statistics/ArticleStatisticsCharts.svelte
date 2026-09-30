@@ -71,15 +71,44 @@
   let resizeObserver: ResizeObserver | null = null;
   let themeObserver: MutationObserver | null = null;
 
+  let colorProbe: HTMLSpanElement | null = null;
+
   /**
-   * 将主题 token 解析为实际颜色值，避免 Canvas 图表无法正确解析 CSS 变量而回退为黑色。
+   * 将主题 token 或任意 CSS 颜色表达式解析为具体的 CSS 颜色值，
+   * 避免 Canvas 图表无法正确解析 CSS 变量 / color-mix 而回退为黑色。
+   *
+   * - `--token` 形式：从根元素的自定义属性读取；
+   * - `var()` / `color-mix()` 等表达式：通过隐藏探测元素交给浏览器计算，
+   *   读取回 `getComputedStyle` 的 `color`。
+   *
+   * DOM 不可用（SSR）时原样返回，构建选项只在客户端 onMount 中执行。
    */
-  function resolveThemeColor(token: string): string {
+  function resolveThemeColor(value: string): string {
     if (typeof window === "undefined" || typeof document === "undefined") {
-      return token;
+      return value;
     }
-    const value = window.getComputedStyle(document.documentElement).getPropertyValue(token).trim();
-    return value || token;
+
+    const token = value.trim();
+    if (token.startsWith("--")) {
+      const resolved = window.getComputedStyle(document.documentElement).getPropertyValue(token).trim();
+      return resolved || value;
+    }
+
+    if (!colorProbe) {
+      colorProbe = document.createElement("span");
+      colorProbe.setAttribute("aria-hidden", "true");
+      colorProbe.style.position = "absolute";
+      colorProbe.style.width = "0";
+      colorProbe.style.height = "0";
+      colorProbe.style.visibility = "hidden";
+      colorProbe.style.pointerEvents = "none";
+      document.body.appendChild(colorProbe);
+    }
+
+    colorProbe.style.color = "";
+    colorProbe.style.color = value;
+    const resolved = window.getComputedStyle(colorProbe).color.trim();
+    return resolved || value;
   }
 
   function createMonthlyOption(): ChartOption {
@@ -100,10 +129,10 @@
       },
       tooltip: {
         trigger: "axis",
-        backgroundColor: "color-mix(in srgb, var(--grey-1) 94%, transparent)",
-        borderColor: "color-mix(in srgb, var(--color-purple) 30%, var(--grey-4))",
+        backgroundColor: resolveThemeColor("color-mix(in srgb, var(--grey-1) 94%, transparent)"),
+        borderColor: resolveThemeColor("color-mix(in srgb, var(--color-purple) 30%, var(--grey-4))"),
         textStyle: {
-          color: "var(--grey-7)",
+          color: resolveThemeColor("var(--grey-7)"),
         },
       },
       grid: {
@@ -121,7 +150,7 @@
         },
         axisLine: {
           lineStyle: {
-            color: "var(--grey-4)",
+            color: resolveThemeColor("var(--grey-4)"),
           },
         },
       },
@@ -133,7 +162,7 @@
         },
         splitLine: {
           lineStyle: {
-            color: "var(--grey-3)",
+            color: resolveThemeColor("var(--grey-3)"),
           },
         },
       },
@@ -152,8 +181,9 @@
             opacity: 1,
           },
           areaStyle: {
-            color:
+            color: resolveThemeColor(
               "color-mix(in srgb, var(--color-purple) 26%, var(--color-pink) 18%)",
+            ),
             opacity: 1,
           },
           emphasis: {
@@ -215,10 +245,10 @@
         axisPointer: {
           type: "shadow",
         },
-        backgroundColor: "color-mix(in srgb, var(--grey-1) 94%, transparent)",
-        borderColor: "color-mix(in srgb, var(--color-orange) 34%, var(--grey-4))",
+        backgroundColor: resolveThemeColor("color-mix(in srgb, var(--grey-1) 94%, transparent)"),
+        borderColor: resolveThemeColor("color-mix(in srgb, var(--color-orange) 34%, var(--grey-4))"),
         textStyle: {
-          color: "var(--grey-7)",
+          color: resolveThemeColor("var(--grey-7)"),
         },
       },
       grid: {
@@ -235,7 +265,7 @@
         },
         splitLine: {
           lineStyle: {
-            color: "var(--grey-3)",
+            color: resolveThemeColor("var(--grey-3)"),
           },
         },
       },
@@ -247,7 +277,7 @@
         },
         axisLine: {
           lineStyle: {
-            color: "var(--grey-4)",
+            color: resolveThemeColor("var(--grey-4)"),
           },
         },
       },
@@ -309,10 +339,10 @@
         axisPointer: {
           type: "shadow",
         },
-        backgroundColor: "color-mix(in srgb, var(--grey-1) 94%, transparent)",
-        borderColor: "color-mix(in srgb, var(--color-blue) 34%, var(--grey-4))",
+        backgroundColor: resolveThemeColor("color-mix(in srgb, var(--grey-1) 94%, transparent)"),
+        borderColor: resolveThemeColor("color-mix(in srgb, var(--color-blue) 34%, var(--grey-4))"),
         textStyle: {
-          color: "var(--grey-7)",
+          color: resolveThemeColor("var(--grey-7)"),
         },
       },
       grid: {
@@ -330,7 +360,7 @@
         },
         axisLine: {
           lineStyle: {
-            color: "var(--grey-4)",
+            color: resolveThemeColor("var(--grey-4)"),
           },
         },
       },
@@ -342,7 +372,7 @@
         },
         splitLine: {
           lineStyle: {
-            color: "var(--grey-3)",
+            color: resolveThemeColor("var(--grey-3)"),
           },
         },
       },
@@ -448,6 +478,9 @@
     monthlyChart = null;
     categoryChart = null;
     tagChart = null;
+
+    colorProbe?.remove();
+    colorProbe = null;
   });
 </script>
 

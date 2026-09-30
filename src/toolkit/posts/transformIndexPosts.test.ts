@@ -13,6 +13,25 @@ type MockPost = {
   };
 };
 
+/** True when `value` contains an unpaired UTF-16 surrogate code unit. */
+function hasLoneSurrogate(value: string): boolean {
+  for (let index = 0; index < value.length; index += 1) {
+    const code = value.charCodeAt(index);
+    if (code >= 0xd800 && code <= 0xdbff) {
+      const next = value.charCodeAt(index + 1);
+      if (!(next >= 0xdc00 && next <= 0xdfff)) {
+        return true;
+      }
+      index += 1;
+      continue;
+    }
+    if (code >= 0xdc00 && code <= 0xdfff) {
+      return true;
+    }
+  }
+  return false;
+}
+
 describe("transformIndexPosts", () => {
   it("calculates read time with ceil strategy", () => {
     expect(calculateReadTime(0)).toBe(0);
@@ -241,5 +260,28 @@ describe("transformIndexPosts", () => {
     });
 
     expect(transformed[0].excerpt).toBe("description text");
+  });
+
+  it("keeps surrogate pairs intact when the excerpt boundary falls inside an emoji", () => {
+    const body = "abcde😀fghij";
+    const post: MockPost = {
+      id: "emoji-excerpt-post",
+      body,
+      data: {
+        title: "Emoji Excerpt",
+        date: new Date("2025-01-05T00:00:00Z"),
+      },
+    };
+
+    // A UTF-16 slice(6) splits the emoji and leaves a lone high surrogate.
+    expect(hasLoneSurrogate(body.slice(0, 6))).toBe(true);
+
+    // eslint-disable-next-line no-unsafe-type-assertion
+    const excerpt = getExcerpt(post as any, "[ENCRYPTED]", 6);
+
+    expect(excerpt).toBe("abcde😀");
+    expect(Array.from(excerpt)).toHaveLength(6);
+    expect(hasLoneSurrogate(excerpt)).toBe(false);
+    expect(excerpt).not.toContain("\uFFFD");
   });
 });

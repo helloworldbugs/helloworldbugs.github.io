@@ -27,6 +27,13 @@ export default defineConfig({
     randomPosts: false,
   },
 
+  // 备案号：关闭，避免显示主题默认的、不属于本站的 ICP 号
+  footer: {
+    icp: {
+      enable: false,
+    },
+  },
+
   sidebar: {
     author: "神楽",
     description: "编程 | 网安 | 系统运维",
@@ -37,6 +44,8 @@ export default defineConfig({
       behavior: "custom",
       customTitle: "神楽的博客",
     },
+    // 首页分类卡片：显式留空以关闭该区域（IndexContent 在 categories 为空时整块不渲染）
+    selectedCategories: [],
   },
 
   nav: [

@@ -1,5 +1,6 @@
 ---
 import { currentLocale, t } from "@/i18n";
+import { DEFAULT_WORDS_PER_MINUTE } from "@/toolkit/posts/calculateStats";
 
 interface Props {
   title: string;
@@ -11,13 +12,12 @@ interface Props {
 
 const { title, date, wordCount, readingTime } = Astro.props;
 
-// Format date helper
+// Format date helper (YYYY-MM-DD, matching the cover meta)
 function formatDate(d: Date): string {
-  return d.toLocaleDateString(currentLocale, {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  });
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
 }
 
 // Format full date helper
@@ -32,10 +32,12 @@ function formatFullDate(d: Date): string {
   });
 }
 
-// Calculate reading time (assuming 200 words per minute)
-const estimatedReadingTime = wordCount
-  ? Math.ceil(wordCount / 200)
-  : readingTime || 1;
+// Reading time: prefer the value computed by the page (the same source used for
+// the cover meta) so both surfaces always agree; otherwise fall back to the
+// shared site-wide words-per-minute rate.
+const estimatedReadingTime =
+  readingTime ??
+  (wordCount ? Math.ceil(wordCount / DEFAULT_WORDS_PER_MINUTE) : 1);
 ---
 
 <header>

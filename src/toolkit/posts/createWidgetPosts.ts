@@ -1,3 +1,4 @@
+import { sliceByCodePoints } from "./sliceByCodePoints";
 import { stripMarkdown } from "./stripMarkdown";
 
 export interface WidgetPost {
@@ -20,25 +21,6 @@ export interface WidgetPostSource {
 }
 
 const DEFAULT_EXCERPT_LENGTH = 300;
-
-function sliceByCodePoints(input: string, maxChars: number): string {
-  if (maxChars <= 0) {
-    return "";
-  }
-
-  let result = "";
-  let count = 0;
-
-  for (const char of input) {
-    if (count >= maxChars) {
-      break;
-    }
-    result += char;
-    count += 1;
-  }
-
-  return result;
-}
 
 export function createWidgetPosts(
   posts: WidgetPostSource[],

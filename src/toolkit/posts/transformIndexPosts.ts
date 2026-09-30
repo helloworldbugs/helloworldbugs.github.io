@@ -1,11 +1,11 @@
 import type { ImageMetadata } from "astro";
 import type { CollectionEntry } from "astro:content";
-import { countWords } from "./calculateStats";
+import { countWords, DEFAULT_WORDS_PER_MINUTE } from "./calculateStats";
+import { sliceByCodePoints } from "./sliceByCodePoints";
 import { stripMarkdown } from "./stripMarkdown";
 import { toCategoryHref, toPostHref } from "./url";
 
 const DEFAULT_EXCERPT_LENGTH = 300;
-const DEFAULT_WORDS_PER_MINUTE = 300;
 
 /**
  * 列表卡片摘要来源。
@@ -77,7 +77,7 @@ export function getExcerpt(
   }
 
   if (post.body) {
-    return stripMarkdown(post.body).slice(0, excerptLength);
+    return sliceByCodePoints(stripMarkdown(post.body), excerptLength);
   }
 
   return "";

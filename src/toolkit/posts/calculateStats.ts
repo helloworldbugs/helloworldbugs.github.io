@@ -1,5 +1,11 @@
 import type { Post } from "./types";
 
+/**
+ * Default reading speed (words per minute) for mixed Chinese/English content.
+ * Single source of truth for reading-time calculations across the site.
+ */
+export const DEFAULT_WORDS_PER_MINUTE = 300;
+
 export interface PostStats {
   totalWords: number;
   totalReadingTime: string;
@@ -42,7 +48,11 @@ export function calculateTotalWords(posts: Post[]): number {
  * Format reading time based on word count
  * Default AWL=150 (Chinese), WPM=300
  */
-export function formatReadingTime(wordCount: number, awl: number = 150, wpm: number = 300): string {
+export function formatReadingTime(
+  wordCount: number,
+  awl: number = 150,
+  wpm: number = DEFAULT_WORDS_PER_MINUTE,
+): string {
   // For Chinese content, use AWL-based calculation
   // For English content, use WPM calculation
   const readingMinutes = Math.ceil(wordCount / ((awl + wpm) / 2));

@@ -4,6 +4,7 @@ import IndexContent from "../components/IndexContent.astro";
 import Pagination from "../components/Pagination.astro";
 import { getCollection } from "astro:content";
 import themeConfig from "@/theme.config";
+import { resolveSiteTitle } from "@/toolkit/siteTitle";
 
 // Fetch all posts
 const allPosts = await getCollection("posts");
@@ -79,12 +80,7 @@ const categories = Array.from(categoryMap.entries())
   }))
   .toSorted((a, b) => b.postCount - a.postCount);
 
-let pageTitle = themeConfig.home?.title?.customTitle ?? "";
-
-if (themeConfig.home?.title?.behavior === "default") {
-  pageTitle =
-    `${themeConfig.brand?.logo || ""} = ${themeConfig.brand?.title || ""} = ${themeConfig.brand?.subtitle || ""}`.trim();
-}
+const pageTitle = resolveSiteTitle(themeConfig);
 ---
 
 <Layout

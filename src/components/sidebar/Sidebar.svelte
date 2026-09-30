@@ -228,9 +228,6 @@
   </div>
 </aside>
 
-<!-- Mobile dimmer -->
-<div class="dimmer" class:active={$sidebarOpen}></div>
-
 <style>
   /* Sidebar container */
   #sidebar {
@@ -358,31 +355,6 @@
 
   .panels > .inner::-webkit-scrollbar {
     display: none;
-  }
-
-  /* Dimmer overlay for mobile */
-  .dimmer {
-    display: none;
-  }
-
-  @media (max-width: 1023px) {
-    .dimmer {
-      background: black;
-      height: 100%;
-      left: 100%;
-      opacity: 0;
-      top: 0;
-      width: 100%;
-      z-index: var(--z-sidebar-overlay);
-      transition: opacity 1s;
-    }
-
-    .dimmer.active {
-      position: fixed;
-      display: block;
-      opacity: 0.3;
-      transform: translateX(-100%);
-    }
   }
 
   /* Dark theme */

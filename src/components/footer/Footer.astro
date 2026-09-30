@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import { currentLocale, getT } from "@/i18n";
 import { sanitizeThemeColor, type ThemeColorValue } from "@/toolkit/themeColor";
+import { DEFAULT_WORDS_PER_MINUTE } from "@/toolkit/posts/calculateStats";
 import "./footer.css";
 
 interface Props {
@@ -47,9 +48,8 @@ const wordCounts = posts.map((post) => {
 });
 const totalWords = wordCounts.reduce((a, b) => a + b, 0);
 
-// Calculate reading time (using 300 WPM as baseline for mixed content)
-const avgWordsPerMinute = 300;
-const readingMinutes = Math.ceil(totalWords / avgWordsPerMinute);
+// Calculate reading time (using the shared site-wide words-per-minute rate)
+const readingMinutes = Math.ceil(totalWords / DEFAULT_WORDS_PER_MINUTE);
 const readingTimeStr =
   readingMinutes === 1
     ? `1 ${t("post.minutes")}`

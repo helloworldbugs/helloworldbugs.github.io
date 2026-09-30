@@ -17,6 +17,7 @@ import type {
 import type { EncryptedData } from "@/toolkit/encryption/types";
 import { encryptContent } from "@/toolkit/encryption/crypto";
 import { createPostContentContainer } from "@/toolkit/posts/createPostContentContainer";
+import { DEFAULT_WORDS_PER_MINUTE } from "@/toolkit/posts/calculateStats";
 import { toPostHref, toTagHref } from "@/toolkit/posts/url";
 import { wrapRenderedCodeBlocks } from "@/toolkit/wrapRenderedCodeBlocks";
 import { wrapRenderedImages } from "@/toolkit/wrapRenderedImages";
@@ -208,8 +209,8 @@ const plainText = (post.body || "")
   .replaceAll(/\s+/g, " ");
 const wordCount = plainText.length;
 
-// Calculate read time (assume 300 words per minute)
-const readTime = Math.ceil(wordCount / 300);
+// Calculate read time (shared site-wide words-per-minute rate)
+const readTime = Math.ceil(wordCount / DEFAULT_WORDS_PER_MINUTE);
 
 // Get site info from config
 const siteConfig = themeConfig.sidebar || {};
@@ -387,6 +388,7 @@ const postMeta = {
           date={post.data.date}
           updated={post.data.updated}
           wordCount={wordCount}
+          readingTime={readTime}
         />
 
         {
