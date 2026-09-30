@@ -30,6 +30,59 @@
     return classes.join(' ')
   }
 
+  // 找到最近的真正可滚动祖先：桌面端是 .panels > .inner，移动端抽屉里结构相同。
+  // 不写死单一选择器，逐级向上判断，两端共用同一套逻辑。
+  function findScrollableAncestor(start: HTMLElement): HTMLElement | null {
+    let node = start.parentElement
+    while (node) {
+      const overflowY = getComputedStyle(node).overflowY
+      if (
+        (overflowY === 'auto' || overflowY === 'scroll')
+        && node.scrollHeight > node.clientHeight
+      ) {
+        return node
+      }
+
+      node = node.parentElement
+    }
+    return null
+  }
+
+  // 按索引定位目标项，而不是等渲染完再 querySelector('.toc-item.active')：
+  // Svelte 的 class 更新是异步的，设置 activeIndex 后立刻查询拿到的仍是上一个项，
+  // 会导致滚动目标滞后一次（跳到底部时高亮项甚至一直停在可视区外）。
+  // 只取 ol.toc 的直接子元素：嵌套子项同样带 .toc-item，直接扁平查询会错位。
+  function getTocItemElement(index: number): HTMLElement | null {
+    const list = containerElement?.querySelector('ol.toc')
+    const item = list?.children[index]
+    return item instanceof HTMLElement ? item : null
+  }
+
+  function scrollTocItemIntoView(activeElement: HTMLElement): void {
+    const scroller = findScrollableAncestor(activeElement)
+    if (!scroller)
+      return
+
+    // 用 rect 差值而不是 offsetTop：offsetTop 相对 offsetParent，
+    // 和实际滚动容器不一定是同一个元素。
+    const itemRect = activeElement.getBoundingClientRect()
+    const scrollerRect = scroller.getBoundingClientRect()
+    const itemTop = itemRect.top - scrollerRect.top
+    const itemBottom = itemRect.bottom - scrollerRect.top
+
+    // 已经舒适可见时不再滚动：避免与用户手动滚动目录打架，也避免 resize 时抖动
+    const margin = 16
+    if (itemTop >= margin && itemBottom <= scroller.clientHeight - margin) {
+      return
+    }
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    scroller.scrollTo({
+      top: scroller.scrollTop + itemTop - scroller.clientHeight / 4,
+      behavior: reduceMotion ? 'auto' : 'smooth',
+    })
+  }
+
   function activateNavByIndex(index: number): void {
     if (index < 0 || index >= toc.length)
       return
@@ -47,14 +100,10 @@
     }
 
     // Scroll TOC into view if needed
-    if (isActive && containerElement) {
-      const activeElement = containerElement.querySelector('.toc-item.active') as HTMLElement
+    if (isActive) {
+      const activeElement = getTocItemElement(index)
       if (activeElement) {
-        const offsetTop = activeElement.offsetTop - containerElement.clientHeight / 4
-        containerElement.scrollTo({
-          top: offsetTop,
-          behavior: 'smooth',
-        })
+        scrollTocItemIntoView(activeElement)
       }
     }
   }

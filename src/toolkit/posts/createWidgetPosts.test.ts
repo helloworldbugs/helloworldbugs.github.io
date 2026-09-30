@@ -45,6 +45,21 @@ describe("createWidgetPosts", () => {
     expect(result[0].data.description).toBe("x".repeat(300));
   });
 
+  it("should clean markdown syntax in the body-derived description", () => {
+    const result = createWidgetPosts([
+      {
+        id: "markdown-post",
+        body: "## Heading\n\nSome **bold** text with a [link](https://example.com)",
+        data: {
+          title: "Markdown Post",
+          encrypted: false,
+        },
+      },
+    ]);
+
+    expect(result[0].data.description).toBe("Heading Some bold text with a link");
+  });
+
   it("should not derive description from body for encrypted posts", () => {
     const result = createWidgetPosts([
       {

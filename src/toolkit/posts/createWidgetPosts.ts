@@ -1,3 +1,5 @@
+import { stripMarkdown } from "./stripMarkdown";
+
 export interface WidgetPost {
   id: string;
   data: {
@@ -45,7 +47,9 @@ export function createWidgetPosts(
   return posts.map((post) => {
     const explicitDescription = post.data.description?.trim() || "";
     const bodyExcerpt =
-      !post.data.encrypted && post.body ? sliceByCodePoints(post.body, excerptLength) : "";
+      !post.data.encrypted && post.body
+        ? sliceByCodePoints(stripMarkdown(post.body), excerptLength)
+        : "";
 
     return {
       id: post.id,

@@ -64,6 +64,20 @@ describe("transformIndexPosts", () => {
     expect(getExcerpt(withoutDescription as any, "[ENCRYPTED]")).toBe(longBody.slice(0, 300));
   });
 
+  it("cleans markdown syntax in body-derived excerpts", () => {
+    const post: MockPost = {
+      id: "markdown-post",
+      body: "# Title\n\n**bold** and `code`\n\n- item",
+      data: {
+        title: "Markdown",
+        date: new Date("2025-01-04T00:00:00Z"),
+      },
+    };
+
+    // eslint-disable-next-line no-unsafe-type-assertion
+    expect(getExcerpt(post as any, "[ENCRYPTED]")).toBe("Title bold and code item");
+  });
+
   it("builds transformed cards with url, category and stats", () => {
     const body = Array.from({ length: 301 }, (_, i) => `w${i}`).join(" ");
     const post: MockPost = {

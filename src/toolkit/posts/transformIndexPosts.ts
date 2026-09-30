@@ -1,6 +1,7 @@
 import type { ImageMetadata } from "astro";
 import type { CollectionEntry } from "astro:content";
 import { countWords } from "./calculateStats";
+import { stripMarkdown } from "./stripMarkdown";
 import { toCategoryHref, toPostHref } from "./url";
 
 const DEFAULT_EXCERPT_LENGTH = 300;
@@ -76,7 +77,7 @@ export function getExcerpt(
   }
 
   if (post.body) {
-    return post.body.slice(0, excerptLength);
+    return stripMarkdown(post.body).slice(0, excerptLength);
   }
 
   return "";
